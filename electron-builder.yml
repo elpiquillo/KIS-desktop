@@ -1,0 +1,16 @@
+appId: fr.kis.kis
+productName: KIS,
+copyright: Copyright 2024 © KIS
+directories:
+  output: build
+dmg:
+  sign: true
+mac:
+  category: working tool
+  hardenedRuntime: true
+publish:
+  provider: github
+  owner: elpiquillo
+  repo: KIS-desktop
+# Mac Notoarization
+afterSign: "./src/electron/notorize.cjs"

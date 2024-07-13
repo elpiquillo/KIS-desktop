@@ -1,0 +1,18 @@
+{
+  "date": {
+    "format": "{{value, datetime}}"
+  },
+  "global": {
+    "searchByName": "Search by name",
+    "welcomeUser": "👋 Hey {{name}}! What are the priorities of the day?",
+    "options": "Options",
+    "favorites": "Favorites"
+  },
+  "applications": {
+    "addToFavorites": "Add to favorites",
+    "disconnect": "Disconnect"
+  },
+  "errors": {
+    
+  }
+}
