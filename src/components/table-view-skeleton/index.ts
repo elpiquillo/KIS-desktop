@@ -1,0 +1,1 @@
+export { default as TableViewSkeleton } from './table-view-skeleton';
