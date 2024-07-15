@@ -35,7 +35,7 @@ function CustomThemeProvider({ children }: Props) {
 
   const bgGradient =
     paletteMode === 'light'
-      ? 'linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);'
+      ? 'linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);'
       : 'linear-gradient(135deg, #212b36 0%, #38495c 50%, #212b36 100%);';
 
   return (
