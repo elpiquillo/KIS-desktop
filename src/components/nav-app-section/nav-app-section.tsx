@@ -44,7 +44,7 @@ export default function NavAppSection({
               height: 32,
               backgroundColor: theme.palette.success.main,
               position: 'absolute',
-              left: -16,
+              left: -9,
               borderRadius: '0px 6px 6px 0px'
             }}
           />
