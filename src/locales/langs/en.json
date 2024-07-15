@@ -6,7 +6,37 @@
     "searchByName": "Search by name",
     "welcomeUser": "👋 Hey {{name}}! What are the priorities of the day?",
     "options": "Options",
-    "favorites": "Favorites"
+    "favorites": "Favorites",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "disconnect": "Disconnect"
+  },
+  "auth": {
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordConfirmation": "Password confirmation is required",
+    "passwordMatch": "Passwords must match",
+    "passwordInvalid": "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
+    "loginPage": {
+      "title": "Access your Applications!",
+      "subTitle": "Please login to continue.",
+      "forgotPassword": "Forgot your password ?",
+      "action": "Login",
+      "register": {
+        "title": "You don't have an account ?",
+        "action": "Sign up"
+      }
+    },
+    "forgotPasswordPage": {
+      "title": "Forgot your password ?",
+      "subTitle": "Enter your email address to reset your password.",
+      "action": "Reset password"
+    },
+    "verificationLinkPage": {
+      "title": "Check your email!",
+      "subTitle": "Follow the instructions sent to your email to reset your password.",
+      "action": "Return to login"
+    }
   },
   "applications": {
     "addToFavorites": "Add to favorites",

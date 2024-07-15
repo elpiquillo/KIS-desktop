@@ -1,8 +1,10 @@
-import { Avatar, Card, CardContent, CardHeader, IconButton, Typography, useTheme } from "@mui/material";
+import { Avatar, Card, CardActionArea, CardContent, CardHeader, IconButton, MenuItem, Typography, useTheme } from "@mui/material";
 import { t } from "i18next";
-import ApplicationInterface from "src/types/application-interface";
+import { useNavigate } from "react-router-dom";
 
+import ApplicationInterface from "src/types/application-interface";
 import Iconify from "../iconify";
+import CustomPopover, { usePopover } from "../custom-popover";
 
 interface ApplicationCardItemProps {
   application?: ApplicationInterface;
@@ -11,6 +13,8 @@ interface ApplicationCardItemProps {
 
 export default function ApplicationCardItem({ application }: ApplicationCardItemProps) {
   const theme = useTheme();
+  const popover = usePopover();
+  const navigate = useNavigate();
 
   function appAvatar() {
     if (application?.logo) {
@@ -39,31 +43,51 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
 
   return (
     <Card key={application?.id.id}>
-      <CardHeader
-        title={appAvatar()}
-        action={
-          <>
-            <IconButton
-              aria-label={t('global.favorite')}
-            >
-              <Iconify icon="ic:round-star" width={24} color="warning.main" />
-            </IconButton>
-            <IconButton
-              aria-label={t('global.options')}
-            >
-              <Iconify icon="ic:round-more-vert" width={24} color={theme.palette.text.secondary} />
-            </IconButton>
-          </>
-        }
-      />
-      <CardContent>
-        <Typography variant="subtitle2">
-          {application?.name}
-        </Typography>
-        <Typography variant="body2" color={theme.palette.text.secondary}>
-          {application?.description}
-        </Typography>
-      </CardContent>
+      <CardActionArea onClick={() => navigate(`/${application?.id.id}`)}>
+        <CardHeader
+          title={appAvatar()}
+          action={
+            <>
+              <IconButton aria-label={t('global.favorite')} >
+                <Iconify icon="ic:round-star" width={24} color="warning.main" />
+              </IconButton>
+              
+              <IconButton aria-label={t('global.options')}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  popover.onOpen(e);
+                }}
+              >
+                <Iconify icon="ic:round-more-vert" width={24} color={theme.palette.text.secondary} />
+              </IconButton>
+
+              <CustomPopover
+                open={popover.open}
+                onClose={popover.onClose}
+                sx={{ width: 160 }}
+                onClick={popover.onClose}
+              >
+                <MenuItem>
+                  <Iconify icon="mdi:star-outline" />
+                  {t('global.addToFavorites')}
+                </MenuItem>
+                <MenuItem>
+                  <Iconify icon="mdi:trash-can-outline" color={theme.palette.error.main} />
+                  <Typography color={theme.palette.error.main} variant="body2">
+                    {t('global.disconnect')}
+                  </Typography>
+                </MenuItem>
+              </CustomPopover>
+            </>
+          }
+        />
+        <CardContent>
+          <Typography variant="subtitle2">{application?.name}</Typography>
+          <Typography variant="body2" color={theme.palette.text.secondary}>
+            {application?.description}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 }
