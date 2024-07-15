@@ -38,7 +38,7 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
   }
 
   return (
-    <Card sx={{ height: "100%" }} key={application?.id.id}>
+    <Card key={application?.id.id}>
       <CardHeader
         title={appAvatar()}
         action={
