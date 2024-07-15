@@ -68,14 +68,12 @@ export default function ApplicationsList({
           />
         }
       />
-      {/* <CardContent> */}
-        <SimpleBar style={{ maxHeight: 'calc(100vh - 150px)' }}>
-          { loading && (
-            <ApplicationCardSkeleton numberOfCards={5} />
-          )}
-          <ApplicationCards applications={applications} />
-        </SimpleBar>
-      {/* </CardContent> */}
+      <SimpleBar style={{ maxHeight: 'calc(100vh - 100px)' }}>
+        { loading && (
+          <ApplicationCardSkeleton numberOfCards={5} />
+        )}
+        <ApplicationCards applications={applications} />
+      </SimpleBar>
     </Card>
   );
 }

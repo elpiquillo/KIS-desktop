@@ -11,6 +11,7 @@ import MainLayout from '../layouts/main';
 import AuthLayout from '../layouts/auth';
 import Applications from '../pages/applications/Applications';
 import Home from '../pages/home/home';
+import ApplicationLayout from '../layouts/application';
 
 function PageWrapper({ element, needAuth = true }: { element: ReactNode; needAuth: boolean }) {
   const wrappedElement = element;
@@ -51,11 +52,9 @@ export function Router() {
 
         <Route element={<AuthentifiedLayout />}>
           <Route path="/" element={<PageWrapper needAuth element={<Home />} />} />
-          <Route
-            path="/applications"
-            element={<PageWrapper needAuth element={<Applications />} />}
-          />
-
+          <Route element={<ApplicationLayout><Outlet /></ApplicationLayout>}>
+            <Route path="/:applicationId" element={<PageWrapper needAuth element={<Applications />} />} />
+          </Route>
           <Route path="*" element={<PageWrapper needAuth={false} element={<Home />} />} />
         </Route>
       </Routes>
