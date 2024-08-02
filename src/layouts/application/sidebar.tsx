@@ -9,7 +9,7 @@ function ActiveLink(path: string, exact: boolean) {
   return useActiveLink(path, exact);
 }
 
-export default function SettingsSidebar() {
+export default function ApplicationMenuSidebar() {
   const { applicationId } = useParams();
   const application = useApplicationState((state) => state.applications.find((app) => app.id.id === applicationId));
 

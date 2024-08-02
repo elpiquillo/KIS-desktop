@@ -8,7 +8,7 @@ export default function ApplicationsView() {
   const application = useApplicationState((state) => state.applications.find((app) => app.id.id === applicationId));
 
   return (
-    <Card sx={{ height: '100%' }}>
+    <Card sx={{ height: '100%', borderRadius: 0 }}>
       <CardHeader />
     </Card>
   );

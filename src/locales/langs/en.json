@@ -21,11 +21,7 @@
       "title": "Access your Applications!",
       "subTitle": "Please login to continue.",
       "forgotPassword": "Forgot your password ?",
-      "action": "Login",
-      "register": {
-        "title": "You don't have an account ?",
-        "action": "Sign up"
-      }
+      "action": "Login"
     },
     "forgotPasswordPage": {
       "title": "Forgot your password ?",
