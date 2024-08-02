@@ -52,12 +52,6 @@ export default function LoginView() {
       <Typography variant="h4">
         {t("auth.loginPage.title")}
       </Typography>
-
-      <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2">
-          {t("auth.loginPage.register.title")}
-        </Typography>
-      </Stack>
     </Stack>
   );
 

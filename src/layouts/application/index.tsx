@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import SettingsSidebar from "./sidebar";
+import ApplicationMenuSidebar from "./sidebar";
 
 type Props = {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ type Props = {
 export default function ApplicationLayout({ children }: Props) {
   return (
     <Grid container columnSpacing={{ xs: 1 }} height="100%">
-      <SettingsSidebar />
+      <ApplicationMenuSidebar />
       <Grid item xs={9} xl={10}>
         {children}
       </Grid>
