@@ -36,7 +36,7 @@ export default function ApplicationsList({
 }: ApplicationsListProps) {
 
   return (
-    <Card sx={{ height: "100%" }}>
+    <Card sx={{ height: "100%", borderRadius: 0 }}>
       <CardHeader
         title={
           <motion.div
