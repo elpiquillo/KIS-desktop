@@ -1,13 +1,13 @@
 import { Avatar, Card, CardActionArea, CardContent, CardHeader, IconButton, MenuItem, Typography, useTheme } from "@mui/material";
 import { t } from "i18next";
 import { useNavigate } from "react-router-dom";
+import DashboardAccessInterface from "src/types/dashboard-access-interface";
 
-import ApplicationInterface from "src/types/application-interface";
 import Iconify from "../iconify";
 import CustomPopover, { usePopover } from "../custom-popover";
 
 interface ApplicationCardItemProps {
-  application?: ApplicationInterface;
+  application?: DashboardAccessInterface;
 }
 
 

@@ -1,4 +1,4 @@
-export default interface ApplicationInterface {
+export default interface DashboardAccessInterface {
   id: {
     id: string;
     display: boolean;

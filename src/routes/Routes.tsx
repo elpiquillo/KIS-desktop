@@ -52,8 +52,21 @@ export function Router() {
 
         <Route element={<AuthentifiedLayout />}>
           <Route path="/" element={<PageWrapper needAuth element={<Home />} />} />
-          <Route element={<ApplicationLayout><Outlet /></ApplicationLayout>}>
-            <Route path="/:applicationId" element={<PageWrapper needAuth element={<Applications />} />} />
+          <Route
+            element={
+              <ApplicationLayout>
+                <Outlet />
+              </ApplicationLayout>
+            }
+          >
+            <Route
+              path="/:applicationId/"
+              element={<PageWrapper needAuth element={<Applications />} />}
+            />
+            <Route
+              path="/:applicationId/:pageId"
+              element={<PageWrapper needAuth element={<Applications />} />}
+            />
           </Route>
           <Route path="*" element={<PageWrapper needAuth={false} element={<Home />} />} />
         </Route>

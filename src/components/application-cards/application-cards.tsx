@@ -1,9 +1,10 @@
 import { Grid } from "@mui/material";
-import ApplicationInterface from "src/types/application-interface";
+import DashboardAccessInterface from "src/types/dashboard-access-interface";
+
 import ApplicationCardItem from "./application-card-item";
 
 interface ApplicationsCardProps {
-  applications?: ApplicationInterface[];
+  applications?: DashboardAccessInterface[];
 }
 
 export default function ApplicationCards({ applications }: ApplicationsCardProps) {

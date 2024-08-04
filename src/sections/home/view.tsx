@@ -1,9 +1,10 @@
 import { t } from "i18next";
-import { useGetApplicationsAll } from "src/apis/application";
+import { useGetDashboardAccessesAll } from "src/apis/dashboard-access";
+
 import ApplicationsList from "./apps-list";
 
 export default function HomeView() {
-  const { data, isLoading } = useGetApplicationsAll();
+  const { data, isLoading } = useGetDashboardAccessesAll();
 
   return (
     <ApplicationsList
