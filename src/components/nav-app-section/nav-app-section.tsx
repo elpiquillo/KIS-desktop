@@ -1,10 +1,10 @@
 import { Avatar, Box, IconButton, Skeleton, Stack, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useActiveLink } from "src/routes/hooks";
-import ApplicationInterface from "src/types/application-interface";
+import DashboardAccessInterface from "src/types/dashboard-access-interface";
 
 interface NavAppSectionProps {
-  applications: ApplicationInterface[];
+  applications: DashboardAccessInterface[];
 }
 
 export default function NavAppSection({

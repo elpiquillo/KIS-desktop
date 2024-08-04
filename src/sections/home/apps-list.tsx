@@ -2,14 +2,15 @@ import { Card, CardContent, CardHeader, Grid, InputAdornment, TextField } from "
 import { t } from "i18next";
 import Iconify from "src/components/iconify";
 import { motion } from "framer-motion";
-import ApplicationInterface from "src/types/application-interface";
 import { ApplicationCards, ApplicationCardSkeleton } from "src/components/application-cards";
+import DashboardAccessInterface from "src/types/dashboard-access-interface";
+
 import SimpleBar from "simplebar-react";
 
 interface ApplicationsListProps {
   title: string;
   loading: boolean;
-  applications: ApplicationInterface[];
+  applications: DashboardAccessInterface[];
 }
 
 const letterVariants = {

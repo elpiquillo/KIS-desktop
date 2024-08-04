@@ -4,8 +4,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
 import { NavAppSection } from 'src/components/nav-app-section';
-import { useApplicationState } from 'src/store/applicationState';
-import { useGetApplicationsAll } from 'src/apis/application';
+import { useDashboardAccessState } from 'src/store/dashboardAccessState';
+import { useGetDashboardAccessesAll } from 'src/apis/dashboard-access';
 
 import { NAV } from '../config-layout';
 
@@ -14,8 +14,8 @@ import AccountPopover from './account-popover';
 // ----------------------------------------------------------------------
 
 export default function Sidebar() {
-  const applications = useApplicationState((s) => s.applications);
-  const { data } = useGetApplicationsAll();
+  const applications = useDashboardAccessState((s) => s.applications);
+  const { data } = useGetDashboardAccessesAll();
 
   return (
     <Box

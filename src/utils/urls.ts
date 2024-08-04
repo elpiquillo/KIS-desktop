@@ -10,7 +10,7 @@ export const urls = {
   },
   dashboards: {
     list: '/users/dashboard_accesses',
-    menu: {},
+    menu: '/users/menus',
     page: {},
   },
   dataHandlers: {
