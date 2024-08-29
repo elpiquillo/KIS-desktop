@@ -14,10 +14,14 @@ export const urls = {
     page: {},
   },
   dataHandlers: {
-    list: '/companies/data_handlers/index',
-    create: '/companies/data_handlers',
-    get: '/companies/data_handlers/',
-    update: '/companies/data_handlers/',
+    list: '/users/data_handlers/index',
+    create: '/users/data_handlers',
+    get: '/users/data_handlers/',
+    update: '/users/data_handlers/',
+  },
+  userInfos: {
+    update: '/users/companies_accounts/',
+    password: '/user_auth/password',
   },
   dashboardAcceses: {},
   profile: {},

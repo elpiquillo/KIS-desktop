@@ -1,4 +1,4 @@
-import { Avatar, Box, IconButton, Skeleton, Stack, useTheme } from "@mui/material";
+import { Avatar, Box, IconButton, Skeleton, Stack, Tooltip, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useActiveLink } from "src/routes/hooks";
 import DashboardAccessInterface from "src/types/dashboard-access-interface";
@@ -49,24 +49,42 @@ export default function NavAppSection({
             }}
           />
         )}
-        <IconButton
-          key={app.id.id}
-          sx={{
-            height: 48,
-            width: 48,
-            backgroundColor: theme.palette.background.neutral,
-            borderRadius: ActiveLink(app.id.id, false) ? 1 : 30,
+        <Tooltip
+          title={app.name}
+          placement="right"
+          disableInteractive
+          slotProps={{
+            popper: {
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, -8],
+                  },
+                },
+              ],
+            },
           }}
-          aria-label={app.name}
-          onClick={() => navigate(app.id.id)}
         >
-          <Avatar
-            alt={app.name}
-            src={app.logo}
-            sx={{ height: 40, width: 40 }}
-            variant={ActiveLink(app.id.id, false) ? 'rounded' : 'circular'}
-          />
-        </IconButton>
+          <IconButton
+            key={app.id.id}
+            sx={{
+              height: 48,
+              width: 48,
+              backgroundColor: theme.palette.background.neutral,
+              borderRadius: ActiveLink(app.id.id, false) ? 1 : 30,
+            }}
+            aria-label={app.name}
+            onClick={() => navigate(app.id.id)}
+          >
+            <Avatar
+              alt={app.name}
+              src={app.logo}
+              sx={{ height: 48, width: 48 }}
+              variant={ActiveLink(app.id.id, false) ? 'rounded' : 'circular'}
+            />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Stack>
   ));

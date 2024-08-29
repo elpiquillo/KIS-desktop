@@ -7,17 +7,18 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import i18next, { t } from 'i18next';
-import { Divider, Grid, IconButton, InputAdornment, MenuItem } from '@mui/material';
+import { Divider, Grid, IconButton, InputAdornment, MenuItem, Typography } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import { useUserState } from 'src/store/userState';
-
+import { usePutPassword, usePutUserInfos } from 'src/apis/account';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { changeLanguage } from 'src/locales/i18n';
 import { languages } from 'src/locales/config-lang';
-import { ThemeModeToggleButton } from 'src/components/theme-mode-toggle-button';
+import themesColor from 'src/utils/themes-color';
+import { useThemeMode } from 'src/theme/ThemeModeContext';
 
 interface ModalProps {
   open: boolean;
@@ -27,9 +28,9 @@ interface ModalProps {
 // ----------------------------------------------------------------------
 
 export function AccountSettingsModal({ open, onClose }: ModalProps) {
-  // const { putUserInfos } = usePutUserInfos();
-  // const { putPassword } = usePutPassword();
-
+  const { putUserInfos } = usePutUserInfos();
+  const { putPassword } = usePutPassword();
+  const { paletteMode, togglePaletteMode } = useThemeMode();
   const { enqueueSnackbar } = useSnackbar();
   const password = useBoolean();
   const passwordConfirmation = useBoolean();
@@ -80,11 +81,11 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
     if (!user) return;
 
     try {
-      // await putUserInfos({
-      //   first_name: formData.firstName,
-      //   last_name: formData.lastName,
-      //   id: user.id
-      // });
+      await putUserInfos({
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        id: user.id
+      });
 
       enqueueSnackbar(
         t('settings.userInfosUpdated'),
@@ -99,10 +100,10 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
 
   const onSubmitPasswordUpdate = acountPasswordMethods.handleSubmit(async (formData: any) => {
     try {
-      // await putPassword({
-      //   password: formData.password,
-      //   password_confirmation: formData.passwordConfirmation
-      // });
+      await putPassword({
+        password: formData.password,
+        password_confirmation: formData.passwordConfirmation
+      });
 
       enqueueSnackbar(
         t('settings.userInfosUpdated'),
@@ -228,6 +229,48 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
     </FormProvider>
   );
 
+  const setNewTheme = (theme: string) => () => {
+    localStorage.setItem('theme-color', theme);
+
+    const isDarkTheme = theme.includes('Dark');
+    const isLightMode = paletteMode === 'light';
+    const isDarkMode = paletteMode === 'dark';
+
+    if (isDarkTheme && isLightMode) {
+      togglePaletteMode();
+    } else if (!isDarkTheme && isDarkMode) {
+      togglePaletteMode();
+    }
+
+    document.body.style.background = themesColor[theme as keyof typeof themesColor];
+
+    onClose();
+    enqueueSnackbar(
+      t('global.goodChoice'),
+      { variant: 'success', anchorOrigin: { vertical: 'top', horizontal: 'center' }}
+    );
+  }
+
+  const getFilteredThemes = (color: 'light' | 'dark') => (
+    Object.entries(themesColor)
+      .filter(([key, _]) => (color === 'dark' ? key.includes('Dark') : !key.includes('Dark')))
+      .reduce((acc, [key, value]) => {
+        acc[key as keyof typeof themesColor] = value;
+        return acc;
+      }, {} as { [key: string]: string })
+  )
+
+  const themesSelection = (themeType: 'light' | 'dark') => (
+    Object.entries(getFilteredThemes(themeType)).map(([key, value]) => (
+      <Grid key={key} item xs={5} sx={{ background: value}} component={Button}
+        height={40}
+        m={0.7}
+        aria-label={key}
+        onClick={setNewTheme(key)}
+      />
+    ))
+  )
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle>
@@ -241,7 +284,20 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
 
         <Divider sx={{ my: 2 }} />
 
-        <ThemeModeToggleButton title={t('settings.themeMode')} />
+
+        <Typography variant="subtitle2">
+          {t('settings.lightThemes')}
+          <Iconify icon="fluent:weather-sunny-high-20-filled" width={24} height={24} ml={1} />
+        </Typography>
+        {themesSelection('light')}
+
+        <Divider sx={{ my: 2 }} />
+
+        <Typography variant="subtitle2">
+          {t('settings.darkThemes')}
+          <Iconify icon="material-symbols-light:nights-stay" width={24} height={24} ml={1} />
+        </Typography>
+        {themesSelection('dark')}
       </DialogContent>
 
       <DialogActions>
