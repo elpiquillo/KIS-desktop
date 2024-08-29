@@ -42,7 +42,9 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
   }
 
   return (
-    <Card key={application?.id.id}>
+    <Card
+      key={application?.id.id}
+      sx={{ boxShadow: 0, border: 1, borderColor: theme.palette.divider }}>
       <CardActionArea onClick={() => navigate(`/${application?.id.id}`)}>
         <CardHeader
           title={appAvatar()}

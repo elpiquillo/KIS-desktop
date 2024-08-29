@@ -1,6 +1,6 @@
 // src/theme/index.tsx
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider as MuiThemeProvider, ThemeOptions } from '@mui/material/styles';
 import { palette } from './palette';
@@ -10,6 +10,7 @@ import { customShadows } from './custom-shadows';
 import { componentsOverrides } from './overrides';
 import { GlobalStyles } from '@mui/material';
 import { ThemeModeProvider, useThemeMode } from './ThemeModeContext';
+import themesColor from 'src/utils/themes-color';
 
 type Props = {
   children: React.ReactNode;
@@ -17,6 +18,14 @@ type Props = {
 
 function CustomThemeProvider({ children }: Props) {
   const { paletteMode } = useThemeMode();
+
+  useEffect(() => {
+    const customTheme = localStorage.getItem('theme-color');
+    if (customTheme) {
+      document.body.style.background = themesColor[customTheme as keyof typeof themesColor];
+    }
+  }
+  , [paletteMode, localStorage]);
 
   const memoizedValue = useMemo<ThemeOptions>(
     () => ({
