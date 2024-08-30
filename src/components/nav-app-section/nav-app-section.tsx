@@ -29,7 +29,7 @@ export default function NavAppSection({
   }
 
   return applications.filter((app) => app.id.display).map((app) => (
-    <Stack key={app.id.id} m="auto" mb={1.5}>
+    <Stack key={app.id.id} m="auto" mb={2}>
       <Box
         sx={{
           display: 'flex',
@@ -42,9 +42,9 @@ export default function NavAppSection({
             sx={{
               width: 4,
               height: 32,
-              backgroundColor: theme.palette.success.main,
+              backgroundColor: theme.palette.primary.darker,
               position: 'absolute',
-              left: -9,
+              left: -13,
               borderRadius: '0px 6px 6px 0px'
             }}
           />
@@ -69,8 +69,8 @@ export default function NavAppSection({
           <IconButton
             key={app.id.id}
             sx={{
-              height: 48,
-              width: 48,
+              height: 40,
+              width: 40,
               backgroundColor: theme.palette.background.neutral,
               borderRadius: ActiveLink(app.id.id, false) ? 1 : 30,
             }}
@@ -80,7 +80,7 @@ export default function NavAppSection({
             <Avatar
               alt={app.name}
               src={app.logo}
-              sx={{ height: 48, width: 48 }}
+              sx={{ height: 40, width: 40 }}
               variant={ActiveLink(app.id.id, false) ? 'rounded' : 'circular'}
             />
           </IconButton>
