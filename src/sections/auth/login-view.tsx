@@ -56,7 +56,7 @@ export default function LoginView() {
   );
 
   const renderForm = (
-    <Stack spacing={2.5}>
+    <Stack spacing={{ xs: 2.5, sm: 2.5 }}>
       <RHFTextField name="email" label="Email address" />
 
       <RHFTextField

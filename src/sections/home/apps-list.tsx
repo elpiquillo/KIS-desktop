@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Grid, InputAdornment, TextField } from "@mui/material";
+import { Card, CardContent, CardHeader, Grid, InputAdornment, Stack, TextField } from "@mui/material";
 import { t } from "i18next";
 import Iconify from "src/components/iconify";
 import { motion } from "framer-motion";
@@ -40,17 +40,19 @@ export default function ApplicationsList({
     <Card sx={{ height: "100%", borderRadius: 0 }}>
       <CardHeader
         title={
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-          >
-            {title.split('').map((letter) => (
-              <motion.span key={`${letter}`} variants={letterVariants}>
-                {letter}
-              </motion.span>
-            ))}
-          </motion.div>
+          <Stack direction="row" alignItems="center">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={containerVariants}
+            >
+              {title.split('').map((letter) => (
+                <motion.span key={`${letter}`} variants={letterVariants}>
+                  {letter}
+                </motion.span>
+              ))}
+            </motion.div>
+          </Stack>
         }
         action={
           <TextField
@@ -58,7 +60,7 @@ export default function ApplicationsList({
             label={(
               t('global.searchByName')
             )}
-            sx={{ mr: 1 }}
+            sx={{ mr: { md: 1 } }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
