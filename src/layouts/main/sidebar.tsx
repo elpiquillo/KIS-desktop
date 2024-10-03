@@ -28,7 +28,6 @@ export default function Sidebar() {
         sx={{
           flex: 1, justifyContent: 'space-between',
           pb: 2,
-          pt: 2,
           height: 1,
           position: 'fixed',
           width: NAV.W_MINI,

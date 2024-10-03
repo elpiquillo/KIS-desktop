@@ -24,9 +24,10 @@ export default function Main({ children, sx, ...other }: BoxProps) {
         py: { xs: 0.5, md: `${HEADER.H_MOBILE + SPACING}px`},
         px: { xs: 0.5 },
         pl: { xs: 0.5 },
-        pr: { xs: 0.5 },
+        pr: { xs: 0.7 },
         ...(lgUp && {
           px: 1,
+          pt: 0,
           pl: 0.2,
           py: 1,
           // width: `calc(100% - ${NAV.W_VERTICAL}px)`,
@@ -38,7 +39,7 @@ export default function Main({ children, sx, ...other }: BoxProps) {
       }}
       {...other}
     >
-      <Card sx={{ borderRadius: 2, height: '100%', background: '#f9fafbb0' }}>
+      <Card sx={{ borderRadius: 2, height: `calc(100% - 30px)`, background: '#f9fafbb0' }}>
         {children}
       </Card>
     </Box>
