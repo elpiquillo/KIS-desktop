@@ -1,4 +1,6 @@
 import { Box } from '@mui/material';
+import SimpleBar from 'simplebar-react';
+
 import React from 'react';
 import Sidebar from './sidebar';
 import Main from './main';
@@ -21,7 +23,9 @@ export default function MainLayout({ children }: Props) {
         }}
       >
         <Sidebar />
-        <Main>{children}</Main>
+        <Main>
+          {children}
+        </Main>
       </Box>
     </>
   );
