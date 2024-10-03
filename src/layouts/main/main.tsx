@@ -29,7 +29,7 @@ export default function Main({ children, sx, ...other }: BoxProps) {
           px: 1,
           pt: 0,
           pl: 0.2,
-          py: 1,
+          py: 1.5,
           // width: `calc(100% - ${NAV.W_VERTICAL}px)`,
           // ...(isNavMini && {
             width: `calc(100% - ${NAV.W_MINI}px)`,
