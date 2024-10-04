@@ -8,7 +8,6 @@ import { apiFetcher } from '../utils/fetchers';
 import { urls } from '../utils/urls';
 import { ApiError } from '../utils/apiErrors';
 
-
 export function useGetDashboardMenu({ dashboardId }: DashboardId) {
   const urlQuery = `${urls.dashboards.menu}?dashboard_id=${dashboardId}`;
   const { error, data, isLoading } = useSWR(urlQuery, apiFetcher, {});
@@ -28,4 +27,3 @@ export function useGetDashboardMenu({ dashboardId }: DashboardId) {
     isLoading,
   };
 }
-
