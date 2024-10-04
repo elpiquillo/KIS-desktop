@@ -1,7 +1,7 @@
-import { Box } from '@mui/material';
-import SimpleBar from 'simplebar-react';
+import Box from '@mui/material/Box';
+import { useLoadSidebarState } from 'src/hooks/use-load-sidebar-state';
+import { useSidebarState } from 'src/store/sidebarState';
 
-import React from 'react';
 import Sidebar from './sidebar';
 import Main from './main';
 import Header from './header';
@@ -12,6 +12,9 @@ type Props = {
 };
 
 export default function MainLayout({ children }: Props) {
+  const { sidebarOpen } = useSidebarState();
+  useLoadSidebarState();
+
   return (
     <>
       <Header />
@@ -22,7 +25,11 @@ export default function MainLayout({ children }: Props) {
           flexDirection: { xs: 'column', lg: 'row' },
         }}
       >
-        <Sidebar />
+        {
+          sidebarOpen && (
+            <Sidebar />
+          )
+        }
         <Main>
           {children}
         </Main>

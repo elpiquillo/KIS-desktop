@@ -28,7 +28,7 @@ export default function Main({ children, sx, ...other }: BoxProps) {
         ...(lgUp && {
           px: 1,
           pt: 0,
-          pl: 0.2,
+          pl: 0.8,
           py: 1.5,
           // width: `calc(100% - ${NAV.W_VERTICAL}px)`,
           // ...(isNavMini && {
