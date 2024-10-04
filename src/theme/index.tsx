@@ -24,8 +24,7 @@ function CustomThemeProvider({ children }: Props) {
     if (customTheme) {
       document.body.style.background = themesColor[customTheme as keyof typeof themesColor];
     }
-  }
-  , [paletteMode, localStorage]);
+  }, [paletteMode, localStorage]);
 
   const memoizedValue = useMemo<ThemeOptions>(
     () => ({
