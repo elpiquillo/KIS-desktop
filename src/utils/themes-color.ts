@@ -10,12 +10,14 @@ const themesColor = {
   coral_blush: 'linear-gradient(to right, #ff9966 0%, #ff5e62 100%)',
   sunday_morning: 'linear-gradient(326deg, #861657 0%, #ffa69e 74%)',
   desert: 'linear-gradient(315deg, #f1dfd1 0%, #f6f0ea 74%)',
+  morning: 'linear-gradient(135deg, #FFDDC1, #FFAB73)',
+  afternoon: 'linear-gradient(135deg, #FFD3A5, #FD6585)',
   darkDark:
     'radial-gradient( circle farthest-corner at 10% 20%,  rgba(90,92,106,1) 0%, rgba(32,45,58,1) 81.3% )',
   blueDark: 'linear-gradient( 171.8deg,  rgba(5,111,146,1) 13.5%, rgba(6,57,84,1) 78.6% )',
   forestDark: 'linear-gradient(135deg, rgba(0,70,64,1) 0%, rgba(34,193,195,1) 100%)',
   red_mistDark: 'linear-gradient(to right, #000000 0%, #e74c3c 100%)',
-  midnightPurpleDark: 'linear-gradient(135deg, rgba(30,60,114,1) 0%, rgba(42,82,152,1) 100%)',
+  midnightPurpleDark: 'linear-gradient(135deg, #2E3A59, #1E2749)',
   charcoalMidnightDark: 'linear-gradient(135deg, rgba(35,37,38,1) 0%, rgba(65,67,69,1) 100%)',
 };
 
