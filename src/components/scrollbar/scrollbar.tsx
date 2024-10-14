@@ -5,9 +5,6 @@ import Box from '@mui/material/Box';
 import { ScrollbarProps } from './types';
 import { StyledScrollbar, StyledRootScrollbar } from './styles';
 
-// ----------------------------------------------------------------------
-/* eslint-disable react-refresh/only-export-components */
-
 const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(({ children, sx, ...other }, ref) => {
   const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
 

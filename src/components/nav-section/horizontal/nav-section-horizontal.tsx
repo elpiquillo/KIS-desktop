@@ -5,9 +5,7 @@ import Stack from '@mui/material/Stack';
 import NavList from './nav-list';
 import { NavProps, NavGroupProps } from '../types';
 
-
 // ----------------------------------------------------------------------
-/* eslint-disable react-refresh/only-export-components */
 function NavSectionHorizontal({ data, slotProps, sx, ...other }: NavProps) {
   return (
     <Stack
@@ -30,9 +28,6 @@ function NavSectionHorizontal({ data, slotProps, sx, ...other }: NavProps) {
 }
 
 export default memo(NavSectionHorizontal);
-
-// ----------------------------------------------------------------------
-/* eslint-disable react-refresh/only-export-components */
 
 function Group({ items, slotProps }: NavGroupProps) {
   return (

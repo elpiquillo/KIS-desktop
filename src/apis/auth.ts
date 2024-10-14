@@ -34,3 +34,13 @@ export async function apiLogin(email: string, password: string) {
     json: (await res.json()).data as UserInfos,
   };
 }
+
+export async function resetPassword(email: string) {
+  try {
+    await apiFetcher(`${urls.auth.forgotPassword}?email=${email}`, {
+      method: 'GET',
+    });
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}

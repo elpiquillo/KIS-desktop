@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useSidebarState } from "src/store/sidebarState";
+import { useEffect } from 'react';
+import { useSidebarState } from 'src/store/sidebarState';
 
 export const useLoadSidebarState = () => {
   const { setSidebarOpen } = useSidebarState();
