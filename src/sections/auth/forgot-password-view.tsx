@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { t } from "i18next";
+import { t } from 'i18next';
 
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
@@ -13,6 +14,7 @@ import { RouterLink } from 'src/routes/components';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { resetPassword } from 'src/apis/auth';
 
 // ----------------------------------------------------------------------
 
@@ -35,8 +37,8 @@ export default function ForgotPasswordView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit((data) => {
-    // Add your forgot password logic here
+  const onSubmit = handleSubmit(async (data) => {
+    await resetPassword(data.email);
   });
 
   const renderForm = (
@@ -73,9 +75,7 @@ export default function ForgotPasswordView() {
 
   const renderHead = (
     <Stack spacing={1} sx={{ mt: 3, mb: 5 }}>
-      <Typography variant="h4">
-        {t('auth.forgotPasswordPage.title')}
-      </Typography>
+      <Typography variant="h4">{t('auth.forgotPasswordPage.title')}</Typography>
 
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         {t('auth.forgotPasswordPage.subTitle')}

@@ -7,9 +7,6 @@ import ListSubheader from '@mui/material/ListSubheader';
 import NavList from './nav-list';
 import { NavProps, NavGroupProps } from '../types';
 
-// ----------------------------------------------------------------------
-/* eslint-disable react-refresh/only-export-components */
-
 function NavSectionVertical({ data, slotProps, ...other }: NavProps) {
   return (
     <Stack component="nav" id="nav-section-vertical" {...other}>

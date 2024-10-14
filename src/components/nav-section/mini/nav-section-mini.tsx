@@ -5,9 +5,6 @@ import Stack from '@mui/material/Stack';
 import NavList from './nav-list';
 import { NavProps, NavGroupProps } from '../types';
 
-// ----------------------------------------------------------------------
-/* eslint-disable react-refresh/only-export-components */
-
 function NavSectionMini({ data, slotProps, ...other }: NavProps) {
   return (
     <Stack component="nav" id="nav-section-mini" spacing={`${slotProps?.gap || 4}px`} {...other}>
