@@ -3,6 +3,7 @@
     "format": "{{value, datetime}}"
   },
   "global": {
+    "action": "Action",
     "searchByName": "Search by name",
     "welcomeUser": "👋 Hey {{name}}! What are the priorities of the day?",
     "options": "Options",
@@ -36,9 +37,13 @@
   },
   "applications": {
     "addToFavorites": "Add to favorites",
-    "disconnect": "Disconnect"
+    "browse": "Browse",
+    "content": "Content",
+    "delete": "Delete",
+    "disconnect": "Disconnect",
+    "exportCsv": "Export CSV",
+    "filter": "Filter",
+    "orDndCsvFile": "or drag & drop your .CSV file here"
   },
-  "errors": {
-    
-  }
+  "errors": {}
 }

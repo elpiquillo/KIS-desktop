@@ -1,17 +1,19 @@
-import { Card, CardHeader } from "@mui/material";
-import { useParams } from "src/routes/hooks";
-import { useDashboardAccessState } from "src/store/dashboardAccessState";
+import { Card, CardHeader } from '@mui/material';
+import { useGetDashboardPage } from 'src/apis/dashboard-page';
+import { useParams } from 'src/routes/hooks';
+import PageView from './page-view';
 
 export default function ApplicationsView() {
-  const { applicationId } = useParams();
-
-  const application = useDashboardAccessState(
-    (state) => state.applications.find((app) => app.id.id === applicationId)
-  );
+  const { applicationId, pageId } = useParams();
+  const { isLoading: isLoadingPage } = useGetDashboardPage({
+    dashboardId: applicationId || '?',
+    pageId: pageId || '?',
+  });
 
   return (
     <Card sx={{ height: '100%', borderRadius: 0 }}>
-      <CardHeader />
+      {/* <CardHeader /> */}
+      <PageView />
     </Card>
   );
 }
