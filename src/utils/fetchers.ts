@@ -22,9 +22,7 @@ export async function apiFetcherRaw(input: RequestInfo, init?: RequestInit) {
     ...init,
     headers: {
       'Content-Type': 'application/json',
-      'access-token': auth['access-token'],
-      uid: auth.uid,
-      client: auth.client,
+      authorization: auth.authorization,
     },
   });
 

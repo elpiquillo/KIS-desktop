@@ -11,14 +11,10 @@ export function useLogin() {
 
   function logout() {
     useUserState.getState().setAuth({
-      'access-token': '',
-      client: '',
-      uid: '',
+      authorization: ''
     });
 
-    localStorage.removeItem(`access-token`);
-    localStorage.removeItem(`uid`);
-    localStorage.removeItem(`client`);
+    localStorage.removeItem(`authorization`);
     navigate('/login');
   }
 
@@ -27,14 +23,10 @@ export function useLogin() {
       const res = await apiLogin(email, password);
 
       const auth: AuthToken = {
-        'access-token': res.raw.headers.get('access-token')!,
-        uid: res.raw.headers.get('uid')!,
-        client: res.raw.headers.get('client')!,
+        authorization: res.raw.headers.get('Authorization')!,
       };
 
-      localStorage.setItem(`access-token`, auth['access-token']);
-      localStorage.setItem(`uid`, auth.uid);
-      localStorage.setItem(`client`, auth.client);
+      localStorage.setItem(`authorization`, auth.authorization);
 
       useUserState.getState().setAuth(auth);
       useUserState.getState().setTokenValidated(true);

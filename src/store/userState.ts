@@ -2,9 +2,7 @@ import { UserInfos } from 'src/types/user-interface';
 import { create } from 'zustand';
 
 export interface AuthToken {
-  'access-token': string;
-  uid: string;
-  client: string;
+  authorization: string;
 }
 
 interface UserState {
@@ -18,9 +16,7 @@ interface UserState {
 
 export const useUserState = create<UserState>()((set) => ({
   auth: {
-    'access-token': localStorage.getItem('access-token') || '',
-    uid: localStorage.getItem('uid') || '',
-    client: localStorage.getItem('client') || '',
+    authorization: localStorage.getItem('authorization') || '',
   },
   setAuth: (value) => set(() => ({ auth: value })),
   tokenValidated: false,
