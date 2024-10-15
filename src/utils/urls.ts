@@ -11,7 +11,9 @@ export const urls = {
   dashboards: {
     list: '/users/dashboard_accesses',
     menu: '/users/menus',
-    page: {},
+    page: {
+      get: '/users/pages',
+    },
   },
   dataHandlers: {
     list: '/users/data_handlers/index',
