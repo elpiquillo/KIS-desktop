@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { Children } from 'react';
 
 interface Props {
   blockInfo: any;
@@ -14,9 +14,9 @@ export default function InputFormView({ blockInfo }: Props) {
       <Box
         sx={{ display: 'grid', gridTemplateColumns: `repeat(${data.submit.column}, 1fr)`, gap: 2 }}
       >
-        {data.fields.map((field: any) => (
-          <TextField key={field.name} fullWidth label={field.label} size="small" />
-        ))}
+        {Children.toArray(
+          data.fields.map((field: any) => <TextField fullWidth label={field.label} size="small" />)
+        )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'end' }}>
         <Button

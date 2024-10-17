@@ -11,7 +11,7 @@ export function useLogin() {
 
   function logout() {
     useUserState.getState().setAuth({
-      authorization: ''
+      authorization: '',
     });
 
     localStorage.removeItem(`authorization`);
