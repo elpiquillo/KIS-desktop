@@ -15,7 +15,8 @@ function NavSectionMini({ data, slotProps, ...other }: NavProps) {
   );
 }
 
-export default memo(NavSectionMini);
+const MemoizedNavSectionMini = memo(NavSectionMini);
+export default MemoizedNavSectionMini;
 
 // ----------------------------------------------------------------------
 

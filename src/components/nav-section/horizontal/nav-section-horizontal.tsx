@@ -27,7 +27,8 @@ function NavSectionHorizontal({ data, slotProps, sx, ...other }: NavProps) {
   );
 }
 
-export default memo(NavSectionHorizontal);
+const MemoizedNavSectionHorizontal = memo(NavSectionHorizontal);
+export default MemoizedNavSectionHorizontal;
 
 function Group({ items, slotProps }: NavGroupProps) {
   return (
