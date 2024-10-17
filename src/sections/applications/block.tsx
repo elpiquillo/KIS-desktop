@@ -103,8 +103,8 @@ export default function Block({ block }: Props) {
   const { content: View } = BlockViewByComponentType[block?.blocs?.[0]?.bloc_id || 'default'];
 
   return (
-    <Box>
-      <View blockInfo={block} handleGetHandlers={handleGetHandlers} />
-    </Box>
+    // <Box>
+    <View blockInfo={block} handleGetHandlers={handleGetHandlers} />
+    // </Box>
   );
 }
