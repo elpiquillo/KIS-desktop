@@ -22,7 +22,8 @@ function NavSectionVertical({ data, slotProps, ...other }: NavProps) {
   );
 }
 
-export default memo(NavSectionVertical);
+const MemoizedNavSectionVertical = memo(NavSectionVertical);
+export default MemoizedNavSectionVertical;
 
 // ----------------------------------------------------------------------
 

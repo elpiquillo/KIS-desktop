@@ -47,7 +47,7 @@ export default function AccountPopover() {
   const openSettingsModal = () => {
     accountSettings.onTrue();
     popover.onClose();
-  }
+  };
 
   return (
     <>
@@ -72,12 +72,13 @@ export default function AccountPopover() {
       >
         <Avatar
           sx={{
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
           }}
-          variant='square'
+          variant="square"
         >
           <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
-            {user && Upercase(String(`${user?.first_name[0]}${user?.last_name[0]}`))}
+            {user &&
+              Upercase(String(`${user?.first_name?.[0] || ''}${user?.last_name?.[0] || ''}`))}
           </Typography>
         </Avatar>
       </IconButton>
@@ -103,9 +104,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Stack sx={{ p: 1 }}>
-          <MenuItem
-            onClick={openSettingsModal}
-          >
+          <MenuItem onClick={openSettingsModal}>
             <Iconify icon="iconamoon:profile-circle-light" width={20} />
             {t('settings.profileSettings')}
           </MenuItem>

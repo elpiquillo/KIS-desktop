@@ -5,6 +5,7 @@ import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 
 import SimpleBar from 'simplebar-react';
 import { applyFilter, removeAccents } from 'src/utils/applyFilter';
+import { Children } from 'react';
 
 interface ApplicationsListProps {
   title: string;
@@ -52,11 +53,11 @@ export default function ApplicationsList({
         title={
           <Stack direction="row" alignItems="center">
             <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-              {title.split('').map((letter) => (
-                <motion.span key={`${letter}`} variants={letterVariants}>
-                  {letter}
-                </motion.span>
-              ))}
+              {Children.toArray(
+                title
+                  .split('')
+                  .map((letter) => <motion.span variants={letterVariants}>{letter}</motion.span>)
+              )}
             </motion.div>
           </Stack>
         }

@@ -34,4 +34,5 @@ const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(({ children, sx, ..
   );
 });
 
-export default memo(Scrollbar);
+const MemoizedScrollbar = memo(Scrollbar);
+export default MemoizedScrollbar;
