@@ -14,6 +14,7 @@ export default function TextWithIconView({ blockInfo }: Props) {
         display: 'flex',
         alignItems: 'center',
         p: 3,
+        // boxShadow: 2,
       }}
     >
       <Box sx={{ flexGrow: 1 }}>

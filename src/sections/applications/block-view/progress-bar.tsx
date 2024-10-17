@@ -1,4 +1,4 @@
-import { Box, LinearProgress, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardHeader, LinearProgress, Typography } from '@mui/material';
 import React from 'react';
 
 interface Props {
@@ -15,14 +15,12 @@ export default function ProgressBarView({ blockInfo }: Props) {
   const showPercentage = Number.isNaN(percentageByData) ? 100 : percentageByData;
 
   return (
-    <Box>
-      <Typography variant="h6" mb={1}>
-        {data.card_title}
-      </Typography>
-      <Typography variant="subtitle1">{data.sub_title}</Typography>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <Card>
+      <CardHeader title={data.card_title} subheader={data.sub_title} />
+      <CardContent>
         <Box sx={{ width: '100%', mr: 1 }}>
           <LinearProgress
+            sx={{ height: 8 }}
             color="success"
             variant="determinate"
             value={showPercentage > 100 ? 100 : showPercentage}
@@ -34,10 +32,12 @@ export default function ProgressBarView({ blockInfo }: Props) {
             sx={{ color: 'text.secondary' }}
           >{`${showPercentage}%`}</Typography>
         </Box>
-      </Box>
-      <Typography variant="body1">
-        {`${data.first_value || 0}${data.devise} / ${data.second_value || 0}${data.devise}`}
-      </Typography>
-    </Box>
+
+        <Typography variant="body1" mt={2}>
+          {`${data.first_value || 0}${data.devise} / ${data.second_value || 0}${data.devise}`}
+        </Typography>
+      </CardContent>
+      
+    </Card>
   );
 }
