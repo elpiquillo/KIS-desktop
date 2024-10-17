@@ -6,6 +6,7 @@ import GaugeView from './gauge';
 import InputFormView from './input-form';
 import ItemListView from './item-list';
 import KanbanView from './kanban';
+import PreKanban from './kanban/pre-kanban';
 import ProgressBarView from './progress-bar';
 import TabView from './tab';
 import TableView from './table';
@@ -50,7 +51,7 @@ export const BlockViewByComponentType: Record<
     content: TableView,
   },
   [ComponentType.KB]: {
-    content: KanbanView,
+    content: PreKanban,
   },
   [ComponentType.CLD]: {
     content: CalendarView,
