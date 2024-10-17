@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Card, CardHeader, Typography } from '@mui/material';
 import { Gauge, gaugeClasses } from '@mui/x-charts';
 import React from 'react';
 import { success } from 'src/theme/palette';
@@ -15,19 +15,12 @@ export default function GaugeView({ blockInfo }: Props) {
     : ((data.first_value / data.second_value) * 100).toFixed(2);
 
   return (
-    <Box>
-      <Typography variant="h6">{data.card_title}</Typography>
-      <Typography variant="body1" color="text.secondary">
-        {data.sub_title}
-      </Typography>
+    <Card>
+      <CardHeader title={data.card_title} subheader={data.sub_title} />
       <Box
         sx={{
           mt: 1.5,
           padding: 2,
-          border: 1,
-          borderColor: 'divider',
-          borderRadius: 1,
-          backgroundColor: 'background.neutral',
         }}
       >
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
@@ -80,6 +73,6 @@ export default function GaugeView({ blockInfo }: Props) {
           {data.bottom_text}
         </Typography>
       </Box>
-    </Box>
+    </Card>
   );
 }
