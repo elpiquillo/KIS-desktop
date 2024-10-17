@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, TextField, Typography } from '@mui/material';
 import React, { Children } from 'react';
 
 interface Props {
@@ -9,6 +9,13 @@ export default function InputFormView({ blockInfo }: Props) {
   const { data } = blockInfo.blocs[0];
 
   return (
+    <Card
+      sx={{
+        // display: 'flex',
+        // alignItems: 'center',
+        p: 3,
+      }}
+    >
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Typography variant="h6">{data.title}</Typography>
       <Box
@@ -32,5 +39,6 @@ export default function InputFormView({ blockInfo }: Props) {
         </Button>
       </Box>
     </Box>
+    </Card>
   );
 }
