@@ -26,11 +26,11 @@ export const useDashboardState = create<DashboardState>()((set) => ({
   setDashboardByDataHandlers: (blockId, data) =>
     set((state) => {
       const start = state.dashboard;
-      const structure = state.dashboard?.dashboard.structure;
-      const indexes = getIndexesForBlockById(blockId, structure);
+      const structure = state.dashboard?.dashboard.dashboard.structure;
+      const indexes = getIndexesForBlockById(blockId, structure || []);
       const blockData =
-        structure[indexes.containerIndex]?.row[indexes.rowIndex]?.blocs[indexes.blockIndex].blocs[0]
-          .data;
+        structure?.[indexes.containerIndex]?.row[indexes.rowIndex]?.blocs[indexes.blockIndex]
+          .blocs[0].data;
       const result = dispatchFetchedData({
         dataQueries: data.queries,
         dispatchQueries: blockData.queries_dispatch,
