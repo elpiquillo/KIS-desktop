@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { Queriesdispatch, QueryResult } from 'src/types/queries-interface';
+import { QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 
 const dispatchFetchedData = (content: {
   dataQueries: QueryResult[];
-  dispatchQueries: Queriesdispatch[];
+  dispatchQueries: QueriesDispatch[];
   blockData: {
     [key: string]: any;
     empty_data?: boolean;
