@@ -25,18 +25,26 @@ export const useDashboardState = create<DashboardState>()((set) => ({
   setDashboardMenu: (value) => set(() => ({ dashboardMenu: value })),
   setDashboardByDataHandlers: (blockId, data) =>
     set((state) => {
-      const start = state.dashboard;
-      const structure = state.dashboard?.dashboard.dashboard.structure;
-      const indexes = getIndexesForBlockById(blockId, structure || []);
+      const copyDashboard = JSON.parse(JSON.stringify(state.dashboard));
+      const structure: any[] = copyDashboard?.pages.pages[0].structure || [];
+      const indexes = getIndexesForBlockById(blockId, structure);
       const blockData =
         structure?.[indexes.containerIndex]?.row[indexes.rowIndex]?.blocs[indexes.blockIndex]
           .blocs[0].data;
-      const result = dispatchFetchedData({
-        dataQueries: data.queries,
-        dispatchQueries: blockData.queries_dispatch,
-        blockData,
-      });
-      // console.log('result', result);
-      return { dashboard: start };
+      if (indexes.containerIndex !== -1) {
+        const result = dispatchFetchedData({
+          dataQueries: data.queries,
+          dispatchQueries: blockData.queries_dispatch,
+          blockData,
+        });
+        structure[indexes.containerIndex].row[indexes.rowIndex].blocs[
+          indexes.blockIndex
+        ].blocs[0].data = result;
+        copyDashboard.pages.pages[0] = {
+          ...copyDashboard.pages.pages[0],
+          structure: [...structure],
+        };
+      }
+      return { dashboard: copyDashboard };
     }),
 }));

@@ -46,7 +46,7 @@ const dispatchFetchedData = (content: {
                     },
                   ];
 
-                  if (tempBlockData.columns_content.length) {
+                  if (tempBlockData.columns_content?.length) {
                     const colExist = tempBlockData.columns_content.find(
                       (td: any) => td.id === columns[0].id
                     );
