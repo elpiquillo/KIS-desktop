@@ -5,8 +5,8 @@ import { useGetDataHandlersList } from 'src/apis/data-handler';
 import { DataQuery } from 'src/types/queries-interface';
 
 import { BlockViewByComponentType } from './block-view/constants';
-import cable from './block-view/kanban/cable';
-import PageDataInCheck from './block-view/kanban/pageDataInCheck';
+import cable from './helpers/cable';
+import PageDataInCheck from './helpers/pageDataInCheck';
 
 interface Props {
   block: any;
