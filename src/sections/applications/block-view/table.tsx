@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { t } from 'i18next';
-import React from 'react';
+import React, { Children } from 'react';
 import { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
 import { TableNoData } from 'src/components/table';
@@ -27,6 +27,12 @@ interface Props {
 export default function TableView({ blockInfo }: Props) {
   const { open, onOpen, onClose } = usePopover();
   const { data } = blockInfo.blocs[0];
+
+  const maxRow =
+    data.columns_content?.reduce(
+      (acc: number, column: any) => (column.content.length > acc ? column.content.length : acc),
+      0
+    ) || 0; // fix by max len content in columns_content
 
   return (
     <Box>
@@ -64,20 +70,24 @@ export default function TableView({ blockInfo }: Props) {
           </TableHead>
 
           <TableBody>
-            {[1, 2, 3].map((row: number) => (
-              <TableRow key={row}>
-                {data.columns.map((column: any) => (
-                  <TableCell key={column.id}>{t('applications.content')}</TableCell>
-                ))}
-                {data.button_action.map((button: any) => (
-                  <TableCell key={button.id}>
-                    <Button key={button.id} size="small" variant="outlined">
-                      {button.text}
-                    </Button>
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+            {Children.toArray(
+              Array.from({ length: maxRow }).map((_, index) => (
+                <TableRow>
+                  {data.columns_content.map((column: any) => (
+                    <TableCell key={column.id}>
+                      {column.content[index]?.column_content || ''}
+                    </TableCell>
+                  ))}
+                  {data.button_action.map((button: any) => (
+                    <TableCell key={button.id}>
+                      <Button key={button.id} size="small" variant="outlined">
+                        {button.text}
+                      </Button>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
             {!data.columns.length && !data.button_action.length && (
               <TableNoData
                 notFound
