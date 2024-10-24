@@ -42,13 +42,17 @@ export default function InputFormView({ blockInfo }: Props) {
     }, {})
   );
 
-  const defaultValues = data.fields.reduce(
-    (acc: any, field: any) => ({
+  const defaultValues = data.fields.reduce((acc: any, field: any) => {
+    let value = field.value || '';
+    if (value.includes('data_in:')) {
+      const [, input] = field.value.replace(/\[|\]/g, '').split(':');
+      value = input;
+    }
+    return {
       ...acc,
-      [field.name]: field.value || '',
-    }),
-    {}
-  );
+      [field.name]: value,
+    };
+  }, {});
 
   const methods = useForm({
     resolver: yupResolver(validationSchema),
