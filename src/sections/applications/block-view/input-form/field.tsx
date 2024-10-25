@@ -1,6 +1,7 @@
 import { Box, MenuItem } from '@mui/material';
 import React from 'react';
 import { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
+import RHFDatePicker from 'src/components/hook-form/rhf-date-picker';
 import RHFRichText from 'src/components/hook-form/rhf-rich-text';
 
 interface Props {
@@ -37,7 +38,7 @@ export default function Field({ index, data }: Props) {
         />
       );
     case 'date':
-      return <RHFTextField name={data.name} label={label} />;
+      return <RHFDatePicker size="small" name={data.name} label={label} />;
     case 'checkbox':
       return <RHFCheckbox name={data.name} label={label} color="success" />;
     case 'image':
