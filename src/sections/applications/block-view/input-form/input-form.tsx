@@ -25,12 +25,12 @@ export default function InputFormView({ blockInfo }: Props) {
               schema.required(field.validate.required.errorMessage),
           })
           .when([], {
-            is: () => field.validate.min.active,
+            is: () => field.validate.minLength.active,
             then: (schema: Yup.NumberSchema | Yup.StringSchema) =>
               schema.min(field.validate.min.value, field.validate.required.errorMessage),
           })
           .when([], {
-            is: () => field.validate.max.active,
+            is: () => field.validate.maxLength.active,
             then: (schema: Yup.NumberSchema | Yup.StringSchema) =>
               schema.max(field.validate.max.value, field.validate.max.errorMessage),
           })
@@ -88,6 +88,7 @@ export default function InputFormView({ blockInfo }: Props) {
         <Box sx={{ display: 'flex', justifyContent: 'end' }}>
           <Button
             variant="contained"
+            type="submit"
             sx={{
               borderRadius: 0.5,
               '&.Mui-disabled': {

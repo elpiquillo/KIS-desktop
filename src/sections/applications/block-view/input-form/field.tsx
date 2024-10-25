@@ -1,6 +1,7 @@
 import { Box, MenuItem } from '@mui/material';
 import React from 'react';
 import { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
+import RHFRichText from 'src/components/hook-form/rhf-rich-text';
 
 interface Props {
   index: number;
@@ -24,7 +25,7 @@ export default function Field({ index, data }: Props) {
         />
       );
     case 'plain-text':
-      return <RHFTextField size="small" name={data.name} label={label} placeholder={data.name} />;
+      return <RHFRichText name={data.name} label={label} />;
     case 'number':
       return (
         <RHFTextField
