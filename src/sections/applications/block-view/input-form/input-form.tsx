@@ -4,6 +4,7 @@ import FormProvider from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Field from './field';
 
 interface Props {
   blockInfo: any;
@@ -74,15 +75,14 @@ export default function InputFormView({ blockInfo }: Props) {
         <Typography variant="h6">{data.title}</Typography>
         <Box
           sx={{
+            my: 2,
             display: 'grid',
             gridTemplateColumns: `repeat(${data.submit.column}, 1fr)`,
             gap: 2,
           }}
         >
           {Children.toArray(
-            data.fields.map((field: any) => (
-              <TextField fullWidth label={field.label} size="small" />
-            ))
+            data.fields.map((field: any, index: number) => <Field data={field} index={index} />)
           )}
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'end' }}>
