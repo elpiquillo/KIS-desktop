@@ -9,6 +9,7 @@ import {
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FormHelperText } from '@mui/material';
+import dayjs from 'dayjs';
 
 type Props = DatePickerProps<any> & {
   name: string;
@@ -29,7 +30,7 @@ export default function RHFDatePicker({ name, label, size, helperText, ...other 
             <DatePicker
               {...field}
               label={label}
-              value={field.value}
+              value={dayjs(field.value)}
               slots={{
                 openPickerIcon: CalendarIcon,
                 switchViewIcon: ArrowDropDownIcon,
@@ -37,7 +38,7 @@ export default function RHFDatePicker({ name, label, size, helperText, ...other 
                 rightArrowIcon: ArrowRightIcon,
               }}
               slotProps={{
-                textField: { size },
+                textField: { size, error: !!error },
                 openPickerIcon: {
                   sx: {
                     color: 'text.secondary',

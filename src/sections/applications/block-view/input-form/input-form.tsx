@@ -35,7 +35,7 @@ export default function InputFormView({ blockInfo }: Props) {
               schema.max(field.validate.max.value, field.validate.max.errorMessage),
           })
           .when([], {
-            is: () => field.validate.pattern.active,
+            is: () => field.validate.pattern?.active,
             then: (schema: Yup.StringSchema) =>
               schema.matches(field.validate.pattern.value, field.validate.pattern.errorMessage),
           }),
@@ -44,8 +44,8 @@ export default function InputFormView({ blockInfo }: Props) {
   );
 
   const defaultValues = data.fields.reduce((acc: any, field: any) => {
-    let value = field.value || '';
-    if (value.includes('data_in:')) {
+    let value = field.type === 'number' ? field.value || 0 : field.value || '';
+    if (value.toString().includes('data_in:')) {
       const [, input] = field.value.replace(/\[|\]/g, '').split(':');
       value = input;
     }
