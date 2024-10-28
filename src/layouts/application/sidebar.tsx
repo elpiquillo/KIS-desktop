@@ -55,7 +55,7 @@ function ApplicationMenuSidebar() {
         }
 
         return (
-          <Typography key={menuItemUrl.text} variant="subtitle2" ml={1} my={1.5}>
+          <Typography variant="subtitle2" ml={1} my={1.5}>
             {menuItemUrl.text}
           </Typography>
         );
@@ -83,7 +83,6 @@ function ApplicationMenuSidebar() {
 
         return (
           <NavItem
-            key={menuItemUrl.text}
             title={menuItemUrl.text}
             path={`${applicationId}/${menuItemUrl.url}`}
             icon={

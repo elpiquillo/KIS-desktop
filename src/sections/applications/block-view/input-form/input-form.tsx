@@ -6,6 +6,19 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Field from './field';
 
+const defaultValueByTypeField: Record<any, any> = {
+  text: '',
+  'text-area': '',
+  'plain-text': '',
+  number: 0,
+  date: '',
+  checkbox: false,
+  image: '',
+  document: '',
+  'hidden-field': '',
+  select: '',
+};
+
 interface Props {
   blockInfo: any;
 }
@@ -44,8 +57,8 @@ export default function InputFormView({ blockInfo }: Props) {
   );
 
   const defaultValues = data.fields.reduce((acc: any, field: any) => {
-    let value = field.type === 'number' ? field.value || 0 : field.value || '';
-    if (value.toString().includes('data_in:')) {
+    let value = field.value.length ? field.value : defaultValueByTypeField[field.type];
+    if (typeof value === 'string' && value.includes('data_in:')) {
       const [, input] = field.value.replace(/\[|\]/g, '').split(':');
       value = input;
     }

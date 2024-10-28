@@ -19,7 +19,7 @@ interface RHFCheckboxProps extends Omit<FormControlLabelProps, 'control' | 'labe
   helperText?: React.ReactNode;
 }
 
-export function RHFCheckbox({ name, helperText, color, label='', ...other }: RHFCheckboxProps) {
+export function RHFCheckbox({ name, helperText, color, label = '', ...other }: RHFCheckboxProps) {
   const { control } = useFormContext();
 
   return (
@@ -28,18 +28,13 @@ export function RHFCheckbox({ name, helperText, color, label='', ...other }: RHF
       control={control}
       render={({ field, fieldState: { error } }) => (
         <>
-          <FormControlLabel 
-            label={label} 
-            sx={{margin: label? '' : '0'}}
-            control={
-              <Checkbox 
-                {...field} 
-                checked={field.value} 
-                color={color} 
-              />} 
-            {...other} 
+          <FormControlLabel
+            label={label}
+            sx={{ margin: label ? '' : '0' }}
+            control={<Checkbox {...field} checked={field.value} color={color} />}
+            {...other}
           />
-          
+
           {(!!error || helperText) && (
             <FormHelperText error={!!error}>{error ? error?.message : helperText}</FormHelperText>
           )}
