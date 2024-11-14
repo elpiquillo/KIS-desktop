@@ -28,6 +28,32 @@ export default function InputFormView({ blockInfo }: Props) {
 
   const validationSchema = Yup.object().shape(
     data.fields.reduce((acc: any, field: any, index: number) => {
+      if (['image', 'document'].includes(field.type)) {
+        return {
+          ...acc,
+          [field.name]: Yup.lazy((value) => {
+            switch (typeof value) {
+              case 'object':
+                return Yup.object().shape({
+                  file_name: Yup.string().when([], {
+                    is: () => field.validate.required.active,
+                    then: (schema: Yup.NumberSchema | Yup.StringSchema) =>
+                      schema.required(field.validate.required.errorMessage),
+                  }),
+                });
+              case 'string':
+                return Yup.string().when([], {
+                  is: () => field.validate.required.active,
+                  then: (schema: Yup.NumberSchema | Yup.StringSchema) =>
+                    schema.required(field.validate.required.errorMessage),
+                });
+              default:
+                return Yup.mixed();
+            }
+          }),
+        };
+      }
+
       const typeValidation: any = field.type === 'number' ? Yup.number() : Yup.string();
       return {
         ...acc,
