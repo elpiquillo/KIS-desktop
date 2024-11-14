@@ -75,7 +75,7 @@ export default function InputFormView({ blockInfo }: Props) {
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
 
   const onSubmit = handleSubmit((formData: any) => {
