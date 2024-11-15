@@ -1,6 +1,8 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { Children } from 'react';
 import FormProvider from 'src/components/hook-form';
+import { useCreateDataHandlers } from 'src/apis/data-handler';
+import { useParams } from 'src/routes/hooks';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -24,7 +26,10 @@ interface Props {
 }
 
 export default function InputFormView({ blockInfo }: Props) {
+  const { pageId } = useParams();
   const { data } = blockInfo.blocs[0];
+
+  const { createDataHandlers } = useCreateDataHandlers(data.queries[0]);
 
   const validationSchema = Yup.object().shape(
     data.fields.reduce((acc: any, field: any, index: number) => {
@@ -105,7 +110,10 @@ export default function InputFormView({ blockInfo }: Props) {
   } = methods;
 
   const onSubmit = handleSubmit((formData: any) => {
-    // console.log(formData);
+    createDataHandlers({
+      pageId: pageId || '?',
+      document: formData,
+    });
   });
 
   return (

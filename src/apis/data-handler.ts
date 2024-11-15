@@ -24,3 +24,25 @@ export function useGetDataHandlersList(blockId: string) {
 
   return { getDataHandlers };
 }
+
+export function useCreateDataHandlers(query?: DataQuery) {
+  const createDataHandlers = async ({ pageId, document }: { pageId: string; document: any }) => {
+    try {
+      await apiFetcher(urls.dataHandlers.create, {
+        method: 'POST',
+        body: JSON.stringify({
+          data_handler: {
+            query_id: query?.id,
+            collection_name: query?.collection_name,
+            page_id: pageId,
+            documents: [document],
+          },
+        }),
+      });
+    } catch (error: any) {
+      throw new Error(t(`errors.${error.message}`));
+    }
+  };
+
+  return { createDataHandlers };
+}
