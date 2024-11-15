@@ -66,12 +66,12 @@ export default function InputFormView({ blockInfo }: Props) {
           .when([], {
             is: () => field.validate.minLength.active,
             then: (schema: Yup.NumberSchema | Yup.StringSchema) =>
-              schema.min(field.validate.min.value, field.validate.required.errorMessage),
+              schema.min(field.validate.minLength.value, field.validate.minLength.errorMessage),
           })
           .when([], {
             is: () => field.validate.maxLength.active,
             then: (schema: Yup.NumberSchema | Yup.StringSchema) =>
-              schema.max(field.validate.max.value, field.validate.max.errorMessage),
+              schema.max(field.validate.maxLength.value, field.validate.maxLength.errorMessage),
           })
           .when([], {
             is: () => field.validate.pattern?.active,
