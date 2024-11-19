@@ -112,7 +112,12 @@ export default function TableView({ blockInfo }: Props) {
         </Table>
       </TableContainer>
 
-      <FilterModal nameColumn={columnForFilter} open={open} onClose={handleCloseFilter} />
+      <FilterModal
+        block={blockInfo}
+        nameColumn={columnForFilter}
+        open={open}
+        onClose={handleCloseFilter}
+      />
     </Box>
   );
 }

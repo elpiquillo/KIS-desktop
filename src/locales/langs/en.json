@@ -49,9 +49,11 @@
     "disconnect": "Disconnect",
     "exportCsv": "Export CSV",
     "filter": "Filter",
+    "include": "include",
     "orDndCsvFile": "or drag & drop your .CSV file here",
-    "uploadImage": "Swipe or click to upload your image",
-    "uploadDocument": "Swipe or click to upload your document"
+    "strict": "strict",
+    "uploadDocument": "Swipe or click to upload your document",
+    "uploadImage": "Swipe or click to upload your image"
   },
   "errors": {}
 }
