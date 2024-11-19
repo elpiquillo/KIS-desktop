@@ -3,15 +3,12 @@ import {
   Button,
   ListItemIcon,
   Paper,
-  Popover,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from '@mui/material';
 import { t } from 'i18next';
@@ -19,12 +16,14 @@ import React, { Children } from 'react';
 import { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
 import { TableNoData } from 'src/components/table';
+import FilterModal from './modal';
 
 interface Props {
   blockInfo: any;
 }
 
 export default function TableView({ blockInfo }: Props) {
+  const [columnForFilter, setColumnForFilter] = React.useState('');
   const { open, onOpen, onClose } = usePopover();
   const { data } = blockInfo.blocs[0];
 
@@ -33,6 +32,19 @@ export default function TableView({ blockInfo }: Props) {
       (acc: number, column: any) => (column.content.length > acc ? column.content.length : acc),
       0
     ) || 0; // fix by max len content in columns_content
+
+  const handleOpenFilter = (event: React.MouseEvent<HTMLElement>, id: number) => {
+    const nameField = data.queries_dispatch[0].destination_fields[0].columns.find(
+      (column: any) => column.id === id
+    ).content;
+    setColumnForFilter(nameField);
+    onOpen(event);
+  };
+
+  const handleCloseFilter = () => {
+    setColumnForFilter('');
+    onClose();
+  };
 
   return (
     <Box>
@@ -56,7 +68,7 @@ export default function TableView({ blockInfo }: Props) {
                   >
                     <Typography variant="subtitle2">{column.name}</Typography>
                     {data.allow_filters && (
-                      <ListItemIcon sx={{ m: 0 }} onClick={onOpen}>
+                      <ListItemIcon sx={{ m: 0 }} onClick={(e) => handleOpenFilter(e, column.id)}>
                         <Iconify icon="mingcute:filter-2-fill" width={15} />
                       </ListItemIcon>
                     )}
@@ -100,44 +112,7 @@ export default function TableView({ blockInfo }: Props) {
         </Table>
       </TableContainer>
 
-      <Popover
-        open={!!open}
-        onClose={onClose}
-        anchorEl={open}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-      >
-        <Stack width={200}>
-          <Stack p={1}>
-            <TextField
-              fullWidth
-              name="filter_operator"
-              size="small"
-              margin="none"
-              variant="outlined"
-              type="text"
-            />
-          </Stack>
-          <Stack p={1} flexDirection="row">
-            <TextField
-              fullWidth
-              name="filter_value"
-              size="small"
-              margin="none"
-              variant="outlined"
-              type="text"
-            />
-          </Stack>
-          <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} p={1}>
-            <Button fullWidth variant="outlined">
-              {t('applications.filter')}
-            </Button>
-            <Button fullWidth variant="outlined" color="error">
-              {t('applications.delete')}
-            </Button>
-          </Stack>
-        </Stack>
-      </Popover>
+      <FilterModal nameColumn={columnForFilter} open={open} onClose={handleCloseFilter} />
     </Box>
   );
 }

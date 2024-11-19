@@ -8,7 +8,7 @@ import ItemListView from './item-list';
 import KanbanView from './kanban';
 import ProgressBarView from './progress-bar';
 import TabView from './tab';
-import TableView from './table';
+import TableView from './table/table';
 import TextWithIconView from './text-with-icon';
 
 export enum ComponentType {
