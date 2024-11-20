@@ -69,20 +69,43 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
         <Table size="small" data-testid="table">
           <TableHead>
             <TableRow>
-              {data.columns.map((column: any) => (
-                <TableCell key={column.id}>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                  >
-                    <Typography variant="subtitle2">{column.name}</Typography>
-                    {data.allow_filters && (
-                      <ListItemIcon sx={{ m: 0 }} onClick={(e) => handleOpenFilter(e, column.id)}>
-                        <Iconify icon="mingcute:filter-2-fill" width={15} />
-                      </ListItemIcon>
-                    )}
-                  </Box>
-                </TableCell>
-              ))}
+              {data.columns.map((column: any) => {
+                const columnNameForFilter =
+                  data.queries_dispatch[0].destination_fields[0].columns.find(
+                    (col: any) => col.id === column.id
+                  ).content;
+                const isActiveFilter = filters.some(
+                  (filter: any) => filter.filter_column === columnNameForFilter
+                );
+                return (
+                  <TableCell key={column.id}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Typography variant="subtitle2">{column.name}</Typography>
+                      {data.allow_filters && (
+                        <ListItemIcon
+                          sx={{
+                            ml: 0.5,
+                            p: 0.5,
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            color: isActiveFilter ? 'white' : 'grey.600',
+                            backgroundColor: isActiveFilter ? 'success.dark' : '',
+                          }}
+                          onClick={(e) => handleOpenFilter(e, column.id)}
+                        >
+                          <Iconify icon="mingcute:filter-2-fill" width={15} />
+                        </ListItemIcon>
+                      )}
+                    </Box>
+                  </TableCell>
+                );
+              })}
               {data.button_action.map((button: any) => (
                 <TableCell key={button.id}>{t('global.action')}</TableCell>
               ))}
