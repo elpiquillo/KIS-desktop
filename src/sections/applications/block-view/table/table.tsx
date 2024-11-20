@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { t } from 'i18next';
-import React, { Children } from 'react';
+import React, { Children, useEffect } from 'react';
 import { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
 import { TableNoData } from 'src/components/table';
@@ -35,6 +35,11 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
       (acc: number, column: any) => (column.content.length > acc ? column.content.length : acc),
       0
     ) || 0; // fix by max len content in columns_content
+
+  useEffect(() => {
+    handleGetHandlers(filters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleOpenFilter = (event: React.MouseEvent<HTMLElement>, id: number) => {
     const nameField = data.queries_dispatch[0].destination_fields[0].columns.find(
