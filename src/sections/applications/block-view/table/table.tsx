@@ -120,7 +120,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
         filters={filtersFromStorage}
         open={open}
         onClose={handleCloseFilter}
-        handleGetHandlers={handleGetContent}
+        handleGetHandlers={handleGetHandlers}
       />
     </Box>
   );

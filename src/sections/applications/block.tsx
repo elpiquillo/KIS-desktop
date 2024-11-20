@@ -65,11 +65,15 @@ export default function Block({ block }: Props) {
 
         return { queriesRequest: [], queriesResponse: [] };
       }
-      return { queriesRequest: [], queriesResponse: [] };
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data_link, data_link_ready, queries, slplitPath]
+    [data_link, data_link_ready, getDataHandlers, queries, slplitPath]
   );
+
+  useEffect(() => {
+    if (toLoad && queries?.length && queries_dispatch?.length) {
+      handleGetHandlers({});
+    }
+  }, [handleGetHandlers, queries, queries_dispatch, slplitPath, toLoad]);
 
   useEffect(() => {
     wss.current = cable(
