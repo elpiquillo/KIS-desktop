@@ -18,7 +18,8 @@ interface Props {
 export default function FilterModal({ block, nameColumn, open, onClose }: Props) {
   const { getDataHandlers } = useGetDataHandlersList(block?.id);
   const { data } = block.blocs[0];
-  const { filters } = data.queries[0];
+
+  const filters = JSON.parse(localStorage.getItem(block.id) || '[]');
 
   const path = window.location.href;
   const slplitPath = path.substring(path.lastIndexOf('/') + 1);
@@ -39,9 +40,31 @@ export default function FilterModal({ block, nameColumn, open, onClose }: Props)
       ? { ...filter }
       : { filter_column: nameColumn, filter_operator: '', filter_value: '' };
     reset(initialValues);
-  }, [filters, nameColumn, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nameColumn, reset]);
 
-  const handleApplyFilter = handleSubmit((formData: any) => {
+  const handleAddFilterToLocalStorage = (formFilter: any) => {
+    if (!filters.length) {
+      localStorage.setItem(block.id, JSON.stringify([formFilter]));
+      return [formFilter];
+    }
+    const filterExist = filters.findIndex((f: any) => f.filter_column === formFilter.filter_column);
+    const updatedFilters =
+      filterExist === -1
+        ? [...filters, formFilter]
+        : filters.map((f: any) => (f.filter_column === formFilter.filter_column ? formFilter : f));
+
+    localStorage.setItem(block.id, JSON.stringify(updatedFilters));
+    return updatedFilters;
+  };
+
+  const handleRemoveFilterFromLocalStorage = (filterColumn: string) => {
+    const updatedFilters = filters.filter((f: any) => f.filter_column !== filterColumn);
+    localStorage.setItem(block.id, JSON.stringify(updatedFilters));
+    return updatedFilters;
+  };
+
+  const handleGetHandlers = (localFilters: any[]) => {
     const tempQueries: DataQuery[] = [];
 
     data.queries.forEach((q: any) => {
@@ -61,7 +84,7 @@ export default function FilterModal({ block, nameColumn, open, onClose }: Props)
         page_id: q.page_id || slplitPath,
         collection_name: q.collection_name,
         limit: q.limit,
-        filters: [...dataFilters(), formData],
+        filters: [...dataFilters(), ...localFilters],
         special_filters: q.special_filters || [],
       };
 
@@ -71,7 +94,19 @@ export default function FilterModal({ block, nameColumn, open, onClose }: Props)
     if (tempQueries.length) {
       getDataHandlers(tempQueries);
     }
+  };
+
+  const handleApplyFilter = handleSubmit((formData: any) => {
+    const updatedFilters = handleAddFilterToLocalStorage(formData);
+    handleGetHandlers(updatedFilters);
+    onClose();
   });
+
+  const handleDeleteFilter = () => {
+    const updatedFilters = handleRemoveFilterFromLocalStorage(nameColumn);
+    handleGetHandlers(updatedFilters);
+    onClose();
+  };
 
   const handleClose = () => {
     reset({});
@@ -117,7 +152,7 @@ export default function FilterModal({ block, nameColumn, open, onClose }: Props)
             <Button fullWidth variant="outlined" type="submit">
               {t('applications.filter')}
             </Button>
-            <Button fullWidth variant="outlined" color="error">
+            <Button fullWidth variant="outlined" color="error" onClick={handleDeleteFilter}>
               {t('applications.delete')}
             </Button>
           </Stack>
