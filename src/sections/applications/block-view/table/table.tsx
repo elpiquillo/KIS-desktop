@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { t } from 'i18next';
 import React, { Children, useEffect } from 'react';
@@ -26,8 +27,9 @@ interface Props {
 export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   const [columnForFilter, setColumnForFilter] = React.useState('');
   const { open, onOpen, onClose } = usePopover();
-  const { data } = blockInfo.blocs[0];
+  const theme = useTheme();
 
+  const { data } = blockInfo.blocs[0];
   const filters = JSON.parse(localStorage.getItem(blockInfo.id) || '[]');
 
   const maxRow =
@@ -65,83 +67,112 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
         )}
       </Box>
 
-      <TableContainer component={Paper}>
-        <Table size="small" data-testid="table">
-          <TableHead>
-            <TableRow>
-              {data.columns.map((column: any) => {
-                const columnNameForFilter =
-                  data.queries_dispatch[0].destination_fields[0].columns.find(
-                    (col: any) => col.id === column.id
-                  ).content;
-                const isActiveFilter = filters.some(
-                  (filter: any) => filter.filter_column === columnNameForFilter
-                );
-                return (
-                  <TableCell key={column.id}>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Typography variant="subtitle2">{column.name}</Typography>
-                      {data.allow_filters && (
-                        <ListItemIcon
-                          sx={{
-                            ml: 0.5,
-                            p: 0.5,
-                            borderRadius: '50%',
-                            cursor: 'pointer',
-                            color: isActiveFilter ? 'white' : 'grey.600',
-                            backgroundColor: isActiveFilter ? 'success.dark' : '',
-                          }}
-                          onClick={(e) => handleOpenFilter(e, column.id)}
-                        >
-                          <Iconify icon="mingcute:filter-2-fill" width={15} />
-                        </ListItemIcon>
-                      )}
-                    </Box>
-                  </TableCell>
-                );
-              })}
-              {data.button_action.map((button: any) => (
-                <TableCell key={button.id}>{t('global.action')}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {Children.toArray(
-              Array.from({ length: maxRow }).map((_, index) => (
-                <TableRow>
-                  {data.columns_content.map((column: any) => (
+      <Box
+        sx={{
+          border: `1px solid ${theme.palette.divider}`,
+          borderRadius: 1,
+        }}
+      >
+        <TableContainer component={Paper}>
+          <Table
+            size="small"
+            data-testid="table"
+            sx={{
+              '& .MuiTableCell-root': {
+                borderColor: `${theme.palette.divider} !important`,
+                borderWidth: '1px',
+                borderStyle: 'solid',
+              },
+              '& .MuiTableRow-root:last-of-type .MuiTableCell-root': {
+                borderBottomWidth: '0px',
+              },
+              '& .MuiTableRow-root:first-of-type .MuiTableCell-root': {
+                borderWidth: '0px 1px 1px 1px',
+              },
+              '& .MuiTableRow-root .MuiTableCell-root:last-of-type': {
+                borderRightWidth: '0px',
+              },
+              '& .MuiTableRow-root .MuiTableCell-root:first-of-type': {
+                borderLeftWidth: '0px',
+              },
+            }}
+          >
+            <TableHead>
+              <TableRow>
+                {data.columns.map((column: any) => {
+                  const columnNameForFilter =
+                    data.queries_dispatch[0].destination_fields[0].columns.find(
+                      (col: any) => col.id === column.id
+                    ).content;
+                  const isActiveFilter = filters.some(
+                    (filter: any) => filter.filter_column === columnNameForFilter
+                  );
+                  return (
                     <TableCell key={column.id}>
-                      {column.content[index]?.column_content || ''}
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Typography variant="subtitle2">{column.name}</Typography>
+                        {data.allow_filters && (
+                          <ListItemIcon
+                            sx={{
+                              ml: 0.5,
+                              p: 0.5,
+                              borderRadius: '50%',
+                              cursor: 'pointer',
+                              color: isActiveFilter ? 'white' : 'grey.600',
+                              backgroundColor: isActiveFilter ? 'success.dark' : '',
+                            }}
+                            onClick={(e) => handleOpenFilter(e, column.id)}
+                          >
+                            <Iconify icon="mingcute:filter-2-fill" width={15} />
+                          </ListItemIcon>
+                        )}
+                      </Box>
                     </TableCell>
-                  ))}
-                  {data.button_action.map((button: any) => (
-                    <TableCell key={button.id}>
-                      <Button key={button.id} size="small" variant="outlined">
-                        {button.text}
-                      </Button>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            )}
-            {!data.columns.length && !data.button_action.length && (
-              <TableNoData
-                notFound
-                title={t('applications.editForm.noColumnsAdded')}
-                imgUrl="/assets/icons/empty/ic_content.svg"
-                sx={{ height: '180px' }}
-              />
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  );
+                })}
+                {data.button_action.map((button: any) => (
+                  <TableCell key={button.id}>{t('global.action')}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {Children.toArray(
+                Array.from({ length: maxRow }).map((_, index) => (
+                  <TableRow>
+                    {data.columns_content.map((column: any) => (
+                      <TableCell key={column.id}>
+                        {column.content[index]?.column_content || ''}
+                      </TableCell>
+                    ))}
+                    {data.button_action.map((button: any) => (
+                      <TableCell key={button.id}>
+                        <Button key={button.id} size="small" variant="outlined">
+                          {button.text}
+                        </Button>
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              )}
+              {!data.columns.length && !data.button_action.length && (
+                <TableNoData
+                  notFound
+                  title={t('applications.editForm.noColumnsAdded')}
+                  imgUrl="/assets/icons/empty/ic_content.svg"
+                  sx={{ height: '180px' }}
+                />
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
 
       <FilterModal
         id={blockInfo.id}
