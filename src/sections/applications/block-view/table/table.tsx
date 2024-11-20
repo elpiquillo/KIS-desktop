@@ -20,12 +20,15 @@ import FilterModal from './modal';
 
 interface Props {
   blockInfo: any;
+  handleGetHandlers: (additionalFilters: any[]) => void;
 }
 
-export default function TableView({ blockInfo }: Props) {
+export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   const [columnForFilter, setColumnForFilter] = React.useState('');
   const { open, onOpen, onClose } = usePopover();
   const { data } = blockInfo.blocs[0];
+
+  const filters = JSON.parse(localStorage.getItem(blockInfo.id) || '[]');
 
   const maxRow =
     data.columns_content?.reduce(
@@ -113,10 +116,12 @@ export default function TableView({ blockInfo }: Props) {
       </TableContainer>
 
       <FilterModal
-        block={blockInfo}
+        id={blockInfo.id}
         nameColumn={columnForFilter}
+        filters={filters}
         open={open}
         onClose={handleCloseFilter}
+        handleGetHandlers={handleGetHandlers}
       />
     </Box>
   );

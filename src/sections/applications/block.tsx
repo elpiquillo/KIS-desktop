@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '@mui/material';
 import { useGetDataHandlersList } from 'src/apis/data-handler';
 import { DataQuery } from 'src/types/queries-interface';
@@ -25,8 +25,8 @@ export default function Block({ block }: Props) {
 
   const wss = useRef<WebSocket | null>(null);
 
-  useEffect(() => {
-    if (toLoad && queries?.length && queries_dispatch?.length) {
+  const handleGetHandlers = useCallback(
+    (additionalFilters: any[]) => {
       const tempQueries: DataQuery[] = [];
 
       queries.forEach((q: any) => {
@@ -48,7 +48,7 @@ export default function Block({ block }: Props) {
           page_id: q.page_id || slplitPath,
           collection_name: q.collection_name,
           limit: q.limit,
-          filters,
+          filters: [...filters, ...additionalFilters],
           special_filters: q.special_filters || [],
         };
 
@@ -60,8 +60,15 @@ export default function Block({ block }: Props) {
       if (tempQueries.length) {
         getDataHandlers(tempQueries);
       }
+    },
+    [getDataHandlers, queries, slplitPath]
+  );
+
+  useEffect(() => {
+    if (toLoad && queries?.length && queries_dispatch?.length) {
+      handleGetHandlers([]);
     }
-  }, [toLoad, queries, queries_dispatch, slplitPath, getDataHandlers]);
+  }, [handleGetHandlers, queries, queries_dispatch, slplitPath, toLoad]);
 
   useEffect(() => {
     wss.current = cable(
@@ -94,5 +101,9 @@ export default function Block({ block }: Props) {
 
   const { content: View } = BlockViewByComponentType[block?.blocs?.[0]?.bloc_id || 'default'];
 
-  return <View blockInfo={block} />;
+  return (
+    <Box>
+      <View blockInfo={block} handleGetHandlers={handleGetHandlers} />
+    </Box>
+  );
 }
