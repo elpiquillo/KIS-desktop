@@ -16,6 +16,15 @@ export interface QueriesDispatch {
   }[];
 }
 
+export interface ButtonAction {
+  index: number;
+  id: string;
+  page_id: string;
+  text: string;
+  name: string;
+  button_color: string;
+}
+
 export interface ApiDataHandlerResponse {
   queries: {
     query_id: string;
@@ -34,6 +43,8 @@ export interface ApiDataHandlerResponse {
     }[];
   }[];
 }
+
+export type Document = ApiDataHandlerResponse['queries'][number]['documents'][number];
 
 export type QueryResult = ApiDataHandlerResponse['queries'][number];
 
