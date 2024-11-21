@@ -6,6 +6,8 @@ import { useParams } from 'src/routes/hooks';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { t } from 'i18next';
+import { useSnackbar } from 'notistack';
 import Field from './field';
 
 const defaultValueByTypeField: Record<any, any> = {
@@ -27,6 +29,8 @@ interface Props {
 
 export default function InputFormView({ blockInfo }: Props) {
   const { pageId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
+
   const { data } = blockInfo.blocs[0];
 
   const { createDataHandlers } = useCreateDataHandlers(data.queries[0]);
@@ -109,10 +113,15 @@ export default function InputFormView({ blockInfo }: Props) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  const onSubmit = handleSubmit((formData: any) => {
-    createDataHandlers({
+  const onSubmit = handleSubmit(async (formData: any) => {
+    await createDataHandlers({
       pageId: pageId || '?',
       document: formData,
+    });
+
+    enqueueSnackbar(t('applications.formCreatedSuccess'), {
+      variant: 'success',
+      anchorOrigin: { vertical: 'top', horizontal: 'center' },
     });
   });
 
@@ -136,6 +145,7 @@ export default function InputFormView({ blockInfo }: Props) {
           <Button
             variant="contained"
             type="submit"
+            disabled={isSubmitting}
             sx={{
               borderRadius: 0.5,
               '&.Mui-disabled': {

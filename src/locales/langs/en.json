@@ -53,7 +53,8 @@
     "orDndCsvFile": "or drag & drop your .CSV file here",
     "strict": "strict",
     "uploadDocument": "Swipe or click to upload your document",
-    "uploadImage": "Swipe or click to upload your image"
+    "uploadImage": "Swipe or click to upload your image",
+    "formCreatedSuccess": "Congratulations, everything was created!"
   },
   "errors": {}
 }
