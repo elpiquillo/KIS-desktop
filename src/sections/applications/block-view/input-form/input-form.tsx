@@ -110,7 +110,8 @@ export default function InputFormView({ blockInfo }: Props) {
 
   const {
     handleSubmit,
-    formState: { isSubmitting, errors },
+    reset,
+    formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (formData: any) => {
@@ -123,6 +124,7 @@ export default function InputFormView({ blockInfo }: Props) {
       variant: 'success',
       anchorOrigin: { vertical: 'top', horizontal: 'center' },
     });
+    reset({});
   });
 
   return (
