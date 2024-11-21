@@ -26,7 +26,7 @@ export default function Block({ block }: Props) {
   const wss = useRef<WebSocket | null>(null);
 
   const handleGetHandlers = useCallback(
-    (additionalFilters: any[]) => {
+    async (additionalFilters?: any[]) => {
       const tempQueries: DataQuery[] = [];
 
       queries.forEach((q: any) => {
@@ -48,7 +48,7 @@ export default function Block({ block }: Props) {
           page_id: q.page_id || slplitPath,
           collection_name: q.collection_name,
           limit: q.limit,
-          filters: [...filters, ...additionalFilters],
+          filters: [...filters, ...(additionalFilters || [])],
           special_filters: q.special_filters || [],
         };
 
@@ -58,15 +58,18 @@ export default function Block({ block }: Props) {
       setToLoad(false);
 
       if (tempQueries.length) {
-        getDataHandlers(tempQueries);
+        const res = await getDataHandlers(tempQueries);
+        return res;
       }
+
+      return null;
     },
     [getDataHandlers, queries, slplitPath]
   );
 
   useEffect(() => {
     if (toLoad && queries?.length && queries_dispatch?.length) {
-      handleGetHandlers([]);
+      handleGetHandlers();
     }
   }, [handleGetHandlers, queries, queries_dispatch, slplitPath, toLoad]);
 

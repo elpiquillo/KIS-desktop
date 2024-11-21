@@ -1,16 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { RouterLink } from 'src/routes/components';
 import { useParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { ApiDataHandlerResponse, QueryResult } from 'src/types/queries-interface';
 
 interface Props {
   blockInfo: any;
+  handleGetHandlers: (additionalFilters?: any[]) => ApiDataHandlerResponse;
 }
 
-export default function ItemListView({ blockInfo }: Props) {
+export default function ItemListView({ blockInfo, handleGetHandlers }: Props) {
   const { applicationId } = useParams();
+  const [documents, setDocuments] = useState<QueryResult['documents']>([]);
   const { data } = blockInfo.blocs[0];
+
+  const handleGetDocuments = async () => {
+    const res = await handleGetHandlers();
+    if (res?.queries?.length) {
+      setDocuments(res.queries[0].documents);
+    }
+  };
+
+  useEffect(() => {
+    handleGetDocuments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box

@@ -17,6 +17,7 @@ export function useGetDataHandlersList(blockId: string) {
       });
 
       setDashboardByDataHandlers(blockId, res);
+      return res;
     } catch (error: any) {
       throw new Error(t(`errors.${error.message}`));
     }

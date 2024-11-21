@@ -21,7 +21,7 @@ import FilterModal from './modal';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (additionalFilters: any[]) => void;
+  handleGetHandlers: (additionalFilters?: any[]) => void;
 }
 
 export default function TableView({ blockInfo, handleGetHandlers }: Props) {
