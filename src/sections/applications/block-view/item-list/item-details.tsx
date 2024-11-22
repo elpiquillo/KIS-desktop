@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { RouterLink } from 'src/routes/components';
 import { useParams } from 'src/routes/hooks';
@@ -49,7 +49,17 @@ export default function ItemDetails({
         padding: 2,
       }}
     >
-      <CardContent sx={{ padding: '12px 0' }}>
+      <CardContent sx={{ padding: '0 0 8px 0' }}>
+        {finalData?.image && (
+          <Box sx={{ maxHeight: '100px', maxWidth: '100px', mb: 1 }}>
+            <CardMedia
+              component="img"
+              src={finalData?.image?.original}
+              alt={finalData?.image?.file_name}
+              sx={{ height: '100%', objectFit: 'contain' }}
+            />
+          </Box>
+        )}
         {finalData?.card_content.map(({ id, title, content }) => (
           <Typography key={id} variant="body2" sx={{ color: 'text.primary' }}>
             {`${title ? `${title}: ` : ''} ${content}`}

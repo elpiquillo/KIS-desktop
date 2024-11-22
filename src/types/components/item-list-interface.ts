@@ -10,6 +10,10 @@ export interface FinalData {
     content: string;
     title: string;
   }[];
-  image?: string;
+  image?: {
+    file_name: string;
+    original: string;
+    thumbnail: string;
+  };
   button_action: ButtonAction[];
 }
