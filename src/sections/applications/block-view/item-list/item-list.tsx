@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { ApiDataHandlerResponse, QueryResult } from 'src/types/queries-interface';
 import ItemDetails from './item-details';
 
@@ -23,14 +23,7 @@ export default function ItemListView({ blockInfo, handleGetHandlers }: Props) {
   }, []);
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'grid',
-        gridTemplateColumns: `repeat(${data.card_content.length}, 1fr)`,
-        gap: 2,
-      }}
-    >
+    <Grid container spacing={2}>
       {blockInfo.blocs[0] &&
         queries[0]?.documents.map((document: any) => (
           <ItemDetails
@@ -41,6 +34,6 @@ export default function ItemListView({ blockInfo, handleGetHandlers }: Props) {
             blockData={blockInfo.blocs[0].data}
           />
         ))}
-    </Box>
+    </Grid>
   );
 }
