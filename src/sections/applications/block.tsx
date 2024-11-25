@@ -27,7 +27,7 @@ export default function Block({ block }: Props) {
 
   const handleGetHandlers = useCallback(
     async (additionalFilters?: any[]) => {
-      const tempQueries: DataQuery[] = [];
+      const queriesRequest: DataQuery[] = [];
 
       queries.forEach((q: any) => {
         const dataFilters = () => {
@@ -52,14 +52,14 @@ export default function Block({ block }: Props) {
           special_filters: q.special_filters || [],
         };
 
-        tempQueries.push(query);
+        queriesRequest.push(query);
       });
 
       setToLoad(false);
 
-      if (tempQueries.length) {
-        const res = await getDataHandlers(tempQueries);
-        return res;
+      if (queriesRequest.length) {
+        const result = await getDataHandlers(queriesRequest);
+        return { queriesRequest, queriesResponse: result?.queries };
       }
 
       return null;

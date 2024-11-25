@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid } from '@mui/material';
-import { ApiDataHandlerResponse, QueryResult } from 'src/types/queries-interface';
+import { Grid } from '@mui/material';
+import { DataQuery, QueryResult } from 'src/types/queries-interface';
 import ItemDetails from './item-details';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (additionalFilters?: any[]) => ApiDataHandlerResponse;
+  handleGetHandlers: (additionalFilters?: any[]) => {
+    queriesRequest: DataQuery[];
+    queriesResponse: QueryResult[];
+  } | null;
 }
 
 export default function ItemListView({ blockInfo, handleGetHandlers }: Props) {
-  const [queries, setQueries] = useState<QueryResult[]>([]);
+  const [queriesRequest, setQueriesRequest] = useState<DataQuery[]>([]);
+  const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
   const { data } = blockInfo.blocs[0];
 
   const handleGetDocuments = async () => {
-    const res = await handleGetHandlers();
-    setQueries(res?.queries || []);
+    const { queriesRequest: request, queriesResponse: response } =
+      (await handleGetHandlers()) || {};
+    setQueriesRequest(request || []);
+    setQueriesResponse(response || []);
   };
 
   useEffect(() => {
@@ -24,14 +30,14 @@ export default function ItemListView({ blockInfo, handleGetHandlers }: Props) {
 
   return (
     <Grid container spacing={2}>
-      {blockInfo.blocs[0] &&
-        queries[0]?.documents.map((document: any) => (
+      {data &&
+        queriesResponse[0]?.documents.map((document: any) => (
           <ItemDetails
-            key={document._id.$oid}
-            queries_dispatch={blockInfo.blocs[0].data.queries_dispatch}
-            queriesValues={queries}
+            queriesDispatch={data.queries_dispatch}
+            queriesRequest={queriesRequest}
+            queriesResponse={queriesResponse}
             current_document={document}
-            blockData={blockInfo.blocs[0].data}
+            blockData={data}
           />
         ))}
     </Grid>

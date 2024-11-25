@@ -5,18 +5,20 @@ import { useParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { FinalData } from 'src/types/components/item-list-interface';
-import { Document, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
+import { DataQuery, Document, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 
 interface Props {
-  queries_dispatch: QueriesDispatch[];
-  queriesValues: QueryResult[];
+  queriesDispatch: QueriesDispatch[];
+  queriesRequest: DataQuery[];
+  queriesResponse: QueryResult[];
   blockData: any;
   current_document: Document;
 }
 
 export default function ItemDetails({
-  queries_dispatch,
-  queriesValues,
+  queriesDispatch,
+  queriesRequest,
+  queriesResponse,
   blockData,
   current_document,
 }: Props) {
@@ -25,20 +27,20 @@ export default function ItemDetails({
   const [finalData, setFinalData] = useState<FinalData | null>(null);
 
   useEffect(() => {
-    if (toLoadFinalData && queries_dispatch?.length && queriesValues?.length) {
-      const currentQueries = JSON.parse(JSON.stringify(queriesValues));
+    if (toLoadFinalData && queriesDispatch?.length && queriesResponse?.length) {
+      const currentQueries = JSON.parse(JSON.stringify(queriesResponse));
       currentQueries[0].documents = [current_document];
 
       const dispatchData = dispatchFetchedData({
         dataQueries: currentQueries,
-        dispatchQueries: queries_dispatch,
+        dispatchQueries: queriesDispatch,
         blockData,
       });
 
       setFinalData(dispatchData);
       setToLoadFinalData(false);
     }
-  }, [blockData, current_document, queriesValues, queries_dispatch, toLoadFinalData]);
+  }, [blockData, current_document, queriesResponse, queriesDispatch, toLoadFinalData]);
 
   return (
     <Grid item xs={12} md={6} lg={4} xl={3}>
@@ -82,6 +84,13 @@ export default function ItemDetails({
               }}
               component={RouterLink}
               href={`${paths.main.root}${applicationId}/${button.page_id}`}
+              state={{
+                data: {
+                  id: current_document._id.$oid,
+                  collection: blockData.queries[0].collection_name,
+                  query: queriesRequest,
+                },
+              }}
             >
               {button.text}
             </Button>
