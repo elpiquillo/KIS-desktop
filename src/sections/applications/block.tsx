@@ -61,7 +61,7 @@ export default function Block({ block }: Props) {
         return { queriesRequest, queriesResponse: result?.queries };
       }
 
-      return null;
+      return { queriesRequest: [], queriesResponse: [] };
     },
     [getDataHandlers, queries, slplitPath]
   );

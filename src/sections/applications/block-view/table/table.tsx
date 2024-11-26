@@ -13,38 +13,56 @@ import {
   useTheme,
 } from '@mui/material';
 import { t } from 'i18next';
-import React, { Children, useEffect } from 'react';
+import React, { Children, useCallback, useEffect, useMemo, useState } from 'react';
 import { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
 import { TableNoData } from 'src/components/table';
+import { DataQuery, QueryResult } from 'src/types/queries-interface';
+import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import FilterModal from './modal';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (additionalFilters?: any[]) => void;
+  handleGetHandlers: (additionalFilters?: any[]) => {
+    queriesRequest: DataQuery[];
+    queriesResponse: QueryResult[];
+  };
 }
 
 export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   const [columnForFilter, setColumnForFilter] = React.useState('');
+  const [data, setData] = useState<any>({});
   const { open, onOpen, onClose } = usePopover();
   const theme = useTheme();
 
-  const { data } = blockInfo.blocs[0];
+  const { data: dataWithoutTableContent } = blockInfo.blocs[0];
   const filters = JSON.parse(localStorage.getItem(blockInfo.id) || '[]');
 
-  const maxRow =
-    data.columns_content?.reduce(
-      (acc: number, column: any) => (column.content.length > acc ? column.content.length : acc),
-      0
-    ) || 0; // fix by max len content in columns_content
+  const maxRow = useMemo(
+    () =>
+      data.columns_content?.reduce(
+        (acc: number, column: any) => (column.content.length > acc ? column.content.length : acc),
+        0
+      ) || 0,
+    [data.columns_content]
+  );
+
+  const handleGetContent = useCallback(async () => {
+    const { queriesResponse } = await handleGetHandlers();
+    const result = dispatchFetchedData({
+      dataQueries: queriesResponse,
+      dispatchQueries: dataWithoutTableContent.queries_dispatch,
+      blockData: dataWithoutTableContent,
+    });
+    setData(result);
+  }, [dataWithoutTableContent, handleGetHandlers]);
 
   useEffect(() => {
-    handleGetHandlers(filters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    handleGetContent();
+  }, [handleGetContent]);
 
   const handleOpenFilter = (event: React.MouseEvent<HTMLElement>, id: number) => {
-    const nameField = data.queries_dispatch[0].destination_fields[0].columns.find(
+    const nameField = data.queries_dispatch?.[0].destination_fields[0].columns.find(
       (column: any) => column.id === id
     ).content;
     setColumnForFilter(nameField);
@@ -99,9 +117,9 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
           >
             <TableHead>
               <TableRow>
-                {data.columns.map((column: any) => {
+                {data.columns?.map((column: any) => {
                   const columnNameForFilter =
-                    data.queries_dispatch[0].destination_fields[0].columns.find(
+                    data.queries_dispatch?.[0].destination_fields[0].columns.find(
                       (col: any) => col.id === column.id
                     ).content;
                   const isActiveFilter = filters.some(
@@ -136,7 +154,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                     </TableCell>
                   );
                 })}
-                {data.button_action.map((button: any) => (
+                {data.button_action?.map((button: any) => (
                   <TableCell key={button.id}>{t('global.action')}</TableCell>
                 ))}
               </TableRow>
@@ -146,12 +164,12 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
               {Children.toArray(
                 Array.from({ length: maxRow }).map((_, index) => (
                   <TableRow>
-                    {data.columns_content.map((column: any) => (
+                    {data.columns_content?.map((column: any) => (
                       <TableCell key={column.id}>
                         {column.content[index]?.column_content || ''}
                       </TableCell>
                     ))}
-                    {data.button_action.map((button: any) => (
+                    {data.button_action?.map((button: any) => (
                       <TableCell key={button.id}>
                         <Button key={button.id} size="small" variant="outlined">
                           {button.text}
@@ -161,7 +179,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                   </TableRow>
                 ))
               )}
-              {!data.columns.length && !data.button_action.length && (
+              {!data.columns?.length && !data.button_action?.length && (
                 <TableNoData
                   notFound
                   title={t('applications.editForm.noColumnsAdded')}
