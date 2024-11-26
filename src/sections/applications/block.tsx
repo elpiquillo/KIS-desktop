@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function Block({ block }: Props) {
-  const { getDataHandlers } = useGetDataHandlersList(block.id);
+  const { getDataHandlers } = useGetDataHandlersList();
   const {
     data: { queries, queries_dispatch },
   } = block.blocs[0];

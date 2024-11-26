@@ -1,12 +1,9 @@
 import { t } from 'i18next';
-import { useDashboardState } from 'src/store/dashboardState';
 import { DataQuery } from 'src/types/queries-interface';
 import { apiFetcher } from 'src/utils/fetchers';
 import { urls } from 'src/utils/urls';
 
-export function useGetDataHandlersList(blockId: string) {
-  const { setDashboardByDataHandlers } = useDashboardState();
-
+export function useGetDataHandlersList() {
   const getDataHandlers = async (queries: DataQuery[]) => {
     try {
       const res = await apiFetcher(urls.dataHandlers.list, {
@@ -15,8 +12,6 @@ export function useGetDataHandlersList(blockId: string) {
           data_handler: { queries },
         }),
       });
-
-      setDashboardByDataHandlers(blockId, res);
       return res;
     } catch (error: any) {
       throw new Error(t(`errors.${error.message}`));
