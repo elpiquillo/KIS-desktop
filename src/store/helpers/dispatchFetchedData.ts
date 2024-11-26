@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 
 const dispatchFetchedData = (content: {
