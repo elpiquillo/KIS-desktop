@@ -1,7 +1,8 @@
 export default interface DashboardAccessInterface {
   id: {
     id: string;
-    display: boolean;
+    display?: boolean;
+    favorite?: boolean;
   };
   logo: string;
   name: string;

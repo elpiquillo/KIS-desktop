@@ -1,20 +1,63 @@
-import { Avatar, Card, CardActionArea, CardContent, CardHeader, IconButton, MenuItem, Typography, useTheme } from "@mui/material";
-import { t } from "i18next";
-import { useNavigate } from "react-router-dom";
-import DashboardAccessInterface from "src/types/dashboard-access-interface";
+import {
+  Avatar,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardHeader,
+  IconButton,
+  MenuItem,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { t } from 'i18next';
+import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
-import Iconify from "../iconify";
-import CustomPopover, { usePopover } from "../custom-popover";
+import DashboardAccessInterface from 'src/types/dashboard-access-interface';
+import { usePutDashboardAccess } from 'src/apis/dashboard-access';
+
+import Iconify from '../iconify';
+
+import CustomPopover, { usePopover } from '../custom-popover';
 
 interface ApplicationCardItemProps {
   application?: DashboardAccessInterface;
 }
 
-
 export default function ApplicationCardItem({ application }: ApplicationCardItemProps) {
   const theme = useTheme();
   const popover = usePopover();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { putDashboardAccess } = usePutDashboardAccess();
+
+  const onSubmitFavorite = async (currentApplication: DashboardAccessInterface | undefined) => {
+    if (!currentApplication) return;
+
+    try {
+      await putDashboardAccess({
+        id: currentApplication.id,
+        favorite: !currentApplication.favorite,
+      } as DashboardAccessInterface);
+      enqueueSnackbar(
+        t(
+          !currentApplication.favorite
+            ? 'applications.favoriteSuccess'
+            : 'applications.removeFromFavoritesSuccess'
+        ),
+        {
+          variant: 'success',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        }
+      );
+    } catch (error: any) {
+      enqueueSnackbar(t('favoriteError'), {
+        variant: 'error',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
+    }
+  };
 
   function appAvatar() {
     if (application?.logo) {
@@ -31,9 +74,7 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
     }
 
     return (
-      <Avatar
-        sx={{ height: 48, width: 48 }}
-      >
+      <Avatar sx={{ height: 48, width: 48 }}>
         <Typography variant="subtitle2" color="grey.600">
           {application?.name.charAt(0)}
         </Typography>
@@ -44,23 +85,39 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
   return (
     <Card
       key={application?.id.id}
-      sx={{ boxShadow: 0, border: 1, borderColor: theme.palette.divider }}>
+      sx={{ boxShadow: 0, border: 1, borderColor: theme.palette.divider }}
+    >
       <CardActionArea onClick={() => navigate(`/${application?.id.id}`)}>
         <CardHeader
           title={appAvatar()}
           action={
             <>
-              <IconButton aria-label={t('global.favorite')} >
-                <Iconify icon="ic:round-star" width={24} color="warning.main" />
+              <IconButton
+                aria-label={t('global.favorite')}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSubmitFavorite(application);
+                }}
+              >
+                <Iconify
+                  icon={application?.favorite ? 'ic:round-star' : 'ic:round-star-outline'}
+                  width={24}
+                  color={application?.favorite ? 'warning.main' : 'gray'}
+                />
               </IconButton>
-              
-              <IconButton aria-label={t('global.options')}
+
+              <IconButton
+                aria-label={t('global.options')}
                 onClick={(e) => {
                   e.stopPropagation();
                   popover.onOpen(e);
                 }}
               >
-                <Iconify icon="ic:round-more-vert" width={24} color={theme.palette.text.secondary} />
+                <Iconify
+                  icon="ic:round-more-vert"
+                  width={24}
+                  color={theme.palette.text.secondary}
+                />
               </IconButton>
 
               <CustomPopover
@@ -69,7 +126,12 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
                 sx={{ width: 160 }}
                 onClick={popover.onClose}
               >
-                <MenuItem>
+                <MenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSubmitFavorite(application);
+                  }}
+                >
                   <Iconify icon="mdi:star-outline" />
                   {t('global.addToFavorites')}
                 </MenuItem>
