@@ -1,8 +1,9 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
-import React, { Children } from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import React, { Children, useCallback, useEffect, useState } from 'react';
 import FormProvider from 'src/components/hook-form';
 import { useCreateDataHandlers } from 'src/apis/data-handler';
 import { useParams } from 'src/routes/hooks';
+import { DataQuery, QueryResult } from 'src/types/queries-interface';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,18 +26,65 @@ const defaultValueByTypeField: Record<any, any> = {
 
 interface Props {
   blockInfo: any;
+  handleGetHandlers: (additionalFilters?: any[]) => {
+    queriesRequest: DataQuery[];
+    queriesResponse: QueryResult[];
+  };
 }
 
-export default function InputFormView({ blockInfo }: Props) {
+export default function InputFormView({ blockInfo, handleGetHandlers }: Props) {
+  const {
+    data: { title, submit, fields, queries, queries_dispatch },
+  } = blockInfo.blocs[0];
+  const [fieldsData, setFieldsData] = useState<any[]>(fields);
   const { pageId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { data } = blockInfo.blocs[0];
+  const { createDataHandlers } = useCreateDataHandlers(queries[0]);
 
-  const { createDataHandlers } = useCreateDataHandlers(data.queries[0]);
+  const handleGetFields = useCallback(async () => {
+    const { queriesResponse } = await handleGetHandlers();
+    const final: {
+      [key: string]: {
+        content: string;
+        target: string | undefined;
+        docs: QueryResult['documents'];
+      };
+    } = {};
+    queriesResponse.forEach((query) => {
+      const found = queries_dispatch.find((e: any) => e.query_id === query.query_id);
+      if (found) {
+        found.destination_fields.forEach((dest_field: any) => {
+          dest_field.columns.forEach((column: any) => {
+            final[column.id] = {
+              content: column.content,
+              target: column.target,
+              docs: query.documents,
+            };
+          });
+        });
+      }
+    });
+    const updatedFields: any[] = fields.map((field: any) => {
+      const copyField = { ...field };
+      if (field.type === 'select' && final[field.title])
+        copyField.options = final[field.title].docs.map((e) => ({
+          name: e[final[field.title].content] as string,
+          value: (e[final[field.title].target!] || e._id.$oid) as string,
+        }));
+      return copyField;
+    });
+    setFieldsData([...updatedFields]);
+  }, [fields, handleGetHandlers, queries_dispatch]);
+
+  useEffect(() => {
+    if (queries?.length > 1) {
+      handleGetFields();
+    }
+  }, [handleGetFields, queries?.length]);
 
   const validationSchema = Yup.object().shape(
-    data.fields.reduce((acc: any, field: any, index: number) => {
+    fieldsData.reduce((acc: any, field: any, index: number) => {
       if (['image', 'document'].includes(field.type)) {
         return {
           ...acc,
@@ -91,7 +139,7 @@ export default function InputFormView({ blockInfo }: Props) {
     }, {})
   );
 
-  const defaultValues = data.fields.reduce((acc: any, field: any) => {
+  const defaultValues = fieldsData.reduce((acc: any, field: any) => {
     let value = field.value.length ? field.value : defaultValueByTypeField[field.type];
     if (typeof value === 'string' && value.includes('data_in:')) {
       const [, input] = field.value.replace(/\[|\]/g, '').split(':');
@@ -130,17 +178,17 @@ export default function InputFormView({ blockInfo }: Props) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <Typography variant="h6">{data.title}</Typography>
+        <Typography variant="h6">{title}</Typography>
         <Box
           sx={{
             my: 2,
             display: 'grid',
-            gridTemplateColumns: `repeat(${data.submit.column}, 1fr)`,
+            gridTemplateColumns: `repeat(${submit.column}, 1fr)`,
             gap: 2,
           }}
         >
           {Children.toArray(
-            data.fields.map((field: any, index: number) => <Field data={field} index={index} />)
+            fieldsData.map((field: any, index: number) => <Field data={field} index={index} />)
           )}
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'end' }}>
@@ -155,7 +203,7 @@ export default function InputFormView({ blockInfo }: Props) {
               },
             }}
           >
-            {data.submit.button}
+            {submit.button}
           </Button>
         </Box>
       </FormProvider>

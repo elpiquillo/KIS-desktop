@@ -65,11 +65,13 @@ export default function Field({ index, data }: Props) {
     case 'select':
       return (
         <RHFSelect size="small" name={data.name} label={label} placeholder={data.name}>
-          {data.options.map((option: any) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.name}
-            </MenuItem>
-          ))}
+          {data.options
+            .filter((option: any) => option.value && option.name)
+            .map((option: any) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.name}
+              </MenuItem>
+            ))}
         </RHFSelect>
       );
     default:

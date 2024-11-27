@@ -63,14 +63,9 @@ export default function Block({ block }: Props) {
 
       return { queriesRequest: [], queriesResponse: [] };
     },
-    [getDataHandlers, queries, slplitPath]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [queries, slplitPath]
   );
-
-  useEffect(() => {
-    if (toLoad && queries?.length && queries_dispatch?.length) {
-      handleGetHandlers();
-    }
-  }, [handleGetHandlers, queries, queries_dispatch, slplitPath, toLoad]);
 
   useEffect(() => {
     wss.current = cable(
