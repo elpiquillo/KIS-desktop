@@ -25,6 +25,8 @@ export const urls = {
     update: '/users/companies_accounts/',
     password: '/user_auth/password',
   },
-  dashboardAcceses: {},
+  dashboardAcceses: {
+    update: '/users/dashboard_accesses/',
+  },
   profile: {},
 };

@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import useSWR from 'swr';
+import { t } from 'i18next';
+
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { apiFetcher } from '../utils/fetchers';
@@ -23,4 +25,29 @@ export function useGetDashboardAccessesAll() {
     data: data as DashboardAccessInterface[],
     isLoading,
   };
+}
+
+export function usePutDashboardAccess() {
+  const { updateDashboardAccess } = useDashboardAccessState();
+
+  const putDashboardAccess = async ({ id, favorite }: DashboardAccessInterface) => {
+    try {
+      const res = await apiFetcher(`${urls.dashboardAcceses.update}${id.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          dashboard_access: {
+            favorite,
+          },
+        }),
+      });
+
+      updateDashboardAccess(
+        res.dashboard_ids.find((dashboard: DashboardAccessInterface) => dashboard.id === id)
+      );
+    } catch (error: any) {
+      throw new Error(t(`errors.${error.message}`));
+    }
+  };
+
+  return { putDashboardAccess };
 }
