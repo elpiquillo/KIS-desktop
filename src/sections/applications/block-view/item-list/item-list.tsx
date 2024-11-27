@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import { DataQuery, QueryResult } from 'src/types/queries-interface';
 import ItemDetails from './item-details';
@@ -8,25 +8,25 @@ interface Props {
   handleGetHandlers: (additionalFilters?: any[]) => {
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
-  } | null;
+  };
 }
 
 export default function ItemListView({ blockInfo, handleGetHandlers }: Props) {
-  const [queriesRequest, setQueriesRequest] = useState<DataQuery[]>([]);
-  const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
   const { data } = blockInfo.blocs[0];
 
-  const handleGetDocuments = async () => {
+  const [queriesRequest, setQueriesRequest] = useState<DataQuery[]>([]);
+  const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
+
+  const handleGetDocuments = useCallback(async () => {
     const { queriesRequest: request, queriesResponse: response } =
       (await handleGetHandlers()) || {};
     setQueriesRequest(request || []);
     setQueriesResponse(response || []);
-  };
+  }, [handleGetHandlers]);
 
   useEffect(() => {
     handleGetDocuments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleGetDocuments]);
 
   return (
     <Grid container spacing={2}>
