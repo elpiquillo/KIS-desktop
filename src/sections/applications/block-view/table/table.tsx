@@ -19,6 +19,9 @@ import Iconify from 'src/components/iconify';
 import { TableNoData } from 'src/components/table';
 import { DataQuery, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { RouterLink } from 'src/routes/components';
+import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 import FilterModal from './modal';
 
 interface Props {
@@ -30,8 +33,10 @@ interface Props {
 }
 
 export default function TableView({ blockInfo, handleGetHandlers }: Props) {
+  const [queriesRequest, setQueriesRequest] = useState<DataQuery[]>([]);
   const [columnForFilter, setColumnForFilter] = React.useState('');
   const [finalData, setFinalData] = useState<any>({});
+  const { applicationId } = useParams();
   const { open, onOpen, onClose } = usePopover();
   const theme = useTheme();
 
@@ -73,7 +78,9 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   );
 
   const handleGetContent = useCallback(async () => {
-    const { queriesResponse } = await handleGetHandlers(filters);
+    const { queriesResponse, queriesRequest: request } = await handleGetHandlers(filters);
+    setQueriesRequest(request);
+
     const dispatchData = dispatchFetchedData({
       dataQueries: queriesResponse,
       dispatchQueries: blockData.queries_dispatch,
@@ -200,7 +207,25 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                     ))}
                     {finalData.button_action?.map((button: any) => (
                       <TableCell key={button.id}>
-                        <Button key={button.id} size="small" variant="outlined">
+                        <Button
+                          key={button.id}
+                          variant="outlined"
+                          sx={{
+                            borderRadius: 0.5,
+                            '&:hover': {
+                              color: 'text.primary',
+                            },
+                          }}
+                          component={RouterLink}
+                          href={`${paths.main.root}${applicationId}/${button.page_id}`}
+                          state={{
+                            data: {
+                              id: finalData.columns_content[0]?.content[index]?.column_id,
+                              collection: blockData.queries[0].collection_name,
+                              query: queriesRequest,
+                            },
+                          }}
+                        >
                           {button.text}
                         </Button>
                       </TableCell>
@@ -208,7 +233,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                   </TableRow>
                 ))
               )}
-              {!finalData.columns?.length && !finalData.button_action?.length && (
+              {!blockData.columns?.length && !blockData.button_action?.length && (
                 <TableNoData
                   notFound
                   title={t('applications.editForm.noColumnsAdded')}
