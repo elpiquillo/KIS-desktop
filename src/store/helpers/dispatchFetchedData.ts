@@ -3,18 +3,15 @@ import { QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 const dispatchFetchedData = (content: {
   dataQueries: QueryResult[];
   dispatchQueries: QueriesDispatch[];
-  blockData: {
+  finalData: {
     [key: string]: any;
-    empty_data?: boolean;
   };
 }): any => {
-  const { dataQueries, dispatchQueries, blockData } = content;
-  const tempBlockData = JSON.parse(JSON.stringify(blockData)) as typeof blockData;
+  const { dataQueries, dispatchQueries, finalData } = content;
+  const tempBlockData = JSON.parse(JSON.stringify(finalData)) as typeof finalData;
   dispatchQueries.forEach((q_d) => {
     const findData = dataQueries.find((qv) => `${qv.query_id}` === `${q_d.query_id}`)!;
-
-    if (findData.documents.length) {
-      tempBlockData.empty_data = false;
+    if (findData?.documents.length) {
       q_d.destination_fields.forEach((d_f) => {
         const entries = Object.entries(d_f);
         const { documents } = findData;
@@ -108,8 +105,6 @@ const dispatchFetchedData = (content: {
           }
         }
       });
-    } else {
-      tempBlockData.empty_data = true;
     }
   });
 

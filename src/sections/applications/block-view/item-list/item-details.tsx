@@ -24,7 +24,7 @@ export default function ItemDetails({
 }: Props) {
   const { applicationId } = useParams();
   const [toLoadFinalData, setToLoadFinalData] = useState(true);
-  const [finalData, setFinalData] = useState<FinalData | null>(null);
+  const [finalData, setFinalData] = useState<FinalData>(blockData);
 
   useEffect(() => {
     if (toLoadFinalData && queriesDispatch?.length && queriesResponse?.length) {
@@ -34,13 +34,13 @@ export default function ItemDetails({
       const dispatchData = dispatchFetchedData({
         dataQueries: currentQueries,
         dispatchQueries: queriesDispatch,
-        blockData,
+        finalData,
       });
 
       setFinalData(dispatchData);
       setToLoadFinalData(false);
     }
-  }, [blockData, current_document, queriesResponse, queriesDispatch, toLoadFinalData]);
+  }, [current_document, queriesResponse, queriesDispatch, toLoadFinalData, finalData]);
 
   return (
     <Grid item xs={12} md={6} lg={4} xl={3}>

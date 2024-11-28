@@ -35,7 +35,10 @@ interface Props {
 export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   const [queriesRequest, setQueriesRequest] = useState<DataQuery[]>([]);
   const [columnForFilter, setColumnForFilter] = React.useState('');
-  const [finalData, setFinalData] = useState<any>({});
+  const [finalData, setFinalData] = useState<any>({
+    ...blockInfo.blocs[0].data,
+    columns_content: [],
+  });
   const { applicationId } = useParams();
   const { open, onOpen, onClose } = usePopover();
   const theme = useTheme();
@@ -74,7 +77,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
       };
       return newData;
     },
-    [blockData.columns]
+    [blockData]
   );
 
   const handleGetContent = useCallback(async () => {
@@ -84,14 +87,14 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
     const dispatchData = dispatchFetchedData({
       dataQueries: queriesResponse,
       dispatchQueries: blockData.queries_dispatch,
-      blockData,
+      finalData,
     });
 
     const result = mapColumnsContentByOriginalProperty(dispatchData);
 
     setFinalData(result);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blockData, handleGetHandlers]);
+  }, [blockData, handleGetHandlers, mapColumnsContentByOriginalProperty]);
 
   useEffect(() => {
     handleGetContent();
