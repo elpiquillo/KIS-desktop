@@ -31,38 +31,67 @@ interface Props {
 
 export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   const [columnForFilter, setColumnForFilter] = React.useState('');
-  const [data, setData] = useState<any>({});
+  const [finalData, setFinalData] = useState<any>({});
   const { open, onOpen, onClose } = usePopover();
   const theme = useTheme();
 
-  const { data: dataWithoutTableContent } = blockInfo.blocs[0];
+  const { data: blockData } = blockInfo.blocs[0];
   const filters = JSON.parse(localStorage.getItem(blockInfo.id) || '[]');
 
   const maxRow = useMemo(
     () =>
-      data.columns_content?.reduce(
+      finalData.columns_content?.reduce(
         (acc: number, column: any) => (column.content.length > acc ? column.content.length : acc),
         0
       ) || 0,
-    [data.columns_content]
+    [finalData.columns_content]
+  );
+
+  const mapColumnsContentByOriginalProperty = useCallback(
+    (data: any) => {
+      const cols = blockData.columns.map((c: any) => c.id);
+      data.columns_content.sort((a: any, b: any) => cols.indexOf(a.id) - cols.indexOf(b.id));
+      const newData = {
+        ...data,
+        columns_content: data.columns_content.map((e: any) => ({
+          ...e,
+          content: e.content.map((cont: any) => {
+            if (
+              typeof cont.column_content !== 'string' &&
+              typeof cont.column_content !== 'number' &&
+              !cont.column_content?.original
+            ) {
+              return { ...cont, column_content: '' };
+            }
+            return cont;
+          }),
+        })),
+      };
+      return newData;
+    },
+    [blockData.columns]
   );
 
   const handleGetContent = useCallback(async () => {
-    const { queriesResponse } = await handleGetHandlers();
-    const result = dispatchFetchedData({
+    const { queriesResponse } = await handleGetHandlers(filters);
+    const dispatchData = dispatchFetchedData({
       dataQueries: queriesResponse,
-      dispatchQueries: dataWithoutTableContent.queries_dispatch,
-      blockData: dataWithoutTableContent,
+      dispatchQueries: blockData.queries_dispatch,
+      blockData,
     });
-    setData(result);
-  }, [dataWithoutTableContent, handleGetHandlers]);
+
+    const result = mapColumnsContentByOriginalProperty(dispatchData);
+
+    setFinalData(result);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockData, handleGetHandlers]);
 
   useEffect(() => {
     handleGetContent();
   }, [handleGetContent]);
 
   const handleOpenFilter = (event: React.MouseEvent<HTMLElement>, id: number) => {
-    const nameField = data.queries_dispatch?.[0].destination_fields[0].columns.find(
+    const nameField = finalData.queries_dispatch?.[0].destination_fields[0].columns.find(
       (column: any) => column.id === id
     ).content;
     setColumnForFilter(nameField);
@@ -77,8 +106,8 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   return (
     <Box>
       <Box sx={{ height: '36px', display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-        <Typography variant="subtitle1">{data.card_title}</Typography>
-        {data.button_export && (
+        <Typography variant="subtitle1">{finalData.card_title}</Typography>
+        {finalData.button_export && (
           <Button disabled variant="outlined">
             {t('applications.exportCsv')}
           </Button>
@@ -117,9 +146,9 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
           >
             <TableHead>
               <TableRow>
-                {data.columns?.map((column: any) => {
+                {finalData.columns?.map((column: any) => {
                   const columnNameForFilter =
-                    data.queries_dispatch?.[0].destination_fields[0].columns.find(
+                    finalData.queries_dispatch?.[0].destination_fields[0].columns.find(
                       (col: any) => col.id === column.id
                     ).content;
                   const isActiveFilter = filters.some(
@@ -135,7 +164,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                         }}
                       >
                         <Typography variant="subtitle2">{column.name}</Typography>
-                        {data.allow_filters && (
+                        {finalData.allow_filters && (
                           <ListItemIcon
                             sx={{
                               ml: 0.5,
@@ -154,7 +183,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                     </TableCell>
                   );
                 })}
-                {data.button_action?.map((button: any) => (
+                {finalData.button_action?.map((button: any) => (
                   <TableCell key={button.id}>{t('global.action')}</TableCell>
                 ))}
               </TableRow>
@@ -164,12 +193,12 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
               {Children.toArray(
                 Array.from({ length: maxRow }).map((_, index) => (
                   <TableRow>
-                    {data.columns_content?.map((column: any) => (
+                    {finalData.columns_content?.map((column: any) => (
                       <TableCell key={column.id}>
                         {column.content[index]?.column_content || ''}
                       </TableCell>
                     ))}
-                    {data.button_action?.map((button: any) => (
+                    {finalData.button_action?.map((button: any) => (
                       <TableCell key={button.id}>
                         <Button key={button.id} size="small" variant="outlined">
                           {button.text}
@@ -179,7 +208,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                   </TableRow>
                 ))
               )}
-              {!data.columns?.length && !data.button_action?.length && (
+              {!finalData.columns?.length && !finalData.button_action?.length && (
                 <TableNoData
                   notFound
                   title={t('applications.editForm.noColumnsAdded')}
