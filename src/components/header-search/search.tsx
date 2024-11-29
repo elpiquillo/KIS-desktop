@@ -1,44 +1,45 @@
 import { Input, alpha } from '@mui/material';
-import { t } from 'i18next';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Iconify from 'src/components/iconify';
 import { useDebounce } from 'src/hooks/use-debounce';
 import { grey } from 'src/theme/palette';
+import { getTestId } from 'src/utils/data-test-id.helper';
 
 interface HeaderSearchProps {
-	value: string;
+  value: string;
   placeholder: string;
-	onSubmit: (value: string) => void;
+  onSubmit: (value: string) => void;
 }
 
-export default function HeaderSearch ({
-	value: initialValue,
+export default function HeaderSearch({
+  value: initialValue,
   placeholder,
-	onSubmit,
+  onSubmit,
 }: HeaderSearchProps) {
-	const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
 
-	const debouncedValue = useDebounce(value, 500);
+  const debouncedValue = useDebounce(value, 500);
 
-	const onInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-		setValue(event.target.value);
-	};
-	useEffect(() => {
-		if (debouncedValue !== initialValue) onSubmit(debouncedValue);
-	}, [debouncedValue, initialValue, onSubmit]);
+  const onInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setValue(event.target.value);
+  };
+  useEffect(() => {
+    if (debouncedValue !== initialValue) onSubmit(debouncedValue);
+  }, [debouncedValue, initialValue, onSubmit]);
 
-	return (
-		<Input
+  return (
+    <Input
+      {...getTestId('input-search')}
       placeholder={placeholder}
       value={value}
       onChange={onInputChange}
       disableUnderline
       startAdornment={
-        <Iconify 
-          icon="material-symbols:search" 
+        <Iconify
+          icon="material-symbols:search"
           sx={{
             color: 'grey.500',
-            mx: '10px'
+            mx: '10px',
           }}
         />
       }
@@ -49,5 +50,5 @@ export default function HeaderSearch ({
         borderRadius: 1,
       }}
     />
-	);
-};
+  );
+}

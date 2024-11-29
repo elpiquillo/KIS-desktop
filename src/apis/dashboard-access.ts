@@ -4,19 +4,24 @@ import { t } from 'i18next';
 
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
+import { sortApplicationsByFavorite } from 'src/utils/sortApplications';
 import { apiFetcher } from '../utils/fetchers';
 import { urls } from '../utils/urls';
 import { ApiError } from '../utils/apiErrors';
 
-export function useGetDashboardAccessesAll() {
-  const { error, data, isLoading } = useSWR(urls.dashboards.list, apiFetcher, {});
+export function useGetDashboardAccessesAll(shouldRefetch: boolean) {
+  const { error, data, isLoading } = useSWR<DashboardAccessInterface[]>(
+    shouldRefetch ? urls.dashboards.list : null,
+    apiFetcher,
+    {}
+  );
 
   // This is a custom hook that sets the dashboards and update it in real time in the store
   const setApplications = useDashboardAccessState((state) => state.setApplications);
 
   useEffect(() => {
     if (data) {
-      setApplications(data as DashboardAccessInterface[]);
+      setApplications(sortApplicationsByFavorite(data));
     }
   }, [data, setApplications]);
 
@@ -42,7 +47,9 @@ export function usePutDashboardAccess() {
       });
 
       updateDashboardAccess(
-        res.dashboard_ids.find((dashboard: DashboardAccessInterface) => dashboard.id === id)
+        res.dashboard_ids.find(
+          (dashboard: DashboardAccessInterface['id']) => dashboard.id === id.id
+        )
       );
     } catch (error: any) {
       throw new Error(t(`errors.${error.message}`));

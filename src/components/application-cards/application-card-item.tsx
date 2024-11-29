@@ -15,6 +15,7 @@ import { useSnackbar } from 'notistack';
 
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { usePutDashboardAccess } from 'src/apis/dashboard-access';
+import { getTestId } from 'src/utils/data-test-id.helper';
 
 import Iconify from '../iconify';
 
@@ -38,7 +39,7 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
     try {
       await putDashboardAccess({
         id: currentApplication.id,
-        favorite: !currentApplication.favorite,
+        favorite: !currentApplication.id.favorite,
       } as DashboardAccessInterface);
       enqueueSnackbar(
         t(
@@ -84,6 +85,7 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
 
   return (
     <Card
+      {...getTestId('application-card-item-container')}
       key={application?.id.id}
       sx={{ boxShadow: 0, border: 1, borderColor: theme.palette.divider }}
     >
@@ -123,17 +125,23 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
               <CustomPopover
                 open={popover.open}
                 onClose={popover.onClose}
-                sx={{ width: 160 }}
+                sx={{ width: 200 }}
                 onClick={popover.onClose}
               >
                 <MenuItem
                   onClick={(e) => {
                     e.stopPropagation();
                     onSubmitFavorite(application);
+                    popover.onClose();
                   }}
                 >
-                  <Iconify icon="mdi:star-outline" />
-                  {t('global.addToFavorites')}
+                  <Iconify
+                    icon={application?.favorite ? 'ic:round-star' : 'ic:round-star-outline'}
+                    color={application?.favorite ? 'warning.main' : 'gray'}
+                  />
+                  {application?.favorite
+                    ? t('global.removeFromFavorites')
+                    : t('global.addToFavorites')}
                 </MenuItem>
                 <MenuItem>
                   <Iconify icon="mdi:trash-can-outline" color={theme.palette.error.main} />
