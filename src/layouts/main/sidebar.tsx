@@ -15,18 +15,22 @@ import AccountPopover from './account-popover';
 
 export default function Sidebar() {
   const applications = useDashboardAccessState((s) => s.applications);
-  const { data } = useGetDashboardAccessesAll();
+  const { data } = useGetDashboardAccessesAll(
+    applications === undefined || applications.length === 0
+  );
 
   return (
     <Box
       sx={{
-        display: 'flex', flexDirection: 'column',
+        display: 'flex',
+        flexDirection: 'column',
         width: { lg: NAV.W_MINI },
       }}
     >
       <Stack
         sx={{
-          flex: 1, justifyContent: 'space-between',
+          flex: 1,
+          justifyContent: 'space-between',
           pb: 2,
           height: 1,
           position: 'fixed',
@@ -38,7 +42,6 @@ export default function Sidebar() {
         <Box sx={{ flex: 1 }} />
         <AccountPopover />
       </Stack>
-      
     </Box>
   );
 }

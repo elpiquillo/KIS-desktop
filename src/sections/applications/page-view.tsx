@@ -1,6 +1,5 @@
-import React from 'react';
 import SimpleBar from 'simplebar-react';
-import { Box, Card, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { useDashboardState } from 'src/store/dashboardState';
 import Block from './block';
 

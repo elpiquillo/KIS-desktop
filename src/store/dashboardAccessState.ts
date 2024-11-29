@@ -1,4 +1,5 @@
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
+import { sortApplicationsByFavorite } from 'src/utils/sortApplications';
 import { create } from 'zustand';
 
 interface DashboardAccessState {
@@ -9,9 +10,23 @@ interface DashboardAccessState {
 
 export const useDashboardAccessState = create<DashboardAccessState>()((set) => ({
   applications: [],
-  setApplications: (value) => set(() => ({ applications: value })),
-  updateDashboardAccess: (value) =>
+  setApplications: (value) => set(() => ({ applications: sortApplicationsByFavorite(value) })),
+  updateDashboardAccess: (value: any) => {
     set((state) => ({
-      applications: state.applications.map((app) => (app.id.id === value?.id.id ? value : app)),
-    })),
+      applications: state.applications.map((application) => {
+        if (application.id.id === value.id) {
+          return {
+            ...application,
+            id: {
+              id: value.id,
+              display: value.display,
+              favorite: value.favorite,
+            },
+            favorite: value.favorite,
+          };
+        }
+        return application;
+      }),
+    }));
+  },
 }));

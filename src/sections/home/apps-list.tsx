@@ -6,6 +6,8 @@ import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import SimpleBar from 'simplebar-react';
 import { applyFilter, removeAccents } from 'src/utils/applyFilter';
 import { Children } from 'react';
+import { sortApplicationsByFavorite } from 'src/utils/sortApplications';
+import { getTestId } from 'src/utils/data-test-id.helper';
 
 interface ApplicationsListProps {
   title: string;
@@ -47,9 +49,12 @@ export default function ApplicationsList({
       removeAccents(item.name).toLowerCase().includes(valueSearched),
   });
 
+  const sortedApplications = sortApplicationsByFavorite(applicationFiltered);
+
   return (
-    <Card sx={{ height: '100%', borderRadius: 0 }}>
+    <Card {...getTestId('applications-list-container')} sx={{ height: '100%', borderRadius: 0 }}>
       <CardHeader
+        {...getTestId('applications-list-header')}
         title={
           <Stack direction="row" alignItems="center">
             <motion.div initial="hidden" animate="visible" variants={containerVariants}>
@@ -65,7 +70,7 @@ export default function ApplicationsList({
       />
       <SimpleBar style={{ maxHeight: 'calc(100vh - 100px)' }}>
         {loading && <ApplicationCardSkeleton numberOfCards={5} />}
-        <ApplicationCards applications={applicationFiltered} />
+        <ApplicationCards applications={sortedApplications} />
       </SimpleBar>
     </Card>
   );
