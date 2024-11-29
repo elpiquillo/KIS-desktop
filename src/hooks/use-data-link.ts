@@ -73,9 +73,9 @@ export const useDataLink = () => {
       const refresh = () => {
         const result = currentRequests[subscribedKey.current] || request();
         result
-          .then((response: AxiosResponse<ApiDataHandlerResponse>) => {
+          .then((response: ApiDataHandlerResponse) => {
             const res = (() => {
-              const resAfterMap = response.data.queries
+              const resAfterMap = response.queries
                 .map((q: any) => q.documents.find((e: any) => e._id.$oid === id))
                 .find((r: any) => r !== undefined);
               return resAfterMap ? { data: resAfterMap } : null;
