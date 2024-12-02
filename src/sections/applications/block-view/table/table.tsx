@@ -161,7 +161,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                   const columnNameForFilter =
                     finalData.queries_dispatch?.[0].destination_fields[0].columns.find(
                       (col: any) => col.id === column.id
-                    ).content;
+                    )?.content;
                   const isActiveFilter = filters.some(
                     (filter: any) => filter.filter_column === columnNameForFilter
                   );
@@ -202,11 +202,16 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
 
             <TableBody>
               {Children.toArray(
-                Array.from({ length: maxRow }).map((_, index) => (
+                Array.from({ length: maxRow }).map((_, indexRow) => (
                   <TableRow>
-                    {finalData.columns_content?.map((column: any) => (
+                    {finalData.columns?.map((column: any, indexColumn: number) => (
                       <TableCell key={column.id}>
-                        <TableCellContent data={column.content[index]?.column_content} />
+                        <TableCellContent
+                          data={
+                            finalData.columns_content[indexColumn]?.content[indexRow]
+                              ?.column_content
+                          }
+                        />
                       </TableCell>
                     ))}
                     {finalData.button_action?.map((button: any) => (
@@ -224,7 +229,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                           href={`${paths.main.root}${applicationId}/${button.page_id}`}
                           state={{
                             data: {
-                              id: finalData.columns_content[0]?.content[index]?.column_id,
+                              id: finalData.columns_content[0]?.content[indexRow]?.column_id,
                               collection: blockData.queries[0].collection_name,
                               query: queriesRequest,
                             },
