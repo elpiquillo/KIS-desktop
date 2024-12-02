@@ -1,5 +1,6 @@
 import { t } from 'i18next';
 import React from 'react';
+import PdfReader from 'src/components/pdf-reader/pdf-reader';
 
 interface Props {
   data: any;
@@ -68,7 +69,7 @@ export default function TableCellContent({ data }: Props) {
       }
       const ext = original.split('.').pop().split('?')[0];
       if (ext === 'pdf') {
-        return 'pdf-reader';
+        return <PdfReader link={original} name={file_name} />;
       }
 
       return (

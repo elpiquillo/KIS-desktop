@@ -1,4 +1,7 @@
 {
+  "component": {
+    "failedLoadPdf": "Failed to load PDF file"
+  },
   "date": {
     "format": "{{value, datetime}}"
   },
