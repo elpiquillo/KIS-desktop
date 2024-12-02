@@ -23,6 +23,7 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 import FilterModal from './modal';
+import TableCellContent from './cell-content';
 
 interface Props {
   blockInfo: any;
@@ -205,7 +206,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
                   <TableRow>
                     {finalData.columns_content?.map((column: any) => (
                       <TableCell key={column.id}>
-                        {column.content[index]?.column_content || ''}
+                        <TableCellContent data={column.content[index]?.column_content} />
                       </TableCell>
                     ))}
                     {finalData.button_action?.map((button: any) => (
