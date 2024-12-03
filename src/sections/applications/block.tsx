@@ -25,7 +25,7 @@ export default function Block({ block }: Props) {
   const { getDataHandlers } = useGetDataHandlersList();
 
   const handleGetHandlers = useCallback(
-    async (additionalFilters?: any[]) => {
+    async (additionalFilters?: any[], page?: number) => {
       if (data_link_ready) {
         const queriesRequest: DataQuery[] = [];
 
@@ -45,6 +45,7 @@ export default function Block({ block }: Props) {
           const query = {
             id: q.id,
             url: q.url,
+            page: page || q.page || 1,
             page_id: q.page_id || slplitPath,
             collection_name: q.collection_name,
             limit: q.limit,
