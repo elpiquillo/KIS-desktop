@@ -19,6 +19,7 @@ import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 function ApplicationMenuSidebar() {
   const { applicationId } = useParams();
   const theme = useTheme();
+
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)
   );
