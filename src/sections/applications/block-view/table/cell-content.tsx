@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import React from 'react';
 import PdfReader from 'src/components/pdf-reader/pdf-reader';
 
@@ -16,7 +15,7 @@ export default function TableCellContent({ data }: Props) {
         return data;
       }
       const number = +data;
-      return t('intlNumber', { val: number });
+      return number;
     }
     return null;
   };

@@ -25,7 +25,7 @@ export default function Block({ block }: Props) {
   const { getDataHandlers } = useGetDataHandlersList();
 
   const handleGetHandlers = useCallback(
-    async (additionalFilters?: any[], page?: number) => {
+    async ({ additionalFilters, page }: { additionalFilters?: any[]; page?: number }) => {
       if (data_link_ready) {
         const queriesRequest: DataQuery[] = [];
 

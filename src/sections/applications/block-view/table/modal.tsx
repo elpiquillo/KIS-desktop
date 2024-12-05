@@ -11,7 +11,7 @@ interface Props {
   filters: any[];
   open: HTMLElement | null;
   onClose: () => void;
-  handleGetHandlers: (additionalFilters: any[]) => void;
+  handleGetHandlers: (props: { filters: any[]; page?: number }) => void;
 }
 
 export default function FilterModal({
@@ -64,13 +64,13 @@ export default function FilterModal({
 
   const handleApplyFilter = handleSubmit((formData: any) => {
     const updatedFilters = handleAddFilterToLocalStorage(formData);
-    handleGetHandlers(updatedFilters);
+    handleGetHandlers({ filters: updatedFilters, page: 1 });
     onClose();
   });
 
   const handleDeleteFilter = () => {
     const updatedFilters = handleRemoveFilterFromLocalStorage(nameColumn);
-    handleGetHandlers(updatedFilters);
+    handleGetHandlers({ filters: updatedFilters, page: 1 });
     onClose();
   };
 

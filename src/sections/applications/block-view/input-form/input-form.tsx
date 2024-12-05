@@ -7,7 +7,7 @@ import InputFormContent from './form-content';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (additionalFilters?: any[]) => {
+  handleGetHandlers: (props: { additionalFilters?: any[]; page?: number }) => {
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
   };
@@ -22,7 +22,7 @@ export default function InputFormView({ blockInfo, handleGetHandlers }: Props) {
   const { data_link } = useDataLink();
 
   const handleGetFields = useCallback(async () => {
-    const { queriesResponse } = await handleGetHandlers();
+    const { queriesResponse } = await handleGetHandlers({});
     const final: {
       [key: string]: {
         content: string;

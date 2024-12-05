@@ -5,7 +5,7 @@ import ItemDetails from './item-details';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (additionalFilters?: any[]) => {
+  handleGetHandlers: (props: { additionalFilters?: any[]; page?: number }) => {
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
   };
@@ -19,7 +19,7 @@ export default function ItemListView({ blockInfo, handleGetHandlers }: Props) {
 
   const handleGetDocuments = useCallback(async () => {
     const { queriesRequest: request, queriesResponse: response } =
-      (await handleGetHandlers()) || {};
+      (await handleGetHandlers({})) || {};
     setQueriesRequest(request || []);
     setQueriesResponse(response || []);
   }, [handleGetHandlers]);

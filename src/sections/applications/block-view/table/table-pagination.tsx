@@ -6,7 +6,7 @@ interface Props {
   currentPage: number;
   maxPage: number;
   size: number;
-  handleGetContent: (page?: number) => void;
+  handleChangePage: (page: number) => void;
 }
 
 export default function TableViewPagination({
@@ -14,10 +14,10 @@ export default function TableViewPagination({
   currentPage,
   maxPage,
   size,
-  handleGetContent,
+  handleChangePage,
 }: Props) {
-  const handleChangePage = (event: unknown, newPage: number) => {
-    handleGetContent(newPage + 1);
+  const onPageChange = (_: unknown, newPage: number) => {
+    handleChangePage(newPage + 1);
   };
 
   if (maxPage === 1) return null;
@@ -28,7 +28,7 @@ export default function TableViewPagination({
       count={size}
       rowsPerPage={limit}
       page={currentPage - 1}
-      onPageChange={handleChangePage}
+      onPageChange={onPageChange}
     />
   );
 }

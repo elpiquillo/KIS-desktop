@@ -12,7 +12,7 @@ import CalendarStyleWrapper from './style-wrapper';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (additionalFilters?: any[]) => {
+  handleGetHandlers: (props: { additionalFilters?: any[]; page?: number }) => {
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
   };
@@ -23,7 +23,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const [finalData, setFinalData] = React.useState<any>({ ...data });
 
   const handleGetDocuments = useCallback(async () => {
-    const { queriesResponse } = (await handleGetHandlers()) || {};
+    const { queriesResponse } = (await handleGetHandlers({})) || {};
     const dispatchData = dispatchFetchedData({
       dataQueries: queriesResponse,
       dispatchQueries: blockInfo.queries_dispatch,

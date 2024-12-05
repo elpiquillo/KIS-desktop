@@ -8,7 +8,6 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   Typography,
   useTheme,
@@ -30,7 +29,7 @@ interface Props {
   queriesResponse: QueryResult[];
   filters: any;
   handleOpenFilter: (e: React.MouseEvent<HTMLElement>, id: string) => void;
-  handleGetContent: (page?: number) => void;
+  handleGetContent: (props: { filters: any[]; page?: number }) => void;
 }
 
 export default function TableContent({
@@ -52,6 +51,10 @@ export default function TableContent({
       ) || 0,
     [finalData.columns_content]
   );
+
+  const handleChangePage = (page: number) => {
+    handleGetContent({ filters, page });
+  };
 
   return (
     <Box
@@ -187,7 +190,7 @@ export default function TableContent({
           currentPage={queriesResponse[0]?.pages.current_page}
           maxPage={queriesResponse[0]?.pages.max_page}
           size={queriesResponse[0]?.documents_size}
-          handleGetContent={handleGetContent}
+          handleChangePage={handleChangePage}
         />
       </TableContainer>
     </Box>

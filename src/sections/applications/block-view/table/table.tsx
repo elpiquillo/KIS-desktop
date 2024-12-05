@@ -9,10 +9,7 @@ import TableContent from './table-content';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (
-    additionalFilters?: any[],
-    page?: number
-  ) => {
+  handleGetHandlers: (props: { additionalFilters?: any[]; page?: number }) => {
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
   };
@@ -29,7 +26,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   const { open, onOpen, onClose } = usePopover();
 
   const { data: blockData } = blockInfo.blocs[0];
-  const filters = JSON.parse(localStorage.getItem(blockInfo.id) || '[]');
+  const filtersFromStorage = JSON.parse(localStorage.getItem(blockInfo.id) || '[]');
 
   const mapColumnsContentByOriginalProperty = useCallback(
     (data: any) => {
@@ -57,11 +54,11 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   );
 
   const handleGetContent = useCallback(
-    async (page?: number) => {
-      const { queriesRequest: request, queriesResponse: response } = await handleGetHandlers(
-        filters,
-        page
-      );
+    async ({ filters, page }: { filters: any[]; page?: number }) => {
+      const { queriesRequest: request, queriesResponse: response } = await handleGetHandlers({
+        additionalFilters: filters,
+        page: page || undefined,
+      });
 
       const dispatchData = dispatchFetchedData({
         dataQueries: response,
@@ -80,7 +77,8 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   );
 
   useEffect(() => {
-    handleGetContent();
+    handleGetContent({ filters: filtersFromStorage });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleGetContent]);
 
   const handleOpenFilter = (event: React.MouseEvent<HTMLElement>, id: string) => {
@@ -111,7 +109,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
         finalData={finalData}
         queriesRequest={queriesRequest}
         queriesResponse={queriesResponse}
-        filters={filters}
+        filters={filtersFromStorage}
         handleOpenFilter={handleOpenFilter}
         handleGetContent={handleGetContent}
       />
@@ -119,10 +117,10 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
       <FilterModal
         id={blockInfo.id}
         nameColumn={columnForFilter}
-        filters={filters}
+        filters={filtersFromStorage}
         open={open}
         onClose={handleCloseFilter}
-        handleGetHandlers={handleGetHandlers}
+        handleGetHandlers={handleGetContent}
       />
     </Box>
   );
