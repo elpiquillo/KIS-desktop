@@ -52,6 +52,14 @@ export default function TableContent({
     [finalData.columns_content]
   );
 
+  const columnsForFilter = useMemo(
+    () =>
+      finalData.queries_dispatch?.[0].destination_fields.find((field: any) =>
+        Object.prototype.hasOwnProperty.call(field, 'columns')
+      )?.columns || [],
+    [finalData.queries_dispatch]
+  );
+
   const handleChangePage = (page: number) => {
     handleGetContent({ filters, page });
   };
@@ -92,10 +100,9 @@ export default function TableContent({
           <TableHead>
             <TableRow>
               {finalData.columns?.map((column: any) => {
-                const columnNameForFilter =
-                  finalData.queries_dispatch?.[0].destination_fields[0].columns.find(
-                    (col: any) => col.id === column.id
-                  )?.content;
+                const columnNameForFilter = columnsForFilter.find(
+                  (col: any) => col.id === column.id
+                )?.content;
                 const isActiveFilter = filters.some(
                   (filter: any) => filter.filter_column === columnNameForFilter
                 );
