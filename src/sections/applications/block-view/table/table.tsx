@@ -5,7 +5,7 @@ import { usePopover } from 'src/components/custom-popover';
 import { DataQuery, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import FilterModal from './modal';
-import TableContent from './table-content';
+import TableContent from './table-content/table-content';
 
 interface Props {
   blockInfo: any;
