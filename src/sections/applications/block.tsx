@@ -65,6 +65,7 @@ export default function Block({ block }: Props) {
 
         return { queriesRequest: [], queriesResponse: [] };
       }
+      return { queriesRequest: [], queriesResponse: [] };
     },
     [data_link, data_link_ready, getDataHandlers, queries, slplitPath]
   );

@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { DataQuery, QueryResult } from 'src/types/queries-interface';
 import { useDataLink } from 'src/hooks/use-data-link';
@@ -65,8 +65,16 @@ export default function InputFormView({ blockInfo, handleGetHandlers }: Props) {
   }, [handleGetFields, queries?.length]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <InputFormContent blockInfo={blockInfo} fieldsData={fieldsData} />
-    </Box>
+    <Card
+      sx={{
+        // display: 'flex',
+        // alignItems: 'center',
+        p: 3,
+      }}
+    >
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <InputFormContent blockInfo={blockInfo} fieldsData={fieldsData} />
+      </Box>
+    </Card>
   );
 }
