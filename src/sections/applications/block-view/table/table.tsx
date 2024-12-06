@@ -81,7 +81,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleGetContent]);
 
-  const handleOpenFilter = (event: React.MouseEvent<HTMLElement>, id: string) => {
+  const handleOpenFilterModal = (event: React.MouseEvent<HTMLElement>, id: string) => {
     const nameField = finalData.queries_dispatch?.[0].destination_fields[0].columns.find(
       (column: any) => column.id === id
     ).content;
@@ -110,7 +110,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
         queriesRequest={queriesRequest}
         queriesResponse={queriesResponse}
         filters={filtersFromStorage}
-        handleOpenFilter={handleOpenFilter}
+        handleOpenFilterModal={handleOpenFilterModal}
         handleGetContent={handleGetContent}
       />
 
@@ -120,7 +120,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
         filters={filtersFromStorage}
         open={open}
         onClose={handleCloseFilter}
-        handleGetHandlers={handleGetHandlers}
+        handleGetContent={handleGetContent}
       />
     </Box>
   );

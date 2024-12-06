@@ -5,6 +5,9 @@ import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import { Theme, SxProps } from '@mui/material/styles';
 import TableSortLabel from '@mui/material/TableSortLabel';
+import { ListItemIcon } from '@mui/material';
+import { t } from 'i18next';
+import Iconify from '../iconify';
 
 // ----------------------------------------------------------------------
 
@@ -24,25 +27,51 @@ const visuallyHidden = {
 
 type Props = {
   order?: 'asc' | 'desc';
-  orderBy?: string;
+  orderBy?: string | number | null;
   headLabel: any[];
+  buttonAction?: any[];
   rowCount?: number;
   numSelected?: number;
-  onSort?: (id: string) => void;
+  onSort?: (id: string | number) => void;
   onSelectAllRows?: (checked: boolean) => void;
+  isActiveFilter?: (id: string) => boolean;
+  handleOpenFilterModal?: (e: React.MouseEvent<HTMLElement>, id: string) => void;
   sx?: SxProps<Theme>;
 };
 
 export default function TableHeadCustom({
   order,
   orderBy,
-  rowCount = 0,
   headLabel,
+  buttonAction,
+  rowCount = 0,
   numSelected = 0,
   onSort,
   onSelectAllRows,
+  isActiveFilter,
+  handleOpenFilterModal,
   sx,
 }: Props) {
+  const filterIcon = (id: string) => {
+    if (!isActiveFilter || !handleOpenFilterModal) return null;
+
+    return (
+      <ListItemIcon
+        sx={{
+          ml: 0.5,
+          p: 0.5,
+          borderRadius: '50%',
+          cursor: 'pointer',
+          color: isActiveFilter(id) ? 'white' : 'grey.600',
+          backgroundColor: isActiveFilter(id) ? 'success.dark' : '',
+        }}
+        onClick={(e) => handleOpenFilterModal(e, id)}
+      >
+        <Iconify icon="mingcute:filter-2-fill" width={15} />
+      </ListItemIcon>
+    );
+  };
+
   return (
     <TableHead sx={sx}>
       <TableRow>
@@ -65,25 +94,38 @@ export default function TableHeadCustom({
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{ width: headCell.width, minWidth: headCell.minWidth }}
           >
-            {onSort ? (
-              <TableSortLabel
-                hideSortIcon
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={() => onSort(headCell.id)}
-              >
-                {headCell.label}
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              {onSort ? (
+                <TableSortLabel
+                  hideSortIcon
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : 'asc'}
+                  onClick={() => onSort(headCell.id)}
+                >
+                  {headCell.label || headCell.name || headCell.id}
 
-                {orderBy === headCell.id ? (
-                  <Box sx={{ ...visuallyHidden }}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            ) : (
-              headCell.label
-            )}
+                  {orderBy === headCell.id ? (
+                    <Box sx={{ ...visuallyHidden }}>
+                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              ) : (
+                headCell.label || headCell.name || headCell.id
+              )}
+              {filterIcon(headCell.id)}
+            </Box>
           </TableCell>
+        ))}
+
+        {buttonAction?.map((button: any) => (
+          <TableCell key={button.id}>{t('global.action')}</TableCell>
         ))}
       </TableRow>
     </TableHead>

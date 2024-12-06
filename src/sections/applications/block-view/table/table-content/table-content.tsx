@@ -1,8 +1,8 @@
 import { Box, Paper, Table, TableContainer, useTheme } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { DataQuery, QueryResult } from 'src/types/queries-interface';
+import { TableHeadCustom } from 'src/components/table';
 import TableViewPagination from './table-pagination';
-import TableViewHead from './table-head';
 import TableViewBody from './table-body';
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
   queriesRequest: DataQuery[];
   queriesResponse: QueryResult[];
   filters: any;
-  handleOpenFilter: (e: React.MouseEvent<HTMLElement>, id: string) => void;
+  handleOpenFilterModal: (e: React.MouseEvent<HTMLElement>, id: string) => void;
   handleGetContent: (props: { filters: any[]; page?: number }) => void;
 }
 
@@ -19,7 +19,7 @@ export default function TableContent({
   queriesRequest,
   queriesResponse,
   filters,
-  handleOpenFilter,
+  handleOpenFilterModal,
   handleGetContent,
 }: Props) {
   const [sort, setSort] = useState<{ order: 'asc' | 'desc'; id: number | null }>({
@@ -60,8 +60,23 @@ export default function TableContent({
     return data;
   }, [finalData.columns_content, getTableData, sort]);
 
-  const handleChangeSort = (newSort: { order: 'asc' | 'desc'; id: number }) => {
-    setSort({ ...newSort });
+  const columnsForFilter = useMemo(
+    () =>
+      finalData.queries_dispatch?.[0].destination_fields.find((field: any) =>
+        Object.prototype.hasOwnProperty.call(field, 'columns')
+      )?.columns || [],
+    [finalData.queries_dispatch]
+  );
+
+  const isActiveFilter = (id: string) => {
+    const columnNameForFilter = columnsForFilter.find((col: any) => col.id === id)?.content;
+    return filters.some((filter: any) => filter.filter_column === columnNameForFilter);
+  };
+
+  const handleChangeSort = (id: string | number) => {
+    const isAsc = sort.id === id && sort.order === 'asc';
+    const newOrder = isAsc ? 'desc' : 'asc';
+    setSort({ order: newOrder, id: Number(id) });
   };
 
   const handleChangePage = (page: number) => {
@@ -101,12 +116,14 @@ export default function TableContent({
             }),
           }}
         >
-          <TableViewHead
-            finalData={finalData}
-            filters={filters}
-            sort={sort}
-            handleOpenFilter={handleOpenFilter}
-            handleChangeSort={handleChangeSort}
+          <TableHeadCustom
+            order={sort.order}
+            orderBy={sort.id}
+            headLabel={finalData.columns}
+            buttonAction={finalData.button_action}
+            onSort={handleChangeSort}
+            isActiveFilter={isActiveFilter}
+            handleOpenFilterModal={handleOpenFilterModal}
           />
 
           <TableViewBody
