@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -21,6 +21,7 @@ interface Props {
 export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
   const [finalData, setFinalData] = React.useState<any>({ ...data });
+  const [documents, setDocuments] = React.useState<any[]>([]);
 
   const handleGetDocuments = useCallback(async () => {
     const { queriesResponse } = (await handleGetHandlers({})) || {};
@@ -31,8 +32,33 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
     });
 
     setFinalData(dispatchData);
+    setDocuments(queriesResponse[0].documents);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blockInfo.queries_dispatch, handleGetHandlers]);
+
+  const getNameFieldFromQueriesDispatch = useCallback(
+    (string: string) => {
+      const find = data.queries_dispatch?.[0].destination_fields.find(
+        (qd: any) => Object.keys(qd)[0] === string
+      );
+      if (find) {
+        return Object.values(find)[0] as string;
+      }
+      return '';
+    },
+    [data.queries_dispatch]
+  );
+
+  const eventList = useMemo(
+    () =>
+      documents.map((f_d) => ({
+        title: f_d[getNameFieldFromQueriesDispatch('event_preview')],
+        start: f_d[getNameFieldFromQueriesDispatch('event_start')],
+        end: f_d[getNameFieldFromQueriesDispatch('event_end')],
+        id: f_d._id.$oid,
+      })),
+    [documents, getNameFieldFromQueriesDispatch]
+  );
 
   useEffect(() => {
     handleGetDocuments();
@@ -55,6 +81,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
             center: 'title',
             right: 'dayGridMonth,dayGridWeek,dayGridDay',
           }}
+          events={eventList}
           editable
           selectable
         />

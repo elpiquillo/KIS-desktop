@@ -7,7 +7,7 @@ const dispatchFetchedData = (content: {
     [key: string]: any;
   };
 }): any => {
-  const { dataQueries, dispatchQueries, finalData } = content;
+  const { dataQueries, dispatchQueries = [], finalData } = content;
   const tempBlockData = JSON.parse(JSON.stringify(finalData)) as typeof finalData;
   dispatchQueries.forEach((q_d) => {
     const findData = dataQueries.find((qv) => `${qv.query_id}` === `${q_d.query_id}`)!;
