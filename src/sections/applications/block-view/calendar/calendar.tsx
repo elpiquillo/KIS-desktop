@@ -8,7 +8,10 @@ import enLocale from '@fullcalendar/core/locales/en-gb';
 import i18next from 'i18next';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { useBoolean } from 'src/hooks/use-boolean';
+import { EventClickArg } from '@fullcalendar/core';
 import CalendarStyleWrapper from './style-wrapper';
+import EventModal from './modal';
 
 interface Props {
   blockInfo: any;
@@ -22,6 +25,9 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
   const [finalData, setFinalData] = React.useState<any>({ ...data });
   const [documents, setDocuments] = React.useState<any[]>([]);
+  const [eventInfoForModal, setEventInfoForModal] = React.useState<any>({});
+
+  const eventModal = useBoolean();
 
   const handleGetDocuments = useCallback(async () => {
     const { queriesResponse } = (await handleGetHandlers({})) || {};
@@ -64,28 +70,46 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
     handleGetDocuments();
   }, [handleGetDocuments]);
 
+  const handleEventClick = (e: EventClickArg) => {
+    const findEv = documents.filter((f) => f._id.$oid === e.event.id);
+    if (findEv) {
+      setEventInfoForModal(findEv[0]);
+      eventModal.onTrue();
+    }
+    return null;
+  };
+
   return (
-    <Box>
-      <Typography variant="h6" sx={{ height: '28px', mb: 1 }}>
-        {data.card_title}
-      </Typography>
-      <CalendarStyleWrapper>
-        <FullCalendar
-          locale={i18next.language === 'fr' ? frLocale : enLocale}
-          locales={[enLocale, frLocale]}
-          plugins={[dayGridPlugin, interactionPlugin]}
-          handleWindowResize
-          themeSystem="mui"
-          headerToolbar={{
-            left: 'prev next today',
-            center: 'title',
-            right: 'dayGridMonth,dayGridWeek,dayGridDay',
-          }}
-          events={eventList}
-          editable
-          selectable
-        />
-      </CalendarStyleWrapper>
-    </Box>
+    <>
+      <Box>
+        <Typography variant="h6" sx={{ height: '28px', mb: 1 }}>
+          {data.card_title}
+        </Typography>
+        <CalendarStyleWrapper>
+          <FullCalendar
+            editable
+            selectable
+            handleWindowResize
+            locale={i18next.language === 'fr' ? frLocale : enLocale}
+            locales={[enLocale, frLocale]}
+            plugins={[dayGridPlugin, interactionPlugin]}
+            themeSystem="mui"
+            headerToolbar={{
+              left: 'prev next today',
+              center: 'title',
+              right: 'dayGridMonth,dayGridWeek,dayGridDay',
+            }}
+            events={eventList}
+            eventClick={handleEventClick}
+          />
+        </CalendarStyleWrapper>
+      </Box>
+
+      <EventModal
+        eventInfo={eventInfoForModal}
+        open={eventModal.value}
+        onClose={eventModal.onFalse}
+      />
+    </>
   );
 }

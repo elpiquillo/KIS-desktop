@@ -57,7 +57,14 @@
     "strict": "strict",
     "uploadDocument": "Swipe or click to upload your document",
     "uploadImage": "Swipe or click to upload your image",
-    "formCreatedSuccess": "Congratulations, everything was created!"
+    "formCreatedSuccess": "Congratulations, everything was created!",
+    "details": "Details",
+    "calendar": {
+      "titleEvent": "Title of event",
+      "descriptionEvent": "Description of event",
+      "start": "Start date",
+      "end": "End date"
+    }
   },
   "errors": {}
 }
