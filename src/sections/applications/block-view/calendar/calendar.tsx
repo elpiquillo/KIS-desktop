@@ -6,13 +6,13 @@ import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import i18next from 'i18next';
-import { DataQuery, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import CalendarStyleWrapper from './style-wrapper';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (props: { additionalFilters?: any[]; page?: number }) => {
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
   };

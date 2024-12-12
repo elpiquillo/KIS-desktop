@@ -2,14 +2,14 @@ import { Box, Button, Typography } from '@mui/material';
 import { t } from 'i18next';
 import React, { useCallback, useEffect, useState } from 'react';
 import { usePopover } from 'src/components/custom-popover';
-import { DataQuery, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import FilterModal from './modal';
 import TableContent from './table-content/table-content';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (props: { additionalFilters?: any[]; page?: number }) => {
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
   };
@@ -54,7 +54,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   );
 
   const handleGetContent = useCallback(
-    async ({ filters, page }: { filters: any[]; page?: number }) => {
+    async ({ filters, page }: { filters: CustomFilter[]; page?: number }) => {
       const { queriesRequest: request, queriesResponse: response } = await handleGetHandlers({
         additionalFilters: filters,
         page: page || undefined,
@@ -83,7 +83,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
 
   const handleOpenFilterModal = (event: React.MouseEvent<HTMLElement>, id: string) => {
     const nameField = finalData.queries_dispatch?.[0].destination_fields[0].columns.find(
-      (column: any) => column.id === id
+      (column: QueriesDispatch['destination_fields'][number]['columns'][number]) => column.id === id
     ).content;
     setColumnForFilter(nameField);
     onOpen(event);

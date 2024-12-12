@@ -9,6 +9,7 @@ import FormControlLabel, {
   FormControlLabelProps,
   formControlLabelClasses,
 } from '@mui/material/FormControlLabel';
+import { SelectOption } from 'src/types/queries-interface';
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +49,7 @@ export function RHFCheckbox({ name, helperText, color, label = '', ...other }: R
 
 interface RHFMultiCheckboxProps extends Omit<FormControlLabelProps, 'control' | 'label'> {
   name: string;
-  options: { label: string; value: any }[];
+  options: SelectOption[];
   row?: boolean;
   label?: string;
   spacing?: number;

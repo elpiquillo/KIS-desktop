@@ -1,5 +1,10 @@
 export type FilterOperator = 'eq' | 'like' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte';
 
+export type SelectOption = {
+  label: string;
+  value: string;
+};
+
 export interface QueriesDispatch {
   query_id: string;
   destination_fields: {

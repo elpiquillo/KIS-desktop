@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableHead from '@mui/material/TableHead';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { TableCellProps } from '@mui/material/TableCell';
 import { Theme, SxProps } from '@mui/material/styles';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { ListItemIcon } from '@mui/material';
@@ -28,8 +28,15 @@ const visuallyHidden = {
 type Props = {
   order?: 'asc' | 'desc';
   orderBy?: string | number | null;
-  headLabel: any[];
-  buttonAction?: any[];
+  headLabel: {
+    id: string | number;
+    name?: string;
+    label?: string;
+    align?: TableCellProps['align'];
+    width?: string;
+    minWidth?: string;
+  }[];
+  buttonAction?: { id: string }[];
   rowCount?: number;
   numSelected?: number;
   onSort?: (id: string | number) => void;
@@ -119,14 +126,12 @@ export default function TableHeadCustom({
               ) : (
                 headCell.label || headCell.name || headCell.id
               )}
-              {filterIcon(headCell.id)}
+              {filterIcon(headCell.id.toString())}
             </Box>
           </TableCell>
         ))}
 
-        {buttonAction?.map((button: any) => (
-          <TableCell key={button.id}>{t('global.action')}</TableCell>
-        ))}
+        {buttonAction?.map((button) => <TableCell key={button.id}>{t('global.action')}</TableCell>)}
       </TableRow>
     </TableHead>
   );

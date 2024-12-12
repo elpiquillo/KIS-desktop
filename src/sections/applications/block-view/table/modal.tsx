@@ -3,15 +3,16 @@ import { t } from 'i18next';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import { CustomFilter, FilterOperator } from 'src/types/queries-interface';
 import { filterOperatorOptions } from './constants';
 
 interface Props {
   id: string;
   nameColumn: string;
-  filters: any[];
+  filters: CustomFilter[];
   open: HTMLElement | null;
   onClose: () => void;
-  handleGetContent: (props: { filters: any[]; page?: number }) => void;
+  handleGetContent: (props: { filters: CustomFilter[]; page?: number }) => void;
 }
 
 export default function FilterModal({
@@ -22,10 +23,10 @@ export default function FilterModal({
   onClose,
   handleGetContent,
 }: Props) {
-  const methods = useForm({
+  const methods = useForm<CustomFilter>({
     defaultValues: {
       filter_column: '',
-      filter_operator: '',
+      filter_operator: '' as FilterOperator,
       filter_value: '',
     },
   });
@@ -33,36 +34,36 @@ export default function FilterModal({
   const { handleSubmit, reset } = methods;
 
   useEffect(() => {
-    const filter = filters.find((f: any) => f.filter_column === nameColumn);
+    const filter = filters.find((f) => f.filter_column === nameColumn);
     const initialValues = filter
       ? { ...filter }
-      : { filter_column: nameColumn, filter_operator: '', filter_value: '' };
+      : { filter_column: nameColumn, filter_operator: '' as FilterOperator, filter_value: '' };
     reset(initialValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nameColumn, reset]);
 
-  const handleAddFilterToLocalStorage = (formFilter: any) => {
+  const handleAddFilterToLocalStorage = (formFilter: CustomFilter) => {
     if (!filters.length) {
       localStorage.setItem(id, JSON.stringify([formFilter]));
       return [formFilter];
     }
-    const filterExist = filters.findIndex((f: any) => f.filter_column === formFilter.filter_column);
+    const filterExist = filters.findIndex((f) => f.filter_column === formFilter.filter_column);
     const updatedFilters =
       filterExist === -1
         ? [...filters, formFilter]
-        : filters.map((f: any) => (f.filter_column === formFilter.filter_column ? formFilter : f));
+        : filters.map((f) => (f.filter_column === formFilter.filter_column ? formFilter : f));
 
     localStorage.setItem(id, JSON.stringify(updatedFilters));
     return updatedFilters;
   };
 
   const handleRemoveFilterFromLocalStorage = (filterColumn: string) => {
-    const updatedFilters = filters.filter((f: any) => f.filter_column !== filterColumn);
+    const updatedFilters = filters.filter((f) => f.filter_column !== filterColumn);
     localStorage.setItem(id, JSON.stringify(updatedFilters));
     return updatedFilters;
   };
 
-  const handleApplyFilter = handleSubmit((formData: any) => {
+  const handleApplyFilter = handleSubmit((formData: CustomFilter) => {
     const updatedFilters = handleAddFilterToLocalStorage(formData);
     handleGetContent({ filters: updatedFilters, page: 1 });
     onClose();

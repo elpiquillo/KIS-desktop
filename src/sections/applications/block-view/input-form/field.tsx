@@ -4,6 +4,7 @@ import { RHFCheckbox, RHFSelect, RHFTextField } from 'src/components/hook-form';
 import RHFDatePicker from 'src/components/hook-form/rhf-date-picker';
 import RHFRichText from 'src/components/hook-form/rhf-rich-text';
 import RHFUploadBox from 'src/components/hook-form/rhf-upload-box';
+import { SelectOption } from 'src/types/queries-interface';
 
 interface Props {
   index: number;
@@ -66,8 +67,8 @@ export default function Field({ index, data }: Props) {
       return (
         <RHFSelect size="small" name={data.name} label={label} placeholder={data.name}>
           {data.options
-            .filter((option: any) => option.value && option.name)
-            .map((option: any) => (
+            .filter((option: SelectOption & { name: string }) => option.value && option.name)
+            .map((option: SelectOption & { name: string }) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.name}
               </MenuItem>

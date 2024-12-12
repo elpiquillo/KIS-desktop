@@ -51,7 +51,7 @@ export default function GaugeView({ blockInfo }: Props) {
           </Box>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-          {data.button_action.map((button: any) => (
+          {data.button_action.map((button: { id: string; text: string }) => (
             <Button
               key={button.id}
               disabled

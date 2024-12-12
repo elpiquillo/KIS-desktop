@@ -10,7 +10,7 @@ import { t } from 'i18next';
 import { useSnackbar } from 'notistack';
 import Field from './field';
 
-const defaultValueByTypeField: Record<any, any> = {
+const defaultValueByTypeField: Record<string, string | number | boolean> = {
   text: '',
   'text-area': '',
   'plain-text': '',
@@ -38,7 +38,7 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   const { createDataHandlers } = useCreateDataHandlers(queries[0]);
 
   const validationSchema = Yup.object().shape(
-    fieldsData.reduce((acc: any, field: any, index: number) => {
+    fieldsData.reduce((acc: any, field: any) => {
       if (['image', 'document'].includes(field.type)) {
         return {
           ...acc,

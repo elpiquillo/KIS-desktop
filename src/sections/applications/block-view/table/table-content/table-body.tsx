@@ -3,7 +3,7 @@ import React, { Children } from 'react';
 import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
-import { DataQuery } from 'src/types/queries-interface';
+import { ButtonAction, DataQuery } from 'src/types/queries-interface';
 import { TableNoData } from 'src/components/table';
 import { t } from 'i18next';
 import TableCellContent from './cell-content';
@@ -27,7 +27,7 @@ export default function TableViewBody({ finalData, tableData, queriesRequest }: 
                 <TableCellContent data={column.content} />
               </TableCell>
             ))}
-            {finalData.button_action?.map((button: any) => (
+            {finalData.button_action?.map((button: ButtonAction) => (
               <TableCell key={button.id}>
                 <Button
                   key={button.id}

@@ -1,13 +1,13 @@
 import { Box, Card } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { DataQuery, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 import { useDataLink } from 'src/hooks/use-data-link';
 import PageDataInCheck from '../../helpers/pageDataInCheck';
 import InputFormContent from './form-content';
 
 interface Props {
   blockInfo: any;
-  handleGetHandlers: (props: { additionalFilters?: any[]; page?: number }) => {
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
   };
@@ -31,17 +31,19 @@ export default function InputFormView({ blockInfo, handleGetHandlers }: Props) {
       };
     } = {};
     queriesResponse.forEach((query) => {
-      const found = queries_dispatch.find((e: any) => e.query_id === query.query_id);
+      const found = queries_dispatch.find((e: QueriesDispatch) => e.query_id === query.query_id);
       if (found) {
-        found.destination_fields.forEach((dest_field: any) => {
-          dest_field.columns.forEach((column: any) => {
-            final[column.id] = {
-              content: column.content,
-              target: column.target,
-              docs: query.documents,
-            };
-          });
-        });
+        found.destination_fields.forEach(
+          (dest_field: QueriesDispatch['destination_fields'][number]) => {
+            dest_field.columns.forEach((column) => {
+              final[column.id] = {
+                content: column.content,
+                target: column.target,
+                docs: query.documents,
+              };
+            });
+          }
+        );
       }
     });
     const updatedFields: any[] = fields.map((field: any) => {

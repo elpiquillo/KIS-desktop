@@ -29,7 +29,7 @@ export default function BreadcrumbView({ blockInfo }: Props) {
           },
         }}
       >
-        {data.right_links.map((link: any) => (
+        {data.right_links.map((link: { id: string; page_link: string; page_name: string }) => (
           <Typography
             key={link.id}
             variant="body2"

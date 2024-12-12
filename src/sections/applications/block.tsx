@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Box } from '@mui/material';
 import { useGetDataHandlersList } from 'src/apis/data-handler';
-import { DataQuery } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 import { useDataLink } from 'src/hooks/use-data-link';
 import { BlockViewByComponentType } from './block-view/constants';
 import cable from './helpers/cable';
@@ -25,11 +24,11 @@ export default function Block({ block }: Props) {
   const { getDataHandlers } = useGetDataHandlersList();
 
   const handleGetHandlers = useCallback(
-    async ({ additionalFilters, page }: { additionalFilters?: any[]; page?: number }) => {
+    async ({ additionalFilters, page }: { additionalFilters?: CustomFilter[]; page?: number }) => {
       if (data_link_ready) {
         const queriesRequest: DataQuery[] = [];
 
-        queries.forEach((q: any) => {
+        queries.forEach((q: DataQuery) => {
           const dataFilters = () => {
             if (q.filters) {
               const filtersJSON = JSON.stringify(q.filters);
@@ -91,8 +90,8 @@ export default function Block({ block }: Props) {
         wss.current!.onmessage = (e) => {
           const message = JSON.parse(e.data);
           if (message.message?.action === 'FETCH DATA') {
-            const flag = queries_dispatch.some((qd: any) => {
-              const findQ = queries.find((qs: any) => qs.id === qd.query_id);
+            const flag = queries_dispatch.some((qd: QueriesDispatch) => {
+              const findQ = queries.find((qs: DataQuery) => qs.id === qd.query_id);
               return findQ!.collection_name === message.message.collection;
             });
             setToLoad(flag);
@@ -107,9 +106,5 @@ export default function Block({ block }: Props) {
 
   const { content: View } = BlockViewByComponentType[block?.blocs?.[0]?.bloc_id || 'default'];
 
-  return (
-    // <Box>
-    <View blockInfo={block} handleGetHandlers={handleGetHandlers} />
-    // </Box>
-  );
+  return <View blockInfo={block} handleGetHandlers={handleGetHandlers} />;
 }

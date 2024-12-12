@@ -1,6 +1,6 @@
 import { Box, Paper, Table, TableContainer, useTheme } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
-import { DataQuery, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 import { TableHeadCustom } from 'src/components/table';
 import TableViewPagination from './table-pagination';
 import TableViewBody from './table-body';
@@ -9,9 +9,9 @@ interface Props {
   finalData: any;
   queriesRequest: DataQuery[];
   queriesResponse: QueryResult[];
-  filters: any;
+  filters: CustomFilter[];
   handleOpenFilterModal: (e: React.MouseEvent<HTMLElement>, id: string) => void;
-  handleGetContent: (props: { filters: any[]; page?: number }) => void;
+  handleGetContent: (props: { filters: CustomFilter[]; page?: number }) => void;
 }
 
 export default function TableContent({
@@ -62,15 +62,16 @@ export default function TableContent({
 
   const columnsForFilter = useMemo(
     () =>
-      finalData.queries_dispatch?.[0].destination_fields.find((field: any) =>
-        Object.prototype.hasOwnProperty.call(field, 'columns')
+      finalData.queries_dispatch?.[0].destination_fields.find(
+        (field: QueriesDispatch['destination_fields'][number]) =>
+          Object.prototype.hasOwnProperty.call(field, 'columns')
       )?.columns || [],
     [finalData.queries_dispatch]
   );
 
   const isActiveFilter = (id: string) => {
     const columnNameForFilter = columnsForFilter.find((col: any) => col.id === id)?.content;
-    return filters.some((filter: any) => filter.filter_column === columnNameForFilter);
+    return filters.some((filter: CustomFilter) => filter.filter_column === columnNameForFilter);
   };
 
   const handleChangeSort = (id: string | number) => {

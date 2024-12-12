@@ -25,7 +25,7 @@ export interface DashboardInfoData {
 }
 
 export interface MenuContextProps {
-  menu: MenuData | any;
+  menu: MenuData;
 }
 
 export interface DashboardCreate {

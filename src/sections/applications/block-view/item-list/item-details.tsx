@@ -5,7 +5,13 @@ import { useParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { FinalData } from 'src/types/components/item-list-interface';
-import { DataQuery, Document, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
+import {
+  ButtonAction,
+  DataQuery,
+  Document,
+  QueriesDispatch,
+  QueryResult,
+} from 'src/types/queries-interface';
 
 interface Props {
   queriesDispatch: QueriesDispatch[];
@@ -71,7 +77,7 @@ export default function ItemDetails({
           ))}
         </CardContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {finalData?.button_action.map((button: any) => (
+          {finalData?.button_action.map((button: ButtonAction) => (
             <Button
               key={button.id}
               fullWidth

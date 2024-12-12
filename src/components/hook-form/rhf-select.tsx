@@ -10,6 +10,7 @@ import { Theme, SxProps } from '@mui/material/styles';
 import FormHelperText from '@mui/material/FormHelperText';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import FormControl, { FormControlProps } from '@mui/material/FormControl';
+import { SelectOption } from 'src/types/queries-interface';
 
 // ----------------------------------------------------------------------
 
@@ -53,11 +54,11 @@ export function RHFSelect({
                 },
               },
             },
-            sx: { 
-              textTransform: 'capitalize', 
+            sx: {
+              textTransform: 'capitalize',
               '& .MuiSelect-icon': {
-                color: 'grey.600'
-              }
+                color: 'grey.600',
+              },
             },
           }}
           error={!!error}
@@ -80,10 +81,7 @@ type RHFMultiSelectProps = FormControlProps & {
   checkbox?: boolean;
   placeholder?: string;
   helperText?: React.ReactNode;
-  options: {
-    label: string;
-    value: string;
-  }[];
+  options: SelectOption[];
 };
 
 export function RHFMultiSelect({
