@@ -21,7 +21,7 @@ export default function Main({ children, sx, ...other }: BoxProps) {
         minHeight: 1,
         display: 'flex',
         flexDirection: 'column',
-        py: { xs: 0.5, md: `${HEADER.H_MOBILE + SPACING}px`},
+        py: { xs: 0.5, md: `${HEADER.H_MOBILE + SPACING}px` },
         px: { xs: 0.5 },
         pl: { xs: 0.5 },
         pr: { xs: 0.7 },
@@ -32,16 +32,14 @@ export default function Main({ children, sx, ...other }: BoxProps) {
           py: 1.5,
           // width: `calc(100% - ${NAV.W_VERTICAL}px)`,
           // ...(isNavMini && {
-            width: `calc(100% - ${NAV.W_MINI}px)`,
+          width: `calc(100% - ${NAV.W_MINI}px)`,
           // }),
         }),
         ...sx,
       }}
       {...other}
     >
-      <Card sx={{ borderRadius: 2, height: `calc(100% - 30px)`, background: '#f9fafbb0' }}>
-        {children}
-      </Card>
+      {children}
     </Box>
   );
 }
