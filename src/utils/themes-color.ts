@@ -1,5 +1,6 @@
 const themesColor = {
-  default:
+  default: '#F5F2EE',
+  classic:
     'linear-gradient(57.4deg, rgba(249,206,183,1) 4.6%, rgba(234,174,202,1) 26%, rgba(210,182,226,1) 49.1%, rgba(173,209,242,1) 86.5%)',
   lightBlue: 'linear-gradient(to right, rgba(239,249,249,1) 0%, rgba(182,199,226,1) 100.2%)',
   sunny_day: 'linear-gradient(to right, #f6d365 0%, #fda085 100%)',
