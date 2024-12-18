@@ -48,7 +48,6 @@ export default function MainLayout({ children }: Props) {
           flexDirection: { xs: 'column', lg: 'row' },
         }}
       >
-<<<<<<< HEAD
         {sidebarOpen && (
           <Sidebar
             sx={{
@@ -60,9 +59,6 @@ export default function MainLayout({ children }: Props) {
             }}
           />
         )}
-=======
-        {sidebarOpen && <Sidebar />}
->>>>>>> 1f2c804 (fix change page on changing application)
         <Main>{children}</Main>
       </Box>
     </Box>
