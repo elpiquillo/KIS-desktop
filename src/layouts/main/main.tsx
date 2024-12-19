@@ -1,5 +1,6 @@
 import Box, { BoxProps } from '@mui/material/Box';
 import Card from '@mui/material/Card';
+
 import 'simplebar-react/dist/simplebar.min.css';
 
 import { useResponsive } from 'src/hooks/use-responsive';
@@ -39,7 +40,7 @@ export default function Main({ children, sx, ...other }: BoxProps) {
       }}
       {...other}
     >
-      {children}
+      <Card sx={{ borderRadius: 2, height: '100%' }}>{children}</Card>
     </Box>
   );
 }

@@ -38,18 +38,27 @@ export default function MainLayout({ children }: Props) {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: boxHeight, // Full viewport height
+        height: '100vh',
       }}
     >
       <Header />
       <Box
         sx={{
-          flex: 1, // Takes the remaining height after Header
           display: 'flex',
+          flex: 1, // Take remaining space after Header
           flexDirection: { xs: 'column', lg: 'row' },
         }}
       >
-        {sidebarOpen && <Sidebar />}
+        {sidebarOpen && (
+          <Sidebar
+            sx={{
+              background: '#ece6e1',
+              flexShrink: 0, // Fixed width
+              flexGrow: 1, // Fills the parent's height
+              mb: 1,
+            }}
+          />
+        )}
         <Main>{children}</Main>
       </Box>
     </Box>

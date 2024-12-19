@@ -1,20 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { t } from 'i18next';
-import { useGetDashboardAccessesAll } from 'src/apis/dashboard-access';
 
 import { Box } from '@mui/material';
+
+import { useGetDashboardAccessesAll } from 'src/apis/dashboard-access';
 import HeaderSearch from 'src/components/header-search';
+import { useGlobalState } from 'src/store/globalState';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
-import { getTestId } from 'src/utils/data-test-id.helper';
 import ApplicationsList from './apps-list';
 
 export default function HomeView() {
   const dashboardStateData = useDashboardAccessState((state) => state.applications);
+  const { showAllApplications } = useGlobalState((state) => state);
+  const { setShowAllApplications } = useGlobalState((state) => state);
+
   const { data, isLoading } = useGetDashboardAccessesAll(
     dashboardStateData === undefined || dashboardStateData.length === 0
   );
 
   const [searchValue, setSearchValue] = useState('');
+
+  useEffect(() => {
+    if (searchValue !== '' && !showAllApplications) {
+      setShowAllApplications(true);
+    }
+  }, [searchValue, showAllApplications, setShowAllApplications]);
 
   return (
     <ApplicationsList

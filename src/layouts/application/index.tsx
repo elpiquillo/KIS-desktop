@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Grid } from '@mui/material';
+import { Card, Grid, useTheme } from '@mui/material';
 
 import Label from 'src/components/label';
 import { useParams } from 'react-router-dom';
@@ -13,6 +13,7 @@ type Props = {
 
 export default function ApplicationLayout({ children }: Props) {
   const [sidebarWidth, setSidebarWidth] = useState<number>(0);
+  const theme = useTheme();
 
   const handleSidebarResize = (newWidth: number) => {
     setSidebarWidth(newWidth);
@@ -23,14 +24,18 @@ export default function ApplicationLayout({ children }: Props) {
     ?.menu_item_url.text;
 
   return (
-    <Grid
-      sx={{ display: 'flex', flexWrap: 'nowrap', background: 'none' }}
-      container
-      height="100%"
-      maxWidth="100vw"
-    >
+    <Grid sx={{ display: 'flex', flexWrap: 'nowrap' }} container height="100%" maxWidth="100vw">
       <ApplicationMenuSidebar onSidebarResize={handleSidebarResize} />
-      <Card sx={{ width: `calc(100% - ${sidebarWidth}px)`, maxWidth: '100vw', ml: 0.5 }}>
+      <Card
+        sx={{
+          width: `calc(100% - ${sidebarWidth}px)`,
+          maxWidth: '100vw',
+          borderRadius: 2,
+          borderTopLeftRadius: 0,
+          borderBottomLeftRadius: 0,
+          background: theme.palette.grey[50],
+        }}
+      >
         <Label title={pageName} m={2}>
           {pageName}
         </Label>

@@ -37,6 +37,8 @@
     }
   },
   "applications": {
+    "showAllApplications": "Show all applications",
+    "hideAllApplications": "Hide all applications",
     "addToFavorites": "Add to favorites",
     "favoriteSuccess": "Application added to favorites",
     "favoriteError": "An error occurred while adding the application to favorites",

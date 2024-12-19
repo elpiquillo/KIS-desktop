@@ -1,15 +1,25 @@
 import SimpleBar from 'simplebar-react';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { useDashboardState } from 'src/store/dashboardState';
 import Block from './block';
 
 export default function PageView() {
+  const theme = useTheme();
   const dashboard = useDashboardState((s) => s.dashboard);
   const structure = dashboard?.pages.pages[0].structure;
 
   return (
-    <SimpleBar style={{ maxHeight: 'calc(100vh - 44px)' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', p: 2, gap: 2, flexGrow: 1 }}>
+    <SimpleBar style={{ maxHeight: 'calc(100vh - 105px)' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          p: 2,
+          gap: 2,
+          flexGrow: 1,
+          background: theme.palette.grey[50],
+        }}
+      >
         {structure?.map((container: any, index: number) => (
           <Grid container p={2} columnSpacing={2}>
             {container.row.map((row: any) => (
