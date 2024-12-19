@@ -12,7 +12,6 @@ export default function ApplicationsView() {
 
   return (
     <Card sx={{ height: '100%', borderRadius: 0 }}>
-      {/* <CardHeader /> */}
       <PageView />
     </Card>
   );

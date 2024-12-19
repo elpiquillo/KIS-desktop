@@ -122,6 +122,8 @@ function ApplicationMenuSidebar({
         ref={sidebarRef}
         sx={{
           borderRadius: 2,
+          borderTopRightRadius: 0,
+          borderBottomRightRadius: 0,
           background: '#ece6e1',
           width: sidebarWidth,
         }}
@@ -141,8 +143,6 @@ function ApplicationMenuSidebar({
       </Grid>
       <Box
         sx={{
-          height: '96%',
-          margin: 'auto',
           flexGrow: 0,
           flexShrink: 0,
           flexBasis: '6px',

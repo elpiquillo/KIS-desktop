@@ -52,7 +52,7 @@ export default function ApplicationsList({
   const sortedApplications = sortApplicationsByFavorite(applicationFiltered);
 
   return (
-    <Card {...getTestId('applications-list-container')} sx={{ height: '100%', borderRadius: 0 }}>
+    <Card {...getTestId('applications-list-container')} sx={{ height: '100%' }}>
       <CardHeader
         {...getTestId('applications-list-header')}
         title={
