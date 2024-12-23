@@ -13,8 +13,8 @@ import { useDashboardState } from 'src/store/dashboardState';
 import '../../assets/fonts/style.css';
 import { MenuItemData } from 'src/types/dashboard-menu-interface';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { alpha, Avatar, Chip, Divider, useTheme } from '@mui/material';
 import Label from 'src/components/label';
-import { Divider } from '@mui/material';
 
 function ApplicationMenuSidebar({
   onSidebarResize,
@@ -22,6 +22,7 @@ function ApplicationMenuSidebar({
   onSidebarResize: (newWidth: number) => void;
 }) {
   const { applicationId } = useParams();
+  const theme = useTheme();
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)
   );
@@ -124,7 +125,7 @@ function ApplicationMenuSidebar({
           borderRadius: 2,
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
-          background: '#ece6e1',
+          background: alpha(theme.palette.background.paper, 0.6),
           width: sidebarWidth,
         }}
         onMouseDown={(e) => e.preventDefault()}
@@ -133,11 +134,22 @@ function ApplicationMenuSidebar({
           <CardHeader
             sx={{ px: 2.5, py: 1.6 }}
             title={
-              // <Label title={application?.name}>{application?.name}</Label>
-              application?.name
+              <Chip
+                color="default"
+                avatar={
+                  <Avatar
+                    alt={application?.name}
+                    src={application?.logo}
+                    sx={{ background: theme.palette.background.paper }}
+                  />
+                }
+                label={application?.name}
+              />
             }
           />
-          <Divider sx={{ opacity: 0.8 }} />
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
           <CardContent sx={{ px: 1.5 }}>{renderMenuItem()}</CardContent>
         </SimpleBar>
       </Grid>

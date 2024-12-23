@@ -48,7 +48,7 @@ export default function Sidebar({ sx }: BoxProps) {
       >
         <NavAppSection applications={applications || data} />
         <Box sx={{ flex: 1 }} />
-        <Box sx={{ mb: 4, mx: 1 }}>
+        <Box sx={{ mx: 'auto' }}>
           <AccountPopover />
         </Box>
       </Stack>
