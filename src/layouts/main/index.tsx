@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
+
 import { useLoadSidebarState } from 'src/hooks/use-load-sidebar-state';
 import { useSidebarState } from 'src/store/sidebarState';
 
@@ -52,7 +53,8 @@ export default function MainLayout({ children }: Props) {
         {sidebarOpen && (
           <Sidebar
             sx={{
-              background: '#ece6e1',
+              background: 'none',
+              boxShadow: 0,
               flexShrink: 0, // Fixed width
               flexGrow: 1, // Fills the parent's height
               mb: 1,

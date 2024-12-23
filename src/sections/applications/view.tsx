@@ -10,9 +10,5 @@ export default function ApplicationsView() {
     pageId: pageId || '?',
   });
 
-  return (
-    <Card sx={{ height: '100%', borderRadius: 0 }}>
-      <PageView />
-    </Card>
-  );
+  return <PageView />;
 }

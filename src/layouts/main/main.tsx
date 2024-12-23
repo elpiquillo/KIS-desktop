@@ -40,7 +40,7 @@ export default function Main({ children, sx, ...other }: BoxProps) {
       }}
       {...other}
     >
-      <Card sx={{ borderRadius: 2, height: '100%' }}>{children}</Card>
+      <Card sx={{ borderRadius: 2, height: '100%', background: 'none' }}>{children}</Card>
     </Box>
   );
 }

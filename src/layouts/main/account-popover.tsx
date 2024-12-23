@@ -56,7 +56,7 @@ export default function AccountPopover() {
         component={Avatar}
         onClick={popover.onOpen}
         sx={{
-          borderRadius: 1,
+          borderRadius: 2,
           width: 48,
           height: 48,
           marginLeft: 'auto',
@@ -89,6 +89,7 @@ export default function AccountPopover() {
           vertical: 'bottom',
           horizontal: 'left',
         }}
+        hiddenArrow
         sx={{ width: 200, p: 0 }}
       >
         <Box sx={{ p: 2, pb: 1.5 }}>
