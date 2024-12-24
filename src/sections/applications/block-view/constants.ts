@@ -7,6 +7,7 @@ import InputFormView from './input-form';
 import ItemListView from './item-list';
 import KanbanView from './kanban';
 import ProgressBarView from './progress-bar';
+import TabView from './tab';
 import TableView from './table';
 import TextWithIconView from './text-with-icon';
 
@@ -14,6 +15,7 @@ export enum ComponentType {
   BC = 'BC',
   IF = 'IF',
   LB = 'LB',
+  TAB = 'TAB',
   FORM = 'FORM',
   PL = 'PL',
   KB = 'KB',
@@ -37,6 +39,9 @@ export const BlockViewByComponentType: Record<
   },
   [ComponentType.LB]: {
     content: ItemListView,
+  },
+  [ComponentType.TAB]: {
+    content: TabView,
   },
   [ComponentType.FORM]: {
     content: InputFormView,
