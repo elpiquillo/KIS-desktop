@@ -9,7 +9,9 @@ import i18next from 'i18next';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { EventClickArg } from '@fullcalendar/core';
+import { useParams } from 'src/routes/hooks';
+import { useUpdateDataHandlers } from 'src/apis/data-handler';
+import { EventChangeArg, EventClickArg } from '@fullcalendar/core';
 import CalendarStyleWrapper from './style-wrapper';
 import EventModal from './modal';
 
@@ -28,6 +30,9 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const [eventInfoForModal, setEventInfoForModal] = React.useState<any>({});
 
   const eventModal = useBoolean();
+  const { pageId } = useParams();
+
+  const { updateDataHandlers } = useUpdateDataHandlers(data.queries[0]);
 
   const handleGetDocuments = useCallback(async () => {
     const { queriesResponse } = (await handleGetHandlers({})) || {};
@@ -70,6 +75,32 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
     handleGetDocuments();
   }, [handleGetDocuments]);
 
+  const handleEventChange = async (e: EventChangeArg) => {
+    const {
+      event: { startStr, endStr, id },
+    } = e;
+
+    const eventForUpdating = documents.find((f) => f._id.$oid === id);
+
+    if (eventForUpdating) {
+      const copyEvent = JSON.parse(JSON.stringify(eventForUpdating));
+
+      copyEvent[getNameFieldFromQueriesDispatch('event_start') as string] = startStr;
+      copyEvent[getNameFieldFromQueriesDispatch('event_end') as string] = endStr || startStr;
+
+      const res = await updateDataHandlers({ pageId: pageId || '1', document: copyEvent });
+      const {
+        updated: [updatedDocument],
+      } = res;
+
+      const copyDocuments = [...documents];
+      const qIndex = documents.findIndex((tq) => tq._id.$oid === updatedDocument._id.$oid);
+      copyDocuments[qIndex] = updatedDocument;
+
+      setDocuments(copyDocuments);
+    }
+  };
+
   const handleEventClick = (e: EventClickArg) => {
     const findEv = documents.filter((f) => f._id.$oid === e.event.id);
     if (findEv) {
@@ -100,6 +131,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
               right: 'dayGridMonth,dayGridWeek,dayGridDay',
             }}
             events={eventList}
+            eventChange={handleEventChange}
             eventClick={handleEventClick}
           />
         </CalendarStyleWrapper>

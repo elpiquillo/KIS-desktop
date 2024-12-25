@@ -42,3 +42,26 @@ export function useCreateDataHandlers(query?: DataQuery) {
 
   return { createDataHandlers };
 }
+
+export function useUpdateDataHandlers(query?: DataQuery) {
+  const updateDataHandlers = async ({ pageId, document }: { pageId: string; document: any }) => {
+    try {
+      const res = await apiFetcher(`${urls.dataHandlers.update}1`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          data_handler: {
+            query_id: query?.id,
+            collection_name: query?.collection_name,
+            page_id: pageId,
+            documents: [document],
+          },
+        }),
+      });
+      return res;
+    } catch (error: any) {
+      throw new Error(t(`errors.${error.message}`));
+    }
+  };
+
+  return { updateDataHandlers };
+}
