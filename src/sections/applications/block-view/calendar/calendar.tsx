@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -25,9 +25,11 @@ interface Props {
 
 export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
-  const [finalData, setFinalData] = React.useState<any>({ ...data });
-  const [documents, setDocuments] = React.useState<any[]>([]);
-  const [eventInfoForModal, setEventInfoForModal] = React.useState<any>({});
+  const [finalData, setFinalData] = useState<any>({ ...data });
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [eventInfoForModal, setEventInfoForModal] = useState<any>({});
+  const [currentView, setCurrentView] = useState('dayGridMonth');
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const eventModal = useBoolean();
   const { pageId } = useParams();
@@ -110,6 +112,18 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
     return null;
   };
 
+  const handleViewChange = (info: any) => {
+    setCurrentView(info.view.type);
+    const { currentStart } = info.view;
+    if (
+      currentDate.getDate() !== currentStart.getDate() ||
+      currentDate.getMonth() !== currentStart.getMonth() ||
+      currentDate.getFullYear() !== currentStart.getFullYear()
+    ) {
+      setCurrentDate(info.view.currentStart);
+    }
+  };
+
   return (
     <>
       <Box>
@@ -130,9 +144,12 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
               center: 'title',
               right: 'dayGridMonth,dayGridWeek,dayGridDay',
             }}
+            initialView={currentView}
+            initialDate={currentDate}
             events={eventList}
             eventChange={handleEventChange}
             eventClick={handleEventClick}
+            datesSet={handleViewChange}
           />
         </CalendarStyleWrapper>
       </Box>
