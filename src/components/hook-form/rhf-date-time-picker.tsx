@@ -9,8 +9,9 @@ import {
   LocalizationProvider,
 } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { FormHelperText } from '@mui/material';
+import { FormHelperText, GlobalStyles } from '@mui/material';
 import dayjs from 'dayjs';
+import { success } from 'src/theme/palette';
 
 type Props = DateTimePickerProps<any> & {
   name: string;
@@ -28,6 +29,13 @@ export default function RHFDateTimePicker({ name, label, size, helperText, ...ot
         control={control}
         render={({ field, fieldState: { error } }) => (
           <>
+            <GlobalStyles
+              styles={{
+                '.MuiButtonBase-root.Mui-selected': {
+                  backgroundColor: `${success.main}!important`,
+                },
+              }}
+            />
             <DateTimePicker
               {...field}
               label={label}
@@ -61,13 +69,6 @@ export default function RHFDateTimePicker({ name, label, size, helperText, ...ot
                 rightArrowIcon: {
                   sx: {
                     color: 'text.secondary',
-                  },
-                },
-                day: {
-                  sx: {
-                    '&.Mui-selected': {
-                      backgroundColor: 'success.main',
-                    },
                   },
                 },
               }}
