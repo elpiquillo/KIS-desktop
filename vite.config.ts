@@ -2,8 +2,11 @@ import path from 'path';
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
 import checker from 'vite-plugin-checker';
+import * as dotenv from 'dotenv';
 
 // ----------------------------------------------------------------------
+// Charger les variables d'environnement
+dotenv.config();
 
 export default defineConfig({
   plugins: [
@@ -18,6 +21,9 @@ export default defineConfig({
       },
     }),
   ],
+  define: {
+    'process.env': process.env, // Injecte les variables dans le projet
+  },
   base: './', // Ensure this base path fits your project structure
   resolve: {
     alias: [
@@ -41,5 +47,5 @@ export default defineConfig({
     environment: 'jsdom', // Correct environment for testing with JSDOM
     globals: true, // Enable globals for tests
     setupFiles: 'src/tests/setup.ts', // Ensure the setup file exists
-  }
+  },
 });
