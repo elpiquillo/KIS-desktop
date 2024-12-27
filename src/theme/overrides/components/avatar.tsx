@@ -49,9 +49,9 @@ export function avatar(theme: Theme) {
       ),
 
       styleOverrides: {
-        // rounded: {
-        //   borderRadius: theme.shape.borderRadius * 1,
-        // },
+        square: {
+          borderRadius: theme.shape.borderRadius * 0.7,
+        },
         colorDefault: ({ ownerState }: { ownerState: AvatarProps }) => {
           const color = colorByName(`${ownerState.alt}`);
 

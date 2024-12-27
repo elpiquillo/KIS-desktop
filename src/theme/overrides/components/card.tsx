@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material/styles';
+import { alpha, Theme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -8,9 +8,9 @@ export function card(theme: Theme) {
       styleOverrides: {
         root: {
           position: 'relative',
-          boxShadow: theme.customShadows.card,
-          borderRadius: theme.shape.borderRadius * 2,
+          borderRadius: theme.shape.borderRadius * 1.5,
           zIndex: 0, // Fix Safari overflow: hidden with border radius
+          border: `solid 1px ${alpha(theme.palette.divider, 0.15)}`,
         },
       },
     },

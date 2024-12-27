@@ -25,6 +25,7 @@ export default function Sidebar({ sx }: BoxProps) {
   return (
     <Card
       sx={{
+        border: 'none',
         flexShrink: 0, // Sidebar keeps its width
         flexGrow: 1, // Ensures it stretches to fill the parent's height
         height: '100%', // Ensures full height matching Main

@@ -47,7 +47,6 @@ export default function ApplicationLayout({ children }: Props) {
         sx={{
           width: `calc(100% - ${sidebarWidth}px)`,
           maxWidth: '100vw',
-          borderRadius: 2,
           borderTopLeftRadius: 0,
           borderBottomLeftRadius: 0,
           background: paletteMode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
