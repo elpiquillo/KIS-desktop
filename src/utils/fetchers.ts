@@ -1,18 +1,18 @@
 import { useUserState } from '../store/userState';
 import { getErrorCode } from './apiErrors';
-import { API_BASE_URL } from './urls';
 
 /**
  * Get raw response, usefull if you want to read headers
  */
 export async function apiFetcherRaw(input: RequestInfo, init?: RequestInit) {
+  const apiUrl = process.env.REACT_APP_API_BASE_URL;
   const getInput = () => {
     if (typeof input === 'string') {
-      return `${API_BASE_URL}${input}`;
+      return `${apiUrl}${input}`;
     }
     return {
       ...(input as Request),
-      url: `${API_BASE_URL}${input}`,
+      url: `${apiUrl}${input}`,
     } as Request;
   };
 
