@@ -22,7 +22,7 @@ export const urls = {
     update: '/users/data_handlers/',
   },
   userInfos: {
-    update: '/users/companies_accounts/',
+    update: '/users/users/',
     password: '/user_auth/password',
   },
   dashboardAcceses: {

@@ -38,38 +38,34 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   const user = useUserState((s) => s.userInfos);
 
   const AccountInfos = Yup.object().shape({
-    firstName: Yup.string()
-      .default(user?.first_name)
-      .required(t('applications.applicationsPage.required')),
-    lastName: Yup.string()
-      .default(user?.last_name)
-      .required(t('applications.applicationsPage.required')),
+    firstName: Yup.string().default(user?.first_name),
+    lastName: Yup.string().default(user?.last_name),
     email: Yup.string()
       .default(user?.email)
       .email(t('applications.applicationsPage.emailInvalid'))
-      .required(t('applications.applicationsPage.required'))
+      .required(t('applications.applicationsPage.required')),
   });
 
   const AccountPassword = Yup.object().shape({
     password: Yup.string()
       .typeError(t('auth.passwordInvalid'))
-      .min(7, t('auth.passwordMin'))      
+      .min(7, t('auth.passwordMin'))
       .required(t('auth.passwordRequired')),
     passwordConfirmation: Yup.string()
       .oneOf([Yup.ref('password')], t('auth.passwordMatch'))
-      .required(t('auth.passwordConfirmation'))
+      .required(t('auth.passwordConfirmation')),
   });
 
   const acountPasswordMethods = useForm({
     resolver: yupResolver(AccountPassword),
     defaultValues: {
       password: '',
-      passwordConfirmation: ''
-    }
+      passwordConfirmation: '',
+    },
   });
 
   const accountInfosMethods = useForm({
-    resolver: yupResolver(AccountInfos)
+    resolver: yupResolver(AccountInfos),
   });
 
   const {
@@ -84,17 +80,17 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       await putUserInfos({
         first_name: formData.firstName,
         last_name: formData.lastName,
-        id: user.id
+        id: user.id,
       });
 
-      enqueueSnackbar(
-        t('settings.userInfosUpdated'),
-        { variant: 'success', anchorOrigin: { vertical: 'top', horizontal: 'center' }}
-      );
+      enqueueSnackbar(t('settings.userInfosUpdated'), {
+        variant: 'success',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
 
       onClose();
     } catch (error) {
-    // Add your error handling logic here
+      // Add your error handling logic here
     }
   });
 
@@ -102,17 +98,17 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
     try {
       await putPassword({
         password: formData.password,
-        password_confirmation: formData.passwordConfirmation
+        password_confirmation: formData.passwordConfirmation,
       });
 
-      enqueueSnackbar(
-        t('settings.userInfosUpdated'),
-        { variant: 'success', anchorOrigin: { vertical: 'top', horizontal: 'center' }}
-      );
+      enqueueSnackbar(t('settings.userInfosUpdated'), {
+        variant: 'success',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
 
       onClose();
     } catch (error) {
-    // Add your error handling logic here
+      // Add your error handling logic here
     }
   });
 
@@ -170,7 +166,10 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={password.onToggle} edge="end">
-                <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} color="grey.400" />
+                <Iconify
+                  icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                  color="grey.400"
+                />
               </IconButton>
             </InputAdornment>
           ),
@@ -188,14 +187,17 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={passwordConfirmation.onToggle} edge="end">
-                <Iconify icon={passwordConfirmation.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} color="grey.400" />
+                <Iconify
+                  icon={passwordConfirmation.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                  color="grey.400"
+                />
               </IconButton>
             </InputAdornment>
           ),
         }}
       />
       <Button
-        size='small'  
+        size="small"
         color="success"
         startIcon={<Iconify icon="material-symbols:lock-reset" />}
         sx={{ mb: 1 }}
@@ -245,37 +247,41 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
     document.body.style.background = themesColor[theme as keyof typeof themesColor];
 
     onClose();
-    enqueueSnackbar(
-      t('global.goodChoice'),
-      { variant: 'success', anchorOrigin: { vertical: 'top', horizontal: 'center' }}
-    );
-  }
+    enqueueSnackbar(t('global.goodChoice'), {
+      variant: 'success',
+      anchorOrigin: { vertical: 'top', horizontal: 'center' },
+    });
+  };
 
-  const getFilteredThemes = (color: 'light' | 'dark') => (
+  const getFilteredThemes = (color: 'light' | 'dark') =>
     Object.entries(themesColor)
       .filter(([key, _]) => (color === 'dark' ? key.includes('Dark') : !key.includes('Dark')))
-      .reduce((acc, [key, value]) => {
-        acc[key as keyof typeof themesColor] = value;
-        return acc;
-      }, {} as { [key: string]: string })
-  )
+      .reduce(
+        (acc, [key, value]) => {
+          acc[key as keyof typeof themesColor] = value;
+          return acc;
+        },
+        {} as { [key: string]: string }
+      );
 
-  const themesSelection = (themeType: 'light' | 'dark') => (
+  const themesSelection = (themeType: 'light' | 'dark') =>
     Object.entries(getFilteredThemes(themeType)).map(([key, value]) => (
-      <Grid key={key} item xs={5} sx={{ background: value}} component={Button}
+      <Grid
+        key={key}
+        item
+        xs={5}
+        sx={{ background: value }}
+        component={Button}
         height={40}
         m={0.7}
         aria-label={key}
         onClick={setNewTheme(key)}
       />
-    ))
-  )
+    ));
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>
-        {t('settings.profileSettings')}
-      </DialogTitle>
+      <DialogTitle>{t('settings.profileSettings')}</DialogTitle>
 
       <DialogContent>
         {infosForm}
@@ -283,7 +289,6 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
         {languageField}
 
         <Divider sx={{ my: 2 }} />
-
 
         <Typography variant="subtitle2">
           {t('settings.lightThemes')}

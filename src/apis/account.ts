@@ -19,7 +19,7 @@ export function usePutUserInfos() {
       const res = await apiFetcher(`${urls.userInfos.update}${id}`, {
         method: 'PUT',
         body: JSON.stringify({
-          company_account: {
+          user: {
             first_name,
             last_name,
           },
