@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box } from '@mui/material';
 import { BlockViewByComponentType } from './block-view/constants';
 
 interface Props {
@@ -7,11 +6,8 @@ interface Props {
 }
 
 export default function Block({ block }: Props) {
-  const { content: View } = BlockViewByComponentType[block?.blocs?.[0]?.bloc_id || 'default'];
+  const { content: View } =
+    BlockViewByComponentType[block?.blocs?.[0]?.bloc_id] || BlockViewByComponentType.default;
 
-  return (
-    // <Box>
-      <View blockInfo={block} />
-    // </Box>
-  );
+  return <View blockInfo={block} />;
 }
