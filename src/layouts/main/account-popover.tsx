@@ -56,9 +56,10 @@ export default function AccountPopover() {
         component={Avatar}
         onClick={popover.onOpen}
         sx={{
-          borderRadius: 2,
+          borderRadius: 1.4,
           width: 48,
           height: 48,
+          background: 'red',
           marginLeft: 'auto',
           marginRight: 'auto',
           backgroundColor: theme.palette.primary.darker,

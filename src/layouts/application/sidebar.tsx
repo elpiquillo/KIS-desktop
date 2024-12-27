@@ -122,7 +122,6 @@ function ApplicationMenuSidebar({
         item
         ref={sidebarRef}
         sx={{
-          borderRadius: 2,
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
           background: alpha(theme.palette.background.paper, 0.6),
@@ -136,8 +135,10 @@ function ApplicationMenuSidebar({
             title={
               <Chip
                 color="default"
+                variant="outlined"
                 avatar={
                   <Avatar
+                    variant="square"
                     alt={application?.name}
                     src={application?.logo}
                     sx={{ background: theme.palette.background.paper }}
@@ -155,6 +156,7 @@ function ApplicationMenuSidebar({
       </Grid>
       <Box
         sx={{
+          background: alpha(theme.palette.background.neutral, 0.9),
           flexGrow: 0,
           flexShrink: 0,
           flexBasis: '6px',

@@ -31,7 +31,7 @@ function CustomThemeProvider({ children }: Props) {
       palette: palette(paletteMode),
       shadows: shadows(paletteMode),
       customShadows: customShadows(paletteMode),
-      shape: { borderRadius: 8 },
+      shape: { borderRadius: 12 },
       typography,
     }),
     [paletteMode]

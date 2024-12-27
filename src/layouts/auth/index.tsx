@@ -40,6 +40,7 @@ export default function AuthLayout({ children, image }: Props) {
           px: { xs: 3, md: 0 },
           boxShadow: { md: 'none' },
           overflow: { md: 'unset' },
+          border: 'none',
           // bgcolor: { md: 'background.default' },
         }}
       >
@@ -53,16 +54,13 @@ export default function AuthLayout({ children, image }: Props) {
       flexGrow={1}
       sx={{
         position: 'relative',
-        backgroundColor: theme => theme.palette.background.paper,
+        backgroundColor: (theme) => theme.palette.background.paper,
       }}
     >
       <Box
         component="img"
         alt="auth"
-        src={
-          image ||
-          '/assets/background/overlay_3.jpg'
-        }
+        src={image || '/assets/background/overlay_3.jpg'}
         sx={{
           backgroundColor: '#59bf95',
           top: 16,
@@ -71,7 +69,7 @@ export default function AuthLayout({ children, image }: Props) {
           position: 'absolute',
           width: 'calc(100% - 32px)',
           height: 'calc(100% - 32px)',
-          borderRadius: 1
+          borderRadius: 1,
         }}
       />
       {/* <Box
