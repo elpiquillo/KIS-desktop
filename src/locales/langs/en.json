@@ -14,7 +14,8 @@
     "addToFavorites": "Add to favorites",
     "removeFromFavorites": "Remove from favorites",
     "disconnect": "Disconnect",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel"
   },
   "auth": {
     "passwordRequired": "Password is required",
@@ -59,6 +60,8 @@
     "uploadImage": "Swipe or click to upload your image",
     "formCreatedSuccess": "Congratulations, everything was created!",
     "details": "Details",
+    "saveDataFromCsv": "Save data from CSV",
+    "successSaved": "The data has been saved successfully",
     "calendar": {
       "titleEvent": "Title of event",
       "descriptionEvent": "Description of event",

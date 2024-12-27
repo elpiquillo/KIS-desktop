@@ -22,7 +22,13 @@ export function useGetDataHandlersList() {
 }
 
 export function useCreateDataHandlers(query?: DataQuery) {
-  const createDataHandlers = async ({ pageId, document }: { pageId: string; document: any }) => {
+  const createDataHandlers = async ({
+    pageId,
+    documents,
+  }: {
+    pageId: string;
+    documents: any[];
+  }) => {
     try {
       await apiFetcher(urls.dataHandlers.create, {
         method: 'POST',
@@ -31,7 +37,7 @@ export function useCreateDataHandlers(query?: DataQuery) {
             query_id: query?.id,
             collection_name: query?.collection_name,
             page_id: pageId,
-            documents: [document],
+            documents,
           },
         }),
       });

@@ -127,7 +127,7 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   const onSubmit = handleSubmit(async (formData: any) => {
     await createDataHandlers({
       pageId: pageId || '?',
-      document: formData,
+      documents: [formData],
     });
 
     enqueueSnackbar(t('applications.formCreatedSuccess'), {

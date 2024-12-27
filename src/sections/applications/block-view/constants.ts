@@ -1,6 +1,6 @@
 import BreadcrumbView from './breadcrumb';
 import CalendarView from './calendar/calendar';
-import CsvImportView from './csv-import';
+import CsvImportView from './csv-import/csv-import';
 import DefaultView from './default';
 import GaugeView from './gauge';
 import InputFormView from './input-form/input-form';
