@@ -5,6 +5,7 @@ import { useParams } from 'src/routes/hooks';
 import { useCreateDataHandlers } from 'src/apis/data-handler';
 import { useSnackbar } from 'notistack';
 import UploadCsv from './upload-csv';
+import CsvTable from './csv-table';
 
 interface Props {
   blockInfo: any;
@@ -65,6 +66,8 @@ export default function CsvImportView({ blockInfo }: Props) {
           </Button>
         </Box>
       )}
+
+      <CsvTable data={csvData} />
     </Box>
   );
 }

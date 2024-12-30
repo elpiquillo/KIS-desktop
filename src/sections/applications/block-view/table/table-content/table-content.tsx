@@ -1,7 +1,7 @@
-import { Box, Paper, Table, TableContainer, useTheme } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 import { TableHeadCustom } from 'src/components/table';
+import TableContainerCustom from 'src/components/table/table-container-custom';
 import TableViewPagination from './table-pagination';
 import TableViewBody from './table-body';
 
@@ -26,7 +26,6 @@ export default function TableContent({
     order: 'asc',
     id: null,
   });
-  const theme = useTheme();
 
   const getTableData = useCallback((columns_content: any) => {
     const groupedData = new Map();
@@ -85,62 +84,29 @@ export default function TableContent({
   };
 
   return (
-    <Box
-      sx={{
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: 1,
-      }}
-    >
-      <TableContainer component={Paper}>
-        <Table
-          size="small"
-          data-testid="table"
-          sx={{
-            '& .MuiTableCell-root': {
-              borderColor: `${theme.palette.divider} !important`,
-              borderWidth: '1px',
-              borderStyle: 'solid',
-            },
-            '& .MuiTableRow-root:first-of-type .MuiTableCell-root': {
-              borderWidth: '0px 1px 1px 1px',
-            },
-            '& .MuiTableRow-root .MuiTableCell-root:last-of-type': {
-              borderRightWidth: '0px',
-            },
-            '& .MuiTableRow-root .MuiTableCell-root:first-of-type': {
-              borderLeftWidth: '0px',
-            },
-            ...(queriesResponse[0]?.pages.max_page === 1 && {
-              '& .MuiTableRow-root:last-of-type .MuiTableCell-root': {
-                borderBottomWidth: '0px',
-              },
-            }),
-          }}
-        >
-          <TableHeadCustom
-            order={sort.order}
-            orderBy={sort.id}
-            headLabel={finalData.columns}
-            buttonAction={finalData.button_action}
-            onSort={handleChangeSort}
-            isActiveFilter={isActiveFilter}
-            handleOpenFilterModal={handleOpenFilterModal}
-          />
-
-          <TableViewBody
-            tableData={tableData}
-            finalData={finalData}
-            queriesRequest={queriesRequest}
-          />
-        </Table>
+    <TableContainerCustom
+      maxPage={queriesResponse[0]?.pages.max_page}
+      pagination={
         <TableViewPagination
           limit={finalData.queries?.[0]?.limit || 10}
           currentPage={queriesResponse[0]?.pages.current_page || 1}
           maxPage={queriesResponse[0]?.pages.max_page || 1}
-          size={queriesResponse[0]?.documents_size}
+          size={queriesResponse[0]?.documents_size || 0}
           handleChangePage={handleChangePage}
         />
-      </TableContainer>
-    </Box>
+      }
+    >
+      <TableHeadCustom
+        order={sort.order}
+        orderBy={sort.id}
+        headLabel={finalData.columns}
+        buttonAction={finalData.button_action}
+        onSort={handleChangeSort}
+        isActiveFilter={isActiveFilter}
+        handleOpenFilterModal={handleOpenFilterModal}
+      />
+
+      <TableViewBody tableData={tableData} finalData={finalData} queriesRequest={queriesRequest} />
+    </TableContainerCustom>
   );
 }
