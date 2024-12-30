@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useGetDataHandlersList } from 'src/apis/data-handler';
-import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, QueriesDispatch } from 'src/types/queries-interface';
 import { useDataLink } from 'src/hooks/use-data-link';
 import { BlockViewByComponentType } from './block-view/constants';
 import cable from './helpers/cable';
@@ -104,7 +104,9 @@ export default function Block({ block }: Props) {
     };
   }, [queries, queries_dispatch, slplitPath, toLoad]);
 
-  const { content: View } = BlockViewByComponentType[block?.blocs?.[0]?.bloc_id || 'default'];
+  const { content: View } =
+    BlockViewByComponentType[block?.blocs?.[0]?.bloc_id || 'default'] ||
+    BlockViewByComponentType.default;
 
   return <View blockInfo={block} handleGetHandlers={handleGetHandlers} />;
 }

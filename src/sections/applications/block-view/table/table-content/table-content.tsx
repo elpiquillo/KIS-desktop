@@ -62,7 +62,7 @@ export default function TableContent({
 
   const columnsForFilter = useMemo(
     () =>
-      finalData.queries_dispatch?.[0].destination_fields.find(
+      finalData.queries_dispatch?.[0]?.destination_fields.find(
         (field: QueriesDispatch['destination_fields'][number]) =>
           Object.prototype.hasOwnProperty.call(field, 'columns')
       )?.columns || [],
@@ -134,9 +134,9 @@ export default function TableContent({
           />
         </Table>
         <TableViewPagination
-          limit={finalData.queries[0].limit}
-          currentPage={queriesResponse[0]?.pages.current_page}
-          maxPage={queriesResponse[0]?.pages.max_page}
+          limit={finalData.queries[0]?.limit || 10}
+          currentPage={queriesResponse[0]?.pages.current_page || 1}
+          maxPage={queriesResponse[0]?.pages.max_page || 1}
           size={queriesResponse[0]?.documents_size}
           handleChangePage={handleChangePage}
         />
