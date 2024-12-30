@@ -27,10 +27,12 @@ export default function Main({ children, sx, ...other }: BoxProps) {
         pl: { xs: 0.5 },
         pr: { xs: 0.7 },
         ...(lgUp && {
-          px: 1,
+          pr: 0.5,
+          pb: 0.5,
+          px: 0,
           pt: 0,
-          pl: 0.8,
-          py: 1.5,
+          pl: 0,
+          py: 0,
           // width: `calc(100% - ${NAV.W_VERTICAL}px)`,
           // ...(isNavMini && {
           width: `calc(100% - ${NAV.W_MINI}px)`,
@@ -40,7 +42,9 @@ export default function Main({ children, sx, ...other }: BoxProps) {
       }}
       {...other}
     >
-      <Card sx={{ height: '100%', background: 'none', border: 'none' }}>{children}</Card>
+      <Card sx={{ height: '100%', background: 'none', border: 'none', boxShadow: 1 }}>
+        {children}
+      </Card>
     </Box>
   );
 }
