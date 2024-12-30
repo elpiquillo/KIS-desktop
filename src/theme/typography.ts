@@ -29,7 +29,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const primaryFont = 'Public Sans, sans-serif';
+export const primaryFont = "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
 export const secondaryFont = 'Barlow, sans-serif';
 
 // ----------------------------------------------------------------------
