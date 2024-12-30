@@ -43,7 +43,7 @@ export default function TableViewBody({ finalData, tableData, queriesRequest }: 
                   state={{
                     data: {
                       id: finalData.columns_content[0]?.content[indexRow]?.column_id,
-                      collection: finalData.queries[0].collection_name,
+                      collection: finalData.queries?.[0].collection_name,
                       query: queriesRequest,
                     },
                   }}

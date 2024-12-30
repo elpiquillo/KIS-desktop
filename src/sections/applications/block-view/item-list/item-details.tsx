@@ -93,7 +93,7 @@ export default function ItemDetails({
               state={{
                 data: {
                   id: current_document._id.$oid,
-                  collection: blockData.queries[0].collection_name,
+                  collection: blockData.queries?.[0].collection_name,
                   query: queriesRequest,
                 },
               }}

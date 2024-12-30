@@ -17,7 +17,7 @@ export default function CsvImportView({ blockInfo }: Props) {
 
   const { enqueueSnackbar } = useSnackbar();
   const { pageId } = useParams();
-  const { createDataHandlers } = useCreateDataHandlers(data.queries[0]);
+  const { createDataHandlers } = useCreateDataHandlers(data.queries?.[0]);
 
   const handleSaveDataFromCsv = async () => {
     const documents = csvData.map((row: any) => {

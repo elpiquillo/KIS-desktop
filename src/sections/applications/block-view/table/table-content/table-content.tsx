@@ -134,7 +134,7 @@ export default function TableContent({
           />
         </Table>
         <TableViewPagination
-          limit={finalData.queries[0]?.limit || 10}
+          limit={finalData.queries?.[0]?.limit || 10}
           currentPage={queriesResponse[0]?.pages.current_page || 1}
           maxPage={queriesResponse[0]?.pages.max_page || 1}
           size={queriesResponse[0]?.documents_size}

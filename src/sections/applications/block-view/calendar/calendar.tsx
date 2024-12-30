@@ -34,7 +34,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const eventModal = useBoolean();
   const { pageId } = useParams();
 
-  const { updateDataHandlers } = useUpdateDataHandlers(data.queries[0]);
+  const { updateDataHandlers } = useUpdateDataHandlers(data.queries?.[0]);
 
   const handleGetDocuments = useCallback(async () => {
     const { queriesResponse } = (await handleGetHandlers({})) || {};

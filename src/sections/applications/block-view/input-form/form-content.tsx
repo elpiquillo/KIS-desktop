@@ -35,7 +35,7 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const { pageId } = useParams();
 
-  const { createDataHandlers } = useCreateDataHandlers(queries[0]);
+  const { createDataHandlers } = useCreateDataHandlers(queries?.[0]);
 
   const validationSchema = Yup.object().shape(
     fieldsData.reduce((acc: any, field: any) => {
@@ -108,6 +108,8 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
       }, {}),
     [fieldsData]
   );
+
+  // return null;
 
   const methods = useForm({
     resolver: yupResolver(validationSchema),
