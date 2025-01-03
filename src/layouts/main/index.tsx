@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 
-import { useLoadSidebarState } from 'src/hooks/use-load-sidebar-state';
 import { useSidebarState } from 'src/store/sidebarState';
 
 import Sidebar from './sidebar';
@@ -16,7 +15,6 @@ type Props = {
 
 export default function MainLayout({ children }: Props) {
   const { sidebarOpen } = useSidebarState();
-  useLoadSidebarState();
 
   const [boxHeight, setBoxHeight] = useState('100vh');
   useEffect(() => {
