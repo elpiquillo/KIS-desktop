@@ -3,6 +3,8 @@ import Card from '@mui/material/Card';
 
 import 'simplebar-react/dist/simplebar.min.css';
 
+import { useSidebarState } from 'src/store/sidebarState';
+
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { NAV, HEADER } from '../config-layout';
@@ -13,6 +15,7 @@ const SPACING = 8;
 
 export default function Main({ children, sx, ...other }: BoxProps) {
   const lgUp = useResponsive('up', 'lg');
+  const { sidebarOpen } = useSidebarState();
 
   return (
     <Box
@@ -31,7 +34,7 @@ export default function Main({ children, sx, ...other }: BoxProps) {
           pb: 0.5,
           px: 0,
           pt: 0,
-          pl: 0,
+          pl: sidebarOpen ? 0 : 0.7,
           py: 0,
           // width: `calc(100% - ${NAV.W_VERTICAL}px)`,
           // ...(isNavMini && {

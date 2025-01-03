@@ -9,7 +9,6 @@ export default function Header() {
   const { sidebarOpen, setSidebarOpen } = useSidebarState();
 
   const handleToggleSidebar = () => {
-    localStorage.setItem('sidebarOpen', JSON.stringify(!sidebarOpen));
     setSidebarOpen(!sidebarOpen);
   };
 
@@ -33,7 +32,7 @@ export default function Header() {
             },
           }}
           aria-label="collapse applications menu"
-          onClick={handleToggleSidebar}
+          onClick={() => handleToggleSidebar()}
         >
           <Iconify
             icon={sidebarOpen ? 'hugeicons:sidebar-left-01' : 'hugeicons:sidebar-left'}

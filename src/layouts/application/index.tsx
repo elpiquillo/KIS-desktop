@@ -1,18 +1,8 @@
-import { useState } from 'react';
-import {
-  Avatar,
-  Box,
-  Card,
-  CardHeader,
-  Chip,
-  Divider,
-  Grid,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Card, CardHeader, Grid, useTheme } from '@mui/material';
+import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 
 import Label from 'src/components/label';
-import { useLocation, useNavigation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDashboardState } from 'src/store/dashboardState';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
 
@@ -23,13 +13,10 @@ type Props = {
 };
 
 export default function ApplicationLayout({ children }: Props) {
-  const [sidebarWidth, setSidebarWidth] = useState<number>(0);
   const theme = useTheme();
   const { paletteMode } = useThemeMode();
+  const { collapseAppMenu } = useCollapseDashboardMenu();
 
-  const handleSidebarResize = (newWidth: number) => {
-    setSidebarWidth(newWidth);
-  };
   const { pageId } = useParams();
   const { dashboardMenu } = useDashboardState();
   const pageName = dashboardMenu?.content.find((item) => item.menu_item_url.url === pageId)
@@ -42,19 +29,24 @@ export default function ApplicationLayout({ children }: Props) {
       height="100%"
       maxWidth="100vw"
     >
-      <ApplicationMenuSidebar onSidebarResize={handleSidebarResize} />
+      <ApplicationMenuSidebar />
       <Card
         sx={{
-          width: `calc(100% - ${sidebarWidth}px)`,
+          width: collapseAppMenu ? '100%' : 'calc(100% - 200px)',
           maxWidth: '100vw',
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
+          ml: -2,
           background: paletteMode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
           border: 'none',
+          transition: 'width 0.3s ease-in-out',
         }}
       >
         <CardHeader
-          sx={{ px: 2.5, py: 1.8 }}
+          sx={{
+            px: 2.5,
+            py: 1.9,
+            borderBottom: '1px dashed',
+            borderColor: 'divider',
+          }}
           title={
             <Box>
               {/* <Typography variant="button">Actions fréquentes</Typography>&nbsp;
@@ -72,8 +64,6 @@ export default function ApplicationLayout({ children }: Props) {
             </Box>
           }
         />
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
 
         {children}
       </Card>
