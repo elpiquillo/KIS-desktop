@@ -3,14 +3,15 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
 import checker from 'vite-plugin-checker';
 import * as dotenv from 'dotenv';
-
+import compression from 'vite-plugin-compression2';
 // ----------------------------------------------------------------------
 // Charger les variables d'environnement
 dotenv.config();
 
 export default defineConfig({
   plugins: [
-    react(),
+    react() as any, // Ensure the plugin is correctly typed
+    compression(), // Ensure the plugin is correctly typed
     checker({
       typescript: true,
       eslint: {
@@ -22,7 +23,7 @@ export default defineConfig({
     }),
   ],
   define: {
-    'process.env': process.env, // Injecte les variables dans le projet
+    'process.env': JSON.stringify(process.env),
   },
   base: './', // Ensure this base path fits your project structure
   resolve: {
