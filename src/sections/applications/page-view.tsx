@@ -1,9 +1,9 @@
 import SimpleBar from 'simplebar-react';
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
 
 import { useDashboardState } from 'src/store/dashboardState';
-import Block from './block';
+import ContainerView from './container-view';
 
 export default function PageView() {
   const theme = useTheme();
@@ -23,24 +23,7 @@ export default function PageView() {
           background: paletteMode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
         }}
       >
-        {structure?.map((container: any, index: number) => (
-          <Grid container p={2} columnSpacing={2}>
-            {container.row.map((row: any) => (
-              <Grid
-                key={row.id}
-                item
-                xs={row.col}
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-              >
-                {row.blocs
-                  .filter((block: any) => block.blocs.length)
-                  .map((block: any) => (
-                    <Block key={block.id} block={block} />
-                  ))}
-              </Grid>
-            ))}
-          </Grid>
-        ))}
+        {structure?.map((container: any) => <ContainerView container={container} sx={{ p: 2 }} />)}
       </Box>
     </SimpleBar>
   );
