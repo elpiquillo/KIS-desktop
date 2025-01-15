@@ -19,7 +19,6 @@ import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 function ApplicationMenuSidebar() {
   const { applicationId } = useParams();
   const theme = useTheme();
-
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)
   );
@@ -56,7 +55,7 @@ function ApplicationMenuSidebar() {
         }
 
         return (
-          <Typography variant="subtitle2" ml={1} my={1.5}>
+          <Typography key={menuItemUrl.text} variant="subtitle2" ml={1} my={1.5}>
             {menuItemUrl.text}
           </Typography>
         );
@@ -84,6 +83,7 @@ function ApplicationMenuSidebar() {
 
         return (
           <NavItem
+            key={menuItemUrl.text}
             title={menuItemUrl.text}
             path={`${applicationId}/${menuItemUrl.url}`}
             icon={
