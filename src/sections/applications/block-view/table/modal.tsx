@@ -39,8 +39,7 @@ export default function FilterModal({
       ? { ...filter }
       : { filter_column: nameColumn, filter_operator: '' as FilterOperator, filter_value: '' };
     reset(initialValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nameColumn, reset]);
+  }, [filters, nameColumn, reset]);
 
   const handleAddFilterToLocalStorage = (formFilter: CustomFilter) => {
     if (!filters.length) {

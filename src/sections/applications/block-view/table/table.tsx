@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 import { t } from 'i18next';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePopover } from 'src/components/custom-popover';
 import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
@@ -26,7 +26,10 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   const { open, onOpen, onClose } = usePopover();
 
   const { data: blockData } = blockInfo.blocs[0];
-  const filtersFromStorage = JSON.parse(localStorage.getItem(blockInfo.id) || '[]');
+  const filtersFromStorage = useMemo(
+    () => JSON.parse(localStorage.getItem(blockInfo.id) || '[]'),
+    [blockInfo.id]
+  );
 
   const mapColumnsContentByOriginalProperty = useCallback(
     (data: any) => {
@@ -60,26 +63,24 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
         page: page || undefined,
       });
 
-      const dispatchData = dispatchFetchedData({
-        dataQueries: response,
-        dispatchQueries: blockData.queries_dispatch,
-        finalData,
+      setFinalData((prevFinalData: any) => {
+        const dispatchData = dispatchFetchedData({
+          dataQueries: response,
+          dispatchQueries: blockData.queries_dispatch,
+          finalData: prevFinalData,
+        });
+
+        return mapColumnsContentByOriginalProperty(dispatchData);
       });
-
-      const result = mapColumnsContentByOriginalProperty(dispatchData);
-
-      setFinalData(result);
       setQueriesRequest(request);
       setQueriesResponse(response);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [blockData, handleGetHandlers, mapColumnsContentByOriginalProperty]
   );
 
   useEffect(() => {
     handleGetContent({ filters: filtersFromStorage });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleGetContent]);
+  }, [filtersFromStorage, handleGetContent]);
 
   const handleOpenFilterModal = (event: React.MouseEvent<HTMLElement>, id: string) => {
     const nameField = finalData.queries_dispatch?.[0].destination_fields[0].columns.find(
