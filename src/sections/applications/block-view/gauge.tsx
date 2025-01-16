@@ -1,22 +1,47 @@
 import { Box, Button, Card, CardHeader, Typography } from '@mui/material';
 import { Gauge, gaugeClasses } from '@mui/x-charts';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { success } from 'src/theme/palette';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 
 interface Props {
   blockInfo: any;
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
+    queriesRequest: DataQuery[];
+    queriesResponse: QueryResult[];
+  };
 }
 
-export default function GaugeView({ blockInfo }: Props) {
+export default function GaugeView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
+  const [finalData, setFinalData] = useState<any>({
+    ...data,
+  });
 
-  const percentage = !data.second_value
-    ? data.first_value
-    : ((data.first_value / data.second_value) * 100).toFixed(2);
+  const handleGetFinalData = useCallback(async () => {
+    const { queriesResponse: response } = (await handleGetHandlers({})) || {};
+
+    setFinalData((prevFinalData: any) =>
+      dispatchFetchedData({
+        dataQueries: response,
+        dispatchQueries: data.queries_dispatch,
+        finalData: prevFinalData,
+      })
+    );
+  }, [data.queries_dispatch, handleGetHandlers]);
+
+  useEffect(() => {
+    handleGetFinalData();
+  }, [handleGetFinalData]);
+
+  const percentage = !finalData.second_value
+    ? finalData.first_value
+    : ((finalData.first_value / finalData.second_value) * 100).toFixed(2);
 
   return (
     <Card>
-      <CardHeader title={data.card_title} subheader={data.sub_title} />
+      <CardHeader title={finalData.card_title} subheader={finalData.sub_title} />
       <Box
         sx={{
           mt: 1.5,
@@ -25,7 +50,7 @@ export default function GaugeView({ blockInfo }: Props) {
       >
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
           <Box sx={{ minWidth: '10px', display: 'flex', alignItems: 'center' }}>
-            <Typography variant="h4">{`${data.middle_text} ${data.devise}`}</Typography>
+            <Typography variant="h4">{`${finalData.middle_text} ${finalData.devise}`}</Typography>
           </Box>
           <Box sx={{ width: '190px' }}>
             <Gauge
@@ -51,7 +76,7 @@ export default function GaugeView({ blockInfo }: Props) {
           </Box>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-          {data.button_action.map((button: { id: string; text: string }) => (
+          {finalData.button_action.map((button: { id: string; text: string }) => (
             <Button
               key={button.id}
               disabled
@@ -70,7 +95,7 @@ export default function GaugeView({ blockInfo }: Props) {
           ))}
         </Box>
         <Typography variant="body1" color="text.secondary">
-          {data.bottom_text}
+          {finalData.bottom_text}
         </Typography>
       </Box>
     </Card>
