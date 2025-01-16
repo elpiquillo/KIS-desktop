@@ -28,6 +28,8 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const [finalData, setFinalData] = useState<any>({ ...data });
   const [documents, setDocuments] = useState<any[]>([]);
   const [eventInfoForModal, setEventInfoForModal] = useState<any>({});
+  const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
+
   const [currentView, setCurrentView] = useState('dayGridMonth');
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -37,17 +39,18 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const { updateDataHandlers } = useUpdateDataHandlers(data.queries?.[0]);
 
   const handleGetDocuments = useCallback(async () => {
-    const { queriesResponse } = (await handleGetHandlers({})) || {};
-    const dispatchData = dispatchFetchedData({
-      dataQueries: queriesResponse,
-      dispatchQueries: blockInfo.queries_dispatch,
-      finalData,
-    });
+    const { queriesResponse: response } = (await handleGetHandlers({})) || {};
 
-    setFinalData(dispatchData);
-    setDocuments(queriesResponse[0].documents);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [blockInfo.queries_dispatch, handleGetHandlers]);
+    setFinalData((prevFinalData: any) =>
+      dispatchFetchedData({
+        dataQueries: response,
+        dispatchQueries: data.queries_dispatch,
+        finalData: prevFinalData,
+      })
+    );
+    setDocuments(response[0].documents);
+    setQueriesResponse(response || []);
+  }, [data.queries_dispatch, handleGetHandlers]);
 
   const getNameFieldFromQueriesDispatch = useCallback(
     (string: string) => {
@@ -104,9 +107,20 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   };
 
   const handleEventClick = (e: EventClickArg) => {
-    const findEv = documents.filter((f) => f._id.$oid === e.event.id);
+    const findEv = documents.filter((f) => f._id.$oid === e.event.id)?.[0];
     if (findEv) {
-      setEventInfoForModal(findEv[0]);
+      if (data.queries_dispatch?.length && queriesResponse?.length) {
+        const current_queries = JSON.parse(JSON.stringify(queriesResponse));
+        current_queries[0].documents = [findEv || {}];
+
+        const dispatchData = dispatchFetchedData({
+          dataQueries: current_queries,
+          dispatchQueries: data.queries_dispatch,
+          finalData,
+        });
+        findEv.eventContent = dispatchData.event_content;
+      }
+      setEventInfoForModal(findEv);
       eventModal.onTrue();
     }
     return null;

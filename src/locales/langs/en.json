@@ -63,8 +63,6 @@
     "saveDataFromCsv": "Save data from CSV",
     "successSaved": "The data has been saved successfully",
     "calendar": {
-      "titleEvent": "Title of event",
-      "descriptionEvent": "Description of event",
       "start": "Start date",
       "end": "End date"
     },

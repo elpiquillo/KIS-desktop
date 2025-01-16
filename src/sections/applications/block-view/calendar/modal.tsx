@@ -24,21 +24,18 @@ export default function EventModal({ eventInfo, open, onClose }: ModalProps) {
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle>{t('applications.details')}</DialogTitle>
 
-      <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <TextField
-          label={t('applications.calendar.titleEvent')}
-          value={eventInfo.title}
-          size="small"
-          sx={{ mt: 1 }}
-          disabled
-        />
-        <TextField
-          label={t('applications.calendar.descriptionEvent')}
-          value={eventInfo.description}
-          size="small"
-          disabled
-        />
-        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
+      <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {eventInfo.eventContent?.map((field: any) => (
+          <TextField
+            key={field.id}
+            label={field.title}
+            value={field.content}
+            size="small"
+            sx={{ mt: 1 }}
+            disabled
+          />
+        ))}
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', mt: 1, gap: 2 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label={t('applications.calendar.start')}
