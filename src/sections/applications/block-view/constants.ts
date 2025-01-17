@@ -5,7 +5,7 @@ import DefaultView from './default';
 import GaugeView from './gauge';
 import InputFormView from './input-form/input-form';
 import ItemListView from './item-list/item-list';
-import KanbanView from './kanban';
+import KanbanView from './kanban/kanban';
 import ProgressBarView from './progress-bar';
 import TabView from './tab';
 import TableView from './table/table';

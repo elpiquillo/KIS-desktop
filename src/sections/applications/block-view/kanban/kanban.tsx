@@ -1,13 +1,42 @@
 import { Box, Card, CardHeader, Typography } from '@mui/material';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Scrollbar from 'src/components/scrollbar';
+import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 
 interface Props {
   blockInfo: any;
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
+    queriesRequest: DataQuery[];
+    queriesResponse: QueryResult[];
+  };
 }
 
-export default function KanbanView({ blockInfo }: Props) {
+export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
+
+  const [finalData, setFinalData] = useState<any>({ ...data });
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [taskInfoForModal, setTaskInfoForModal] = useState<any>({});
+  const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
+
+  const handleGetDocuments = useCallback(async () => {
+    const { queriesResponse: response } = (await handleGetHandlers({})) || {};
+
+    setFinalData((prevFinalData: any) =>
+      dispatchFetchedData({
+        dataQueries: response,
+        dispatchQueries: data.queries_dispatch,
+        finalData: prevFinalData,
+      })
+    );
+    setDocuments(response[0].documents);
+    setQueriesResponse(response || []);
+  }, [data.queries_dispatch, handleGetHandlers]);
+
+  useEffect(() => {
+    handleGetDocuments();
+  }, [handleGetDocuments]);
 
   return (
     <Scrollbar>
