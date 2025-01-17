@@ -1,22 +1,47 @@
 import { Box, Card, CardContent, CardHeader, LinearProgress, Typography } from '@mui/material';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 
 interface Props {
   blockInfo: any;
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
+    queriesRequest: DataQuery[];
+    queriesResponse: QueryResult[];
+  };
 }
 
-export default function ProgressBarView({ blockInfo }: Props) {
+export default function ProgressBarView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
+  const [finalData, setFinalData] = useState<any>({
+    ...data,
+  });
 
-  const percentageByData = data.force_percent
-    ? +data.force_percent
-    : +((data.first_value / data.second_value) * 100).toFixed(2);
+  const handleGetFinalData = useCallback(async () => {
+    const { queriesResponse: response } = (await handleGetHandlers({})) || {};
+
+    setFinalData((prevFinalData: any) =>
+      dispatchFetchedData({
+        dataQueries: response,
+        dispatchQueries: data.queries_dispatch,
+        finalData: prevFinalData,
+      })
+    );
+  }, [data.queries_dispatch, handleGetHandlers]);
+
+  useEffect(() => {
+    handleGetFinalData();
+  }, [handleGetFinalData]);
+
+  const percentageByData = finalData.force_percent
+    ? +finalData.force_percent
+    : +((finalData.first_value / finalData.second_value) * 100).toFixed(2);
 
   const showPercentage = Number.isNaN(percentageByData) ? 100 : percentageByData;
 
   return (
     <Card>
-      <CardHeader title={data.card_title} subheader={data.sub_title} />
+      <CardHeader title={finalData.card_title} subheader={finalData.sub_title} />
       <CardContent>
         <Box sx={{ width: '100%', mr: 1 }}>
           <LinearProgress
@@ -34,10 +59,9 @@ export default function ProgressBarView({ blockInfo }: Props) {
         </Box>
 
         <Typography variant="body1" mt={2}>
-          {`${data.first_value || 0}${data.devise} / ${data.second_value || 0}${data.devise}`}
+          {`${finalData.first_value || 0}${finalData.devise} / ${finalData.second_value || 0}${finalData.devise}`}
         </Typography>
       </CardContent>
-      
     </Card>
   );
 }
