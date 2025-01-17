@@ -33,6 +33,16 @@ export default function ProgressBarView({ blockInfo, handleGetHandlers }: Props)
     handleGetFinalData();
   }, [handleGetFinalData]);
 
+  const progressColor = (percent: number) => {
+    if (percent < 75) {
+      return 'error';
+    }
+    if (percent < 90) {
+      return 'warning';
+    }
+    return 'success';
+  };
+
   const percentageByData = finalData.force_percent
     ? +finalData.force_percent
     : +((finalData.first_value / finalData.second_value) * 100).toFixed(2);
@@ -46,7 +56,7 @@ export default function ProgressBarView({ blockInfo, handleGetHandlers }: Props)
         <Box sx={{ width: '100%', mr: 1 }}>
           <LinearProgress
             sx={{ height: 8 }}
-            color="success"
+            color={progressColor(showPercentage)}
             variant="determinate"
             value={showPercentage > 100 ? 100 : showPercentage}
           />
