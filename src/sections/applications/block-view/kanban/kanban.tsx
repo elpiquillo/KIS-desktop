@@ -1,8 +1,12 @@
-import { Box, Card, CardHeader, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Container, Stack } from '@mui/material';
+import React, { Children, useCallback, useEffect, useState } from 'react';
+import EmptyContent from 'src/components/empty-content';
 import Scrollbar from 'src/components/scrollbar';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
+import { Droppable, DropResult, DragDropContext } from '@hello-pangea/dnd';
+import KanbanColumnSkeleton from 'src/components/kanban/kanban-column-skeleton';
+import KanbanColumn from './kanban-column';
 
 interface Props {
   blockInfo: any;
@@ -15,12 +19,14 @@ interface Props {
 export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
 
+  const [isLoadingDocuments, setIsLoadingDocuments] = useState<boolean>(false);
   const [finalData, setFinalData] = useState<any>({ ...data });
-  const [documents, setDocuments] = useState<any[]>([]);
+  const [columnsWithDocuments, setColumnsWithDocuments] = useState<any[]>([]);
   const [taskInfoForModal, setTaskInfoForModal] = useState<any>({});
   const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
 
   const handleGetDocuments = useCallback(async () => {
+    setIsLoadingDocuments(true);
     const { queriesResponse: response } = (await handleGetHandlers({})) || {};
 
     setFinalData((prevFinalData: any) =>
@@ -30,64 +36,86 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
         finalData: prevFinalData,
       })
     );
-    setDocuments(response[0].documents);
     setQueriesResponse(response || []);
-  }, [data.queries_dispatch, handleGetHandlers]);
+
+    const updatedColumns = data.columns.map((column: any) => {
+      const docs = response[0].documents.filter((doc: any) => doc.project_status === column.title);
+      return { ...column, documents: docs };
+    });
+    setColumnsWithDocuments(updatedColumns);
+    setIsLoadingDocuments(false);
+  }, [data.columns, data.queries_dispatch, handleGetHandlers]);
 
   useEffect(() => {
     handleGetDocuments();
   }, [handleGetDocuments]);
 
+  const onDragEnd = useCallback(
+    async ({ destination, source, draggableId, type }: DropResult) => {},
+    []
+  );
+
   return (
-    <Scrollbar>
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 1.5,
-          pb: 1,
-        }}
-      >
-        {data.columns.map((column: any) => (
-          <Card
-            key={column.id}
-            sx={{
-              minWidth: '300px',
-              padding: 1,
-              backgroundColor: 'background.neutral',
-              boxShadow: 'none',
-            }}
-          >
-            <CardHeader
-              sx={{ height: '40px', padding: '0 12px 4px 12px' }}
-              title={<Typography variant="h6">{column.title}</Typography>}
-            />
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-                padding: 1,
-              }}
-            >
-              {data.card_content.map((content: any) => (
-                <Card
-                  key={content.id}
+    <Container
+      maxWidth={false}
+      sx={{
+        height: 1,
+      }}
+    >
+      {isLoadingDocuments && (
+        <Stack direction="row" alignItems="flex-start" spacing={3}>
+          {Children.toArray(
+            [...Array(4)].map((_, index) => <KanbanColumnSkeleton index={index} />)
+          )}
+        </Stack>
+      )}
+
+      {!isLoadingDocuments && !columnsWithDocuments.length && (
+        <EmptyContent
+          filled
+          title="No Data"
+          sx={{
+            py: 10,
+            maxHeight: { md: 480 },
+          }}
+        />
+      )}
+
+      {!!columnsWithDocuments.length && (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="board" type="COLUMN" direction="horizontal">
+            {(provided) => (
+              <Scrollbar
+                sx={{
+                  height: 1,
+                  minHeight: {
+                    xs: '80vh',
+                    md: 'unset',
+                  },
+                }}
+              >
+                <Stack
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  spacing={3}
+                  direction="row"
+                  alignItems="flex-start"
                   sx={{
-                    padding: 2,
+                    p: 0.25,
+                    height: 1,
                   }}
                 >
-                  <Typography variant="h6" sx={{ color: 'text.primary' }}>
-                    {content.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.primary' }}>
-                    {content.content}
-                  </Typography>
-                </Card>
-              ))}
-            </Box>
-          </Card>
-        ))}
-      </Box>
-    </Scrollbar>
+                  {columnsWithDocuments.map((column, index) => (
+                    <KanbanColumn index={index} key={column.id} column={column} />
+                  ))}
+
+                  {provided.placeholder}
+                </Stack>
+              </Scrollbar>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
+    </Container>
   );
 }
