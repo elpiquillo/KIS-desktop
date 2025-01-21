@@ -1,3 +1,4 @@
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import BreadcrumbView from './breadcrumb';
 import CalendarView from './calendar/calendar';
 import CsvImportView from './csv-import/csv-import';
@@ -26,9 +27,15 @@ export enum ComponentType {
 }
 
 export const BlockViewByComponentType: Record<
-  string,
+  ComponentType | 'default',
   {
-    content: any;
+    content: React.FC<{
+      blockInfo: { id: string; blocs: any[] };
+      handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
+        queriesRequest: DataQuery[];
+        queriesResponse: QueryResult[];
+      }>;
+    }>;
   }
 > = {
   [ComponentType.BC]: {

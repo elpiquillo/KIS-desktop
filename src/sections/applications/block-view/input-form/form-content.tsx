@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { t } from 'i18next';
 import { useSnackbar } from 'notistack';
+import { FieldData, InputFormData } from 'src/types/application/input-form-interface';
 import Field from './field';
 
 const defaultValueByTypeField: Record<string, string | number | boolean> = {
@@ -24,8 +25,8 @@ const defaultValueByTypeField: Record<string, string | number | boolean> = {
 };
 
 interface Props {
-  blockInfo: any;
-  fieldsData: any[];
+  blockInfo: { blocs: InputFormData[] };
+  fieldsData: FieldData[];
 }
 
 export default function InputFormContent({ blockInfo, fieldsData }: Props) {
@@ -38,7 +39,7 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   const { createDataHandlers } = useCreateDataHandlers(queries?.[0]);
 
   const validationSchema = Yup.object().shape(
-    fieldsData.reduce((acc: any, field: any) => {
+    fieldsData.reduce((acc: any, field) => {
       if (['image', 'document'].includes(field.type)) {
         return {
           ...acc,
@@ -77,17 +78,20 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
           .when([], {
             is: () => field.validate.minLength.active,
             then: (schema: Yup.NumberSchema | Yup.StringSchema) =>
-              schema.min(field.validate.minLength.value, field.validate.minLength.errorMessage),
+              schema.min(+field.validate.minLength.value, field.validate.minLength.errorMessage),
           })
           .when([], {
             is: () => field.validate.maxLength.active,
             then: (schema: Yup.NumberSchema | Yup.StringSchema) =>
-              schema.max(field.validate.maxLength.value, field.validate.maxLength.errorMessage),
+              schema.max(+field.validate.maxLength.value, field.validate.maxLength.errorMessage),
           })
           .when([], {
             is: () => field.validate.pattern?.active,
             then: (schema: Yup.StringSchema) =>
-              schema.matches(field.validate.pattern.value, field.validate.pattern.errorMessage),
+              schema.matches(
+                new RegExp(field.validate.pattern?.value.toString() || ''),
+                field.validate.pattern?.errorMessage
+              ),
           }),
       };
     }, {})
@@ -95,10 +99,13 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
 
   const defaultFormValues = useMemo(
     () =>
-      fieldsData.reduce((acc: any, field: any) => {
-        let value = field.value.length ? field.value : defaultValueByTypeField[field.type];
+      fieldsData.reduce((acc: Record<string, string | number | boolean>, field: FieldData) => {
+        let value =
+          typeof field.value === 'string' && field.value.length
+            ? field.value
+            : defaultValueByTypeField[field.type];
         if (typeof value === 'string' && value.includes('data_in:')) {
-          const [, input] = field.value.replace(/\[|\]/g, '').split(':');
+          const [, input] = (field.value as string).replace(/\[|\]/g, '').split(':');
           [, value] = input.split(' ');
         }
         return {
@@ -108,8 +115,6 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
       }, {}),
     [fieldsData]
   );
-
-  // return null;
 
   const methods = useForm({
     resolver: yupResolver(validationSchema),
@@ -126,7 +131,7 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
     reset(defaultFormValues);
   }, [defaultFormValues, reset]);
 
-  const onSubmit = handleSubmit(async (formData: any) => {
+  const onSubmit = handleSubmit(async (formData: Record<string, string | number | boolean>) => {
     await createDataHandlers({
       pageId: pageId || '?',
       documents: [formData],
@@ -151,7 +156,7 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
         }}
       >
         {Children.toArray(
-          fieldsData.map((field: any, index: number) => <Field data={field} index={index} />)
+          fieldsData.map((field, index: number) => <Field data={field} index={index} />)
         )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'end' }}>

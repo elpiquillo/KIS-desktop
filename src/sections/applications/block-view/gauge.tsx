@@ -3,26 +3,27 @@ import { Gauge, gaugeClasses } from '@mui/x-charts';
 import React, { useCallback, useEffect, useState } from 'react';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { success } from 'src/theme/palette';
+import { GaugeData } from 'src/types/application/gauge-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 
 interface Props {
-  blockInfo: any;
-  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
+  blockInfo: { blocs: GaugeData[] };
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
-  };
+  }>;
 }
 
 export default function GaugeView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
-  const [finalData, setFinalData] = useState<any>({
+  const [finalData, setFinalData] = useState<GaugeData['data']>({
     ...data,
   });
 
   const handleGetFinalData = useCallback(async () => {
     const { queriesResponse: response } = (await handleGetHandlers({})) || {};
 
-    setFinalData((prevFinalData: any) =>
+    setFinalData((prevFinalData) =>
       dispatchFetchedData({
         dataQueries: response,
         dispatchQueries: data.queries_dispatch,
@@ -76,7 +77,7 @@ export default function GaugeView({ blockInfo, handleGetHandlers }: Props) {
           </Box>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-          {finalData.button_action.map((button: { id: string; text: string }) => (
+          {finalData.button_action.map((button) => (
             <Button
               key={button.id}
               disabled

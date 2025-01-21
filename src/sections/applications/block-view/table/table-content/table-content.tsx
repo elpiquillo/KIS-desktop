@@ -1,12 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import { TableHeadCustom } from 'src/components/table';
 import TableContainerCustom from 'src/components/table/table-container-custom';
+import { TableFinalData } from 'src/types/application/table-interface';
+import { DataValue } from 'src/types/application/input-form-interface';
 import TableViewPagination from './table-pagination';
 import TableViewBody from './table-body';
 
 interface Props {
-  finalData: any;
+  finalData: TableFinalData;
   queriesRequest: DataQuery[];
   queriesResponse: QueryResult[];
   filters: CustomFilter[];
@@ -22,35 +24,43 @@ export default function TableContent({
   handleOpenFilterModal,
   handleGetContent,
 }: Props) {
-  const [sort, setSort] = useState<{ order: 'asc' | 'desc'; id: number | null }>({
+  const [sort, setSort] = useState<{ order: 'asc' | 'desc'; id: string }>({
     order: 'asc',
-    id: null,
+    id: '',
   });
 
-  const getTableData = useCallback((columns_content: any) => {
-    const groupedData = new Map();
+  const getTableData = useCallback(
+    (
+      columns_content: TableFinalData['columns_content']
+    ): {
+      id: string;
+      content: DataValue;
+    }[][] => {
+      const groupedData = new Map();
 
-    columns_content.forEach((column: any) => {
-      column.content.forEach((content: any) => {
-        if (!groupedData.has(content.column_id)) {
-          groupedData.set(content.column_id, []);
-        }
-        groupedData.get(content.column_id).push({
-          id: column.id,
-          content: content.column_content,
+      columns_content.forEach((column) => {
+        column.content.forEach((content) => {
+          if (!groupedData.has(content.column_id)) {
+            groupedData.set(content.column_id, []);
+          }
+          groupedData.get(content.column_id).push({
+            id: column.id,
+            content: content.column_content,
+          });
         });
       });
-    });
 
-    return Array.from(groupedData.values());
-  }, []);
+      return Array.from(groupedData.values());
+    },
+    []
+  );
 
   const tableData = useMemo(() => {
     const data = getTableData(finalData.columns_content);
     if (sort.id !== null) {
-      data.sort((a: any, b: any) => {
-        const aValue = a.find((item: any) => item.id === sort.id)?.content || '';
-        const bValue = b.find((item: any) => item.id === sort.id)?.content || '';
+      data.sort((a, b) => {
+        const aValue = a.find((item) => item.id === sort.id?.toString())?.content || '';
+        const bValue = b.find((item) => item.id === sort.id?.toString())?.content || '';
         if (aValue < bValue) return sort.order === 'asc' ? -1 : 1;
         if (aValue > bValue) return sort.order === 'asc' ? 1 : -1;
         return 0;
@@ -61,22 +71,21 @@ export default function TableContent({
 
   const columnsForFilter = useMemo(
     () =>
-      finalData.queries_dispatch?.[0]?.destination_fields.find(
-        (field: QueriesDispatch['destination_fields'][number]) =>
-          Object.prototype.hasOwnProperty.call(field, 'columns')
+      finalData.queries_dispatch?.[0]?.destination_fields.find((field) =>
+        Object.prototype.hasOwnProperty.call(field, 'columns')
       )?.columns || [],
     [finalData.queries_dispatch]
   );
 
   const isActiveFilter = (id: string) => {
-    const columnNameForFilter = columnsForFilter.find((col: any) => col.id === id)?.content;
-    return filters.some((filter: CustomFilter) => filter.filter_column === columnNameForFilter);
+    const columnNameForFilter = columnsForFilter.find((col) => col.id === id)?.content;
+    return filters.some((filter) => filter.filter_column === columnNameForFilter);
   };
 
   const handleChangeSort = (id: string | number) => {
     const isAsc = sort.id === id && sort.order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc';
-    setSort({ order: newOrder, id: Number(id) });
+    setSort({ order: newOrder, id: id.toString() });
   };
 
   const handleChangePage = (page: number) => {

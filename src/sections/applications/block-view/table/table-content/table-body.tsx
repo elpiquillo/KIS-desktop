@@ -3,14 +3,19 @@ import React, { Children } from 'react';
 import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
-import { ButtonAction, DataQuery } from 'src/types/queries-interface';
+import { DataQuery } from 'src/types/queries-interface';
 import { TableNoData } from 'src/components/table';
+import { TableFinalData } from 'src/types/application/table-interface';
+import { DataValue } from 'src/types/application/input-form-interface';
 import { t } from 'i18next';
 import TableCellContent from './cell-content';
 
 interface Props {
-  finalData: any;
-  tableData: any[];
+  finalData: TableFinalData;
+  tableData: {
+    id: string;
+    content: DataValue;
+  }[][];
   queriesRequest: DataQuery[];
 }
 
@@ -22,12 +27,12 @@ export default function TableViewBody({ finalData, tableData, queriesRequest }: 
       {Children.toArray(
         tableData.map((row, indexRow) => (
           <TableRow>
-            {row.map((column: any) => (
+            {row.map((column) => (
               <TableCell key={column.id}>
                 <TableCellContent data={column.content} />
               </TableCell>
             ))}
-            {finalData.button_action?.map((button: ButtonAction) => (
+            {finalData.button_action?.map((button) => (
               <TableCell key={button.id}>
                 <Button
                   key={button.id}

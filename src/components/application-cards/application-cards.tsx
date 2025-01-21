@@ -21,7 +21,7 @@ export default function ApplicationCards({ applications }: ApplicationsCardProps
   };
 
   const renderApplications = (apps: DashboardAccessInterface[]) =>
-    apps?.map((application: any) => (
+    apps?.map((application) => (
       <Grid
         {...getTestId('application-card-item-grid')}
         item

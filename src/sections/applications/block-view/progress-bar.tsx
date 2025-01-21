@@ -1,26 +1,27 @@
 import { Box, Card, CardContent, CardHeader, LinearProgress, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { ProgressBarData } from 'src/types/application/progress-bar-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 
 interface Props {
-  blockInfo: any;
-  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
+  blockInfo: { blocs: ProgressBarData[] };
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
-  };
+  }>;
 }
 
 export default function ProgressBarView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
-  const [finalData, setFinalData] = useState<any>({
+  const [finalData, setFinalData] = useState<ProgressBarData['data']>({
     ...data,
   });
 
   const handleGetFinalData = useCallback(async () => {
     const { queriesResponse: response } = (await handleGetHandlers({})) || {};
 
-    setFinalData((prevFinalData: any) =>
+    setFinalData((prevFinalData) =>
       dispatchFetchedData({
         dataQueries: response,
         dispatchQueries: data.queries_dispatch,

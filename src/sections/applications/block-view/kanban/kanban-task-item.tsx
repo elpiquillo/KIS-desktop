@@ -3,14 +3,15 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { Document } from 'src/types/queries-interface';
 import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 type Props = PaperProps & {
-  index: number;
-  document: any;
-  onUpdateTask: (updateTask: any) => void;
+  index: string;
+  document: Document;
+  onUpdateTask: (updateTask: Document) => void;
   onDeleteTask: VoidFunction;
 };
 
@@ -33,7 +34,7 @@ export default function KanbanTaskItem({
 
   return (
     <>
-      <Draggable draggableId={document._id.$oid} index={index}>
+      <Draggable draggableId={document._id.$oid} index={+index}>
         {(provided) => (
           <Paper
             ref={provided.innerRef}

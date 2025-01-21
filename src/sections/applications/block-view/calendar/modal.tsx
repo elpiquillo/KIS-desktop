@@ -12,9 +12,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { t } from 'i18next';
 import React from 'react';
+import { Document } from 'src/types/queries-interface';
 
 interface ModalProps {
-  eventInfo: any;
+  eventInfo: Document | null;
   open: boolean;
   onClose: () => void;
 }
@@ -25,7 +26,7 @@ export default function EventModal({ eventInfo, open, onClose }: ModalProps) {
       <DialogTitle>{t('applications.details')}</DialogTitle>
 
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {eventInfo.eventContent?.map((field: any) => (
+        {eventInfo?.eventContent?.map((field: any) => (
           <TextField
             key={field.id}
             label={field.title}
@@ -39,7 +40,7 @@ export default function EventModal({ eventInfo, open, onClose }: ModalProps) {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label={t('applications.calendar.start')}
-              value={dayjs(eventInfo.start_date)}
+              value={dayjs(eventInfo?.start_date)}
               disabled
               slotProps={{
                 textField: { size: 'small' },
@@ -47,7 +48,7 @@ export default function EventModal({ eventInfo, open, onClose }: ModalProps) {
             />
             <DatePicker
               label={t('applications.calendar.end')}
-              value={dayjs(eventInfo.end_date)}
+              value={dayjs(eventInfo?.end_date)}
               disabled
               slotProps={{
                 textField: { size: 'small' },

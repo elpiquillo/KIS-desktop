@@ -3,28 +3,29 @@ import { t } from 'i18next';
 import React, { useState } from 'react';
 import { useParams } from 'src/routes/hooks';
 import { useCreateDataHandlers } from 'src/apis/data-handler';
+import { CsvImportData } from 'src/types/application/csv-import-interface';
 import { useSnackbar } from 'notistack';
 import UploadCsv from './upload-csv';
 import CsvTable from './csv-table';
 
 interface Props {
-  blockInfo: any;
+  blockInfo: { blocs: CsvImportData[] };
 }
 
 export default function CsvImportView({ blockInfo }: Props) {
   const { data } = blockInfo.blocs[0];
 
-  const [csvData, setCsvData] = useState<any[]>([]);
+  const [csvData, setCsvData] = useState<string[][]>([]);
 
   const { enqueueSnackbar } = useSnackbar();
   const { pageId } = useParams();
   const { createDataHandlers } = useCreateDataHandlers(data.queries?.[0]);
 
   const handleSaveDataFromCsv = async () => {
-    const documents = csvData.map((row: any) => {
-      const arrayRow: string[] = Object.values(row);
-      const parseRow = data.fields.reduce((acc: { [key: string]: string }, field: any) => {
-        acc[field.field_name] = arrayRow[field.row];
+    const documents = csvData.map((row) => {
+      const arrayRow = [...row];
+      const parseRow = data.fields.reduce((acc: { [key: string]: string }, field) => {
+        acc[field.field_name] = arrayRow[+field.row];
         return acc;
       }, {});
       return parseRow;

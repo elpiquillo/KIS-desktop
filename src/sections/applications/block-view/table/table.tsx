@@ -2,24 +2,25 @@ import { Box, Button, Typography } from '@mui/material';
 import { t } from 'i18next';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePopover } from 'src/components/custom-popover';
-import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { TableData, TableFinalData } from 'src/types/application/table-interface';
 import FilterModal from './modal';
 import TableContent from './table-content/table-content';
 
 interface Props {
-  blockInfo: any;
-  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
+  blockInfo: { id: string; blocs: TableData[] };
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
-  };
+  }>;
 }
 
 export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   const [queriesRequest, setQueriesRequest] = useState<DataQuery[]>([]);
   const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
   const [columnForFilter, setColumnForFilter] = React.useState('');
-  const [finalData, setFinalData] = useState<any>({
+  const [finalData, setFinalData] = useState<TableFinalData>({
     ...blockInfo.blocs[0].data,
     columns_content: [],
   });
@@ -32,14 +33,14 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   );
 
   const mapColumnsContentByOriginalProperty = useCallback(
-    (data: any) => {
-      const cols = blockData.columns.map((c: any) => c.id);
-      data.columns_content.sort((a: any, b: any) => cols.indexOf(a.id) - cols.indexOf(b.id));
+    (data: TableFinalData) => {
+      const cols = blockData.columns.map((c) => c.id);
+      data.columns_content.sort((a, b) => cols.indexOf(a.id) - cols.indexOf(b.id));
       const newData = {
         ...data,
-        columns_content: data.columns_content.map((e: any) => ({
+        columns_content: data.columns_content.map((e) => ({
           ...e,
-          content: e.content.map((cont: any) => {
+          content: e.content.map((cont) => {
             if (
               typeof cont.column_content !== 'string' &&
               typeof cont.column_content !== 'number' &&
@@ -63,7 +64,7 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
         page: page || undefined,
       });
 
-      setFinalData((prevFinalData: any) => {
+      setFinalData((prevFinalData) => {
         const dispatchData = dispatchFetchedData({
           dataQueries: response,
           dispatchQueries: blockData.queries_dispatch,
@@ -83,9 +84,10 @@ export default function TableView({ blockInfo, handleGetHandlers }: Props) {
   }, [filtersFromStorage, handleGetContent]);
 
   const handleOpenFilterModal = (event: React.MouseEvent<HTMLElement>, id: string) => {
-    const nameField = finalData.queries_dispatch?.[0].destination_fields[0].columns.find(
-      (column: QueriesDispatch['destination_fields'][number]['columns'][number]) => column.id === id
-    ).content;
+    const nameField =
+      finalData.queries_dispatch?.[0]?.destination_fields?.[0]?.columns.find(
+        (column) => column.id === id
+      )?.content ?? '';
     setColumnForFilter(nameField);
     onOpen(event);
   };

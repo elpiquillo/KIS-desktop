@@ -1,14 +1,15 @@
 import React from 'react';
 import PdfReader from 'src/components/pdf-reader/pdf-reader';
+import { DataValue, DataValueFile } from 'src/types/application/input-form-interface';
 
 interface Props {
-  data: any;
+  data: DataValue;
 }
 
-export default function TableCellContent({ data }: Props) {
+export default function TableCellContent({ data }: Props): JSX.Element {
   const isNumeric = () => {
     if (+data) {
-      if (/^0[0-9].*$/.test(data)) {
+      if (/^0[0-9].*$/.test(data as string)) {
         return data;
       }
       if (+data > 9999999999) {
@@ -24,10 +25,10 @@ export default function TableCellContent({ data }: Props) {
     if (typeof data === 'number') {
       return null;
     }
-    const isIt = data.match(
+    const isIt = (data as string).match(
       /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/ // eslint-disable-line
     );
-    const date = new Date(data);
+    const date = new Date(data as string);
     return isIt ? date.toLocaleDateString() : null;
   };
 
@@ -36,24 +37,24 @@ export default function TableCellContent({ data }: Props) {
       return null;
     }
 
-    const isIt = data.match(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
-    const isIt2 = data.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
-    const date = new Date(data);
+    const isIt = (data as string).match(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
+    const isIt2 = (data as string).match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+    const date = new Date(data as string);
 
     return isIt || isIt2 ? date.toLocaleString() : null;
   };
 
   const isImgOrDocument = () => {
-    const { original } = data;
+    const { original } = data as DataValueFile;
     return original !== undefined;
   };
 
   if (typeof data === 'boolean') {
-    return String(data);
+    return <>{String(data)}</>;
   }
 
   if (!data) {
-    return data;
+    return <>{String(data)}</>;
   }
 
   if (typeof data === 'object') {
@@ -66,7 +67,7 @@ export default function TableCellContent({ data }: Props) {
           </a>
         );
       }
-      const ext = original.split('.').pop().split('?')[0];
+      const ext = original.split('.').pop()?.split('?')[0];
       if (ext === 'pdf') {
         return <PdfReader link={original} name={file_name} />;
       }
@@ -83,21 +84,21 @@ export default function TableCellContent({ data }: Props) {
         </a>
       );
     }
-    const { $oid } = data;
-    return $oid;
+    const { file_name } = data;
+    return <>{String(file_name)}</>;
   }
 
   if (isDateTime()) {
-    return isDateTime();
+    return <>{String(isDateTime())}</>;
   }
 
   if (isClassicDate()) {
-    return isClassicDate();
+    return <>{String(isClassicDate())}</>;
   }
 
   if (isNumeric()) {
-    return isNumeric();
+    return <>{String(isNumeric())}</>;
   }
 
-  return data;
+  return <>{String(data)}</>;
 }

@@ -5,7 +5,7 @@ import { TableHeadCustom } from 'src/components/table';
 import TableContainerCustom from 'src/components/table/table-container-custom';
 
 interface Props {
-  data: any;
+  data: string[][];
 }
 
 export default function CsvTable({ data }: Props) {
@@ -25,7 +25,7 @@ export default function CsvTable({ data }: Props) {
       <TableContainerCustom>
         <TableHeadCustom
           headLabel={
-            data[0].map((column_name: string) => ({
+            data[0].map((column_name) => ({
               id: column_name,
               name: column_name,
             })) || []
@@ -36,7 +36,7 @@ export default function CsvTable({ data }: Props) {
           {Children.toArray(
             data
               .slice(1, 100)
-              .map((row: string[]) => (
+              .map((row) => (
                 <TableRow>
                   {Children.toArray(row.map((column) => <TableCell>{column}</TableCell>))}
                 </TableRow>

@@ -6,28 +6,29 @@ import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import i18next from 'i18next';
-import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useParams } from 'src/routes/hooks';
 import { useUpdateDataHandlers } from 'src/apis/data-handler';
-import { EventChangeArg, EventClickArg } from '@fullcalendar/core';
+import { CalendarData } from 'src/types/application/calendar-interface';
+import { DatesSetArg, EventChangeArg, EventClickArg } from '@fullcalendar/core';
 import CalendarStyleWrapper from './style-wrapper';
 import EventModal from './modal';
 
 interface Props {
-  blockInfo: any;
-  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
+  blockInfo: { blocs: CalendarData[] };
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
-  };
+  }>;
 }
 
 export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
-  const [finalData, setFinalData] = useState<any>({ ...data });
-  const [documents, setDocuments] = useState<any[]>([]);
-  const [eventInfoForModal, setEventInfoForModal] = useState<any>({});
+  const [finalData, setFinalData] = useState<CalendarData['data']>({ ...data });
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [eventInfoForModal, setEventInfoForModal] = useState<Document | null>(null);
   const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
 
   const [currentView, setCurrentView] = useState('dayGridMonth');
@@ -41,7 +42,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const handleGetDocuments = useCallback(async () => {
     const { queriesResponse: response } = (await handleGetHandlers({})) || {};
 
-    setFinalData((prevFinalData: any) =>
+    setFinalData((prevFinalData) =>
       dispatchFetchedData({
         dataQueries: response,
         dispatchQueries: data.queries_dispatch,
@@ -55,7 +56,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const getNameFieldFromQueriesDispatch = useCallback(
     (string: string) => {
       const find = data.queries_dispatch?.[0].destination_fields.find(
-        (qd: any) => Object.keys(qd)[0] === string
+        (qd) => Object.keys(qd)[0] === string
       );
       if (find) {
         return Object.values(find)[0] as string;
@@ -126,7 +127,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
     return null;
   };
 
-  const handleViewChange = (info: any) => {
+  const handleViewChange = (info: DatesSetArg) => {
     setCurrentView(info.view.type);
     const { currentStart } = info.view;
     if (

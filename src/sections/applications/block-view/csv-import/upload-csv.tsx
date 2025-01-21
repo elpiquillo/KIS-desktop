@@ -1,11 +1,12 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { t } from 'i18next';
+import { ParseResult } from 'papaparse';
 import React from 'react';
 import { usePapaParse } from 'react-papaparse';
 import UploadBox from 'src/components/uploader/uploader';
 
 interface Props {
-  setCsvData: (data: any[]) => void;
+  setCsvData: (data: string[][]) => void;
 }
 
 export default function UploadCsv({ setCsvData }: Props) {
@@ -19,9 +20,9 @@ export default function UploadCsv({ setCsvData }: Props) {
       reader.onload = (event) => {
         if (event.target?.result) {
           readString(event.target.result as string, {
-            complete: (results: any) => {
-              const data = results.data.map((row: any) => Object.values(row));
-              setCsvData([results.meta.fields, ...data]);
+            complete: (results: ParseResult<string>) => {
+              const data = results.data.map((row) => Object.values(row));
+              setCsvData([results.meta.fields || [], ...data]);
             },
             header: true,
           });

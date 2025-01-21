@@ -1,8 +1,8 @@
 import { Box, Card, IconButton } from '@mui/material';
-import '../../../assets/fonts/style.css';
+import { TextWithIconData } from 'src/types/application/text-with-icon-interface';
 
 interface Props {
-  blockInfo: any;
+  blockInfo: { blocs: TextWithIconData[] };
 }
 
 export default function TextWithIconView({ blockInfo }: Props) {

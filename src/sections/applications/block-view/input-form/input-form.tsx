@@ -1,23 +1,24 @@
 import { Box, Card } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { CustomFilter, DataQuery, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
+import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import { useDataLink } from 'src/hooks/use-data-link';
+import { FieldData, InputFormData } from 'src/types/application/input-form-interface';
 import PageDataInCheck from '../../helpers/pageDataInCheck';
 import InputFormContent from './form-content';
 
 interface Props {
-  blockInfo: any;
-  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => {
+  blockInfo: { blocs: InputFormData[] };
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
-  };
+  }>;
 }
 
 export default function InputFormView({ blockInfo, handleGetHandlers }: Props) {
   const {
     data: { fields, queries, queries_dispatch },
   } = blockInfo.blocs[0];
-  const [fieldsData, setFieldsData] = useState<any[]>(fields);
+  const [fieldsData, setFieldsData] = useState<FieldData[]>(fields);
 
   const { data_link } = useDataLink();
 
@@ -27,26 +28,24 @@ export default function InputFormView({ blockInfo, handleGetHandlers }: Props) {
       [key: string]: {
         content: string;
         target: string | undefined;
-        docs: QueryResult['documents'];
+        docs: Document[];
       };
     } = {};
     queriesResponse.forEach((query) => {
-      const found = queries_dispatch.find((e: QueriesDispatch) => e.query_id === query.query_id);
+      const found = queries_dispatch.find((e) => e.query_id === query.query_id);
       if (found) {
-        found.destination_fields.forEach(
-          (dest_field: QueriesDispatch['destination_fields'][number]) => {
-            dest_field.columns.forEach((column) => {
-              final[column.id] = {
-                content: column.content,
-                target: column.target,
-                docs: query.documents,
-              };
-            });
-          }
-        );
+        found.destination_fields.forEach((dest_field) => {
+          dest_field.columns.forEach((column) => {
+            final[column.id] = {
+              content: column.content,
+              target: column.target,
+              docs: query.documents,
+            };
+          });
+        });
       }
     });
-    const updatedFields: any[] = fields.map((field: any) => {
+    const updatedFields = fields.map((field) => {
       const copyField = { ...field };
       if (field.type === 'select' && final[field.title])
         copyField.options = final[field.title].docs.map((e) => ({

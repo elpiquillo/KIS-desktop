@@ -5,11 +5,11 @@ import RHFDatePicker from 'src/components/hook-form/rhf-date-picker';
 import RHFDateTimePicker from 'src/components/hook-form/rhf-date-time-picker';
 import RHFRichText from 'src/components/hook-form/rhf-rich-text';
 import RHFUploadBox from 'src/components/hook-form/rhf-upload-box';
-import { SelectOption } from 'src/types/queries-interface';
+import { FieldData } from 'src/types/application/input-form-interface';
 
 interface Props {
   index: number;
-  data: any;
+  data: FieldData;
 }
 
 export default function Field({ index, data }: Props) {
@@ -69,13 +69,14 @@ export default function Field({ index, data }: Props) {
     case 'select':
       return (
         <RHFSelect size="small" name={data.name} label={label} placeholder={data.name}>
-          {data.options
-            .filter((option: SelectOption & { name: string }) => option.value && option.name)
-            .map((option: SelectOption & { name: string }) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.name}
-              </MenuItem>
-            ))}
+          {!!data.options &&
+            data.options
+              .filter((option) => option.value && option.name)
+              .map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.name}
+                </MenuItem>
+              ))}
         </RHFSelect>
       );
     default:

@@ -4,20 +4,14 @@ import { RouterLink } from 'src/routes/components';
 import { useParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
-import { FinalData } from 'src/types/components/item-list-interface';
-import {
-  ButtonAction,
-  DataQuery,
-  Document,
-  QueriesDispatch,
-  QueryResult,
-} from 'src/types/queries-interface';
+import { ItemListData, ItemListFinalData } from 'src/types/application/item-list-interface';
+import { DataQuery, Document, QueriesDispatch, QueryResult } from 'src/types/queries-interface';
 
 interface Props {
   queriesDispatch: QueriesDispatch[];
   queriesRequest: DataQuery[];
   queriesResponse: QueryResult[];
-  blockData: any;
+  blockData: ItemListData['data'];
   current_document: Document;
 }
 
@@ -30,7 +24,7 @@ export default function ItemDetails({
 }: Props) {
   const { applicationId } = useParams();
   const [toLoadFinalData, setToLoadFinalData] = useState(true);
-  const [finalData, setFinalData] = useState<FinalData>(blockData);
+  const [finalData, setFinalData] = useState<ItemListFinalData>(blockData);
 
   useEffect(() => {
     if (toLoadFinalData && queriesDispatch?.length && queriesResponse?.length) {
@@ -77,7 +71,7 @@ export default function ItemDetails({
           ))}
         </CardContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {finalData?.button_action.map((button: ButtonAction) => (
+          {finalData?.button_action.map((button) => (
             <Button
               key={button.id}
               fullWidth

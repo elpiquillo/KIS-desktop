@@ -6,21 +6,22 @@ import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
 import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
+import { Document } from 'src/types/queries-interface';
 import { Typography } from '@mui/material';
 import KanbanTaskItem from './kanban-task-item';
 
 // ----------------------------------------------------------------------
 
 interface Props {
-  column: any;
+  column: { id: string; title: string; documents: Document[] };
   index: number;
 }
 
 export default function KanbanColumn({ column, index }: Props) {
   const openAddTask = useBoolean();
 
-  const handleAddTask = useCallback(async (taskData: any) => {}, []);
-  const handleUpdateTask = useCallback(async (taskData: any) => {}, []);
+  const handleAddTask = useCallback(async (taskData: Document) => {}, []);
+  const handleUpdateTask = useCallback(async (taskData: Document) => {}, []);
   const handleDeleteTask = useCallback(async (taskId: string) => {}, []);
 
   return (
@@ -54,7 +55,7 @@ export default function KanbanColumn({ column, index }: Props) {
                     width: 280,
                   }}
                 >
-                  {column.documents.map((document: any) => (
+                  {column.documents.map((document) => (
                     <KanbanTaskItem
                       key={document._id.$oid}
                       index={document._id.$oid}
