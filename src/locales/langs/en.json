@@ -69,6 +69,10 @@
     "csvImport": {
       "extractFromFile": "Extract from your CSV file",
       "makeReadingEasier": "To make reading easier, a maximum of 100 lines of your file are displayed."
+    },
+    "kanban": {
+      "addTask": "Add a task",
+      "editTask": "Edit task"
     }
   },
   "errors": {}

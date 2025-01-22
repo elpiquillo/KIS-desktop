@@ -7,7 +7,9 @@ import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/querie
 import { Droppable, DropResult, DragDropContext } from '@hello-pangea/dnd';
 import KanbanColumnSkeleton from 'src/components/kanban/kanban-column-skeleton';
 import { KanbanData } from 'src/types/application/kanban-interface';
+import { useBoolean } from 'src/hooks/use-boolean';
 import KanbanColumn from './kanban-column';
+import TaskModal from './modal';
 
 interface Props {
   blockInfo: { blocs: KanbanData[] };
@@ -20,16 +22,18 @@ interface Props {
 export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
 
-  const [isLoadingDocuments, setIsLoadingDocuments] = useState<boolean>(false);
+  const [isLoadingTasks, setIsLoadingTasks] = useState<boolean>(false);
   const [finalData, setFinalData] = useState<KanbanData['data']>({ ...data });
-  const [columnsWithDocuments, setColumnsWithDocuments] = useState<
-    { id: string; title: string; documents: Document[] }[]
+  const [columnsWithTasks, setColumnsWithTasks] = useState<
+    { id: string; title: string; tasks: Document[] }[]
   >([]);
-  const [taskInfoForModal, setTaskInfoForModal] = useState(null);
   const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
 
+  const [taskInfoForModal, setTaskInfoForModal] = useState<Document | null>(null);
+  const openTaskModal = useBoolean();
+
   const handleGetDocuments = useCallback(async () => {
-    setIsLoadingDocuments(true);
+    setIsLoadingTasks(true);
     const { queriesResponse: response } = (await handleGetHandlers({})) || {};
 
     setFinalData((prevFinalData) =>
@@ -45,10 +49,10 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
       const docs: Document[] = response[0].documents.filter(
         (doc) => doc.project_status === column.title
       );
-      return { ...column, documents: docs };
+      return { ...column, tasks: docs };
     });
-    setColumnsWithDocuments(updatedColumns);
-    setIsLoadingDocuments(false);
+    setColumnsWithTasks(updatedColumns);
+    setIsLoadingTasks(false);
   }, [data.columns, data.queries_dispatch, handleGetHandlers]);
 
   useEffect(() => {
@@ -60,6 +64,18 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
     []
   );
 
+  const handleOpenTaskModal = (taskData?: Document) => {
+    openTaskModal.onTrue();
+    if (taskData) {
+      setTaskInfoForModal(taskData);
+    }
+  };
+
+  const handleCloseTaskModal = () => {
+    openTaskModal.onFalse();
+    setTaskInfoForModal(null);
+  };
+
   return (
     <Container
       maxWidth={false}
@@ -67,7 +83,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
         height: 1,
       }}
     >
-      {isLoadingDocuments && (
+      {isLoadingTasks && (
         <Stack direction="row" alignItems="flex-start" spacing={3}>
           {Children.toArray(
             [...Array(4)].map((_, index) => <KanbanColumnSkeleton index={index} />)
@@ -75,7 +91,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
         </Stack>
       )}
 
-      {!isLoadingDocuments && !columnsWithDocuments.length && (
+      {!isLoadingTasks && !columnsWithTasks.length && (
         <EmptyContent
           filled
           title="No Data"
@@ -86,7 +102,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
         />
       )}
 
-      {!!columnsWithDocuments.length && (
+      {!!columnsWithTasks.length && (
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="board" type="COLUMN" direction="horizontal">
             {(provided) => (
@@ -110,8 +126,13 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
                     height: 1,
                   }}
                 >
-                  {columnsWithDocuments.map((column, index) => (
-                    <KanbanColumn index={index} key={column.id} column={column} />
+                  {columnsWithTasks.map((column, index) => (
+                    <KanbanColumn
+                      index={index}
+                      key={column.id}
+                      column={column}
+                      handleOpenEditModal={handleOpenTaskModal}
+                    />
                   ))}
 
                   {provided.placeholder}
@@ -121,6 +142,12 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
           </Droppable>
         </DragDropContext>
       )}
+
+      <TaskModal
+        open={openTaskModal.value}
+        task={taskInfoForModal}
+        handleClose={handleCloseTaskModal}
+      />
     </Container>
   );
 }

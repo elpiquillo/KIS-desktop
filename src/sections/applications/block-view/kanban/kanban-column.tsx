@@ -1,29 +1,22 @@
-import { useCallback } from 'react';
+import React from 'react';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
-import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
 import { Document } from 'src/types/queries-interface';
 import { Typography } from '@mui/material';
+import { t } from 'i18next';
 import KanbanTaskItem from './kanban-task-item';
 
-// ----------------------------------------------------------------------
-
 interface Props {
-  column: { id: string; title: string; documents: Document[] };
   index: number;
+  column: { id: string; title: string; tasks: Document[] };
+  handleOpenEditModal: (task?: Document) => void;
 }
 
-export default function KanbanColumn({ column, index }: Props) {
-  const openAddTask = useBoolean();
-
-  const handleAddTask = useCallback(async (taskData: Document) => {}, []);
-  const handleUpdateTask = useCallback(async (taskData: Document) => {}, []);
-  const handleDeleteTask = useCallback(async (taskId: string) => {}, []);
-
+export default function KanbanColumn({ index, column, handleOpenEditModal }: Props) {
   return (
     <Draggable draggableId={column.id} index={index}>
       {(provided, snapshot) => (
@@ -55,13 +48,12 @@ export default function KanbanColumn({ column, index }: Props) {
                     width: 280,
                   }}
                 >
-                  {column.documents.map((document) => (
+                  {column.tasks.map((document) => (
                     <KanbanTaskItem
                       key={document._id.$oid}
                       index={document._id.$oid}
                       document={document}
-                      onUpdateTask={handleUpdateTask}
-                      onDeleteTask={() => handleDeleteTask(document._id.$oid)}
+                      onUpdateTask={handleOpenEditModal}
                     />
                   ))}
                   {dropProvided.placeholder}
@@ -79,28 +71,14 @@ export default function KanbanColumn({ column, index }: Props) {
                 fullWidth
                 size="large"
                 color="inherit"
-                startIcon={
-                  <Iconify
-                    icon={openAddTask.value ? 'solar:close-circle-broken' : 'mingcute:add-line'}
-                    width={18}
-                    sx={{ mr: -0.5 }}
-                  />
-                }
-                onClick={openAddTask.onToggle}
+                startIcon={<Iconify icon="mingcute:add-line" width={18} sx={{ mr: -0.5 }} />}
+                onClick={() => handleOpenEditModal()}
                 sx={{ fontSize: 14 }}
               >
-                {openAddTask.value ? 'Close' : 'Add Task'}
+                {t('applications.kanban.addTask')}
               </Button>
             </Stack>
           </Stack>
-
-          {/* {openAddTask.value && (
-                <KanbanTaskAdd
-                  status={column.name}
-                  onAddTask={handleAddTask}
-                  onCloseAddTask={openAddTask.onFalse}
-                />
-              )} */}
         </Paper>
       )}
     </Draggable>
