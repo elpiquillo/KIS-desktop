@@ -15,7 +15,9 @@
     "removeFromFavorites": "Remove from favorites",
     "disconnect": "Disconnect",
     "close": "Close",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "info": "Info"
   },
   "auth": {
     "passwordRequired": "Password is required",

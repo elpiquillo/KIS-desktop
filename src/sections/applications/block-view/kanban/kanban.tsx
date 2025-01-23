@@ -198,6 +198,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
       )}
 
       <TaskModal
+        blockData={finalData}
         open={openTaskModal.value}
         task={taskInfoForModal}
         handleClose={handleCloseTaskModal}
