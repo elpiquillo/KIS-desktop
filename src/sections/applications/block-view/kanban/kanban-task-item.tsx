@@ -8,25 +8,25 @@ import { Box } from '@mui/material';
 // ----------------------------------------------------------------------
 
 type Props = PaperProps & {
-  index: string;
-  document: Document;
+  index: number;
+  task: Document;
   onUpdateTask: (updateTask: Document) => void;
 };
 
-export default function KanbanTaskItem({ document, index, onUpdateTask, sx, ...other }: Props) {
+export default function KanbanTaskItem({ task, index, onUpdateTask, sx, ...other }: Props) {
   const statuses = [
-    document.project_label_red && 'error.main',
-    document.project_label_green && 'success.main',
-    document.project_label_blue && 'info.main',
-    document.project_label_yellow && 'warning.main',
+    task.project_label_red && 'error.main',
+    task.project_label_green && 'success.main',
+    task.project_label_blue && 'info.main',
+    task.project_label_yellow && 'warning.main',
   ].filter(Boolean);
 
   const handleClickTask = () => {
-    onUpdateTask(document);
+    onUpdateTask(task);
   };
 
   return (
-    <Draggable draggableId={document._id.$oid} index={+index}>
+    <Draggable draggableId={task._id.$oid} index={index}>
       {(provided) => (
         <Paper
           ref={provided.innerRef}
@@ -54,7 +54,7 @@ export default function KanbanTaskItem({ document, index, onUpdateTask, sx, ...o
               py: 2.5,
             }}
           >
-            <Typography variant="subtitle2">{document.client}</Typography>
+            <Typography variant="subtitle2">{task.client}</Typography>
 
             <Box sx={{ display: 'flex', gap: 1 }}>
               {statuses.map((status) => (

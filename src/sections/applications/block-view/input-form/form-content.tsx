@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { t } from 'i18next';
 import { useSnackbar } from 'notistack';
 import { FieldData, InputFormData } from 'src/types/application/input-form-interface';
+import { Document } from 'src/types/queries-interface';
 import Field from './field';
 
 const defaultValueByTypeField: Record<string, string | number | boolean> = {
@@ -134,7 +135,7 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   const onSubmit = handleSubmit(async (formData: Record<string, string | number | boolean>) => {
     await createDataHandlers({
       pageId: pageId || '?',
-      documents: [formData],
+      documents: [formData as Document],
     });
 
     enqueueSnackbar(t('applications.formCreatedSuccess'), {

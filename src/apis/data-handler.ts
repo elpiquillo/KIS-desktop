@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { DataQuery } from 'src/types/queries-interface';
+import { DataQuery, Document } from 'src/types/queries-interface';
 import { apiFetcher } from 'src/utils/fetchers';
 import { urls } from 'src/utils/urls';
 
@@ -27,7 +27,7 @@ export function useCreateDataHandlers(query?: DataQuery) {
     documents,
   }: {
     pageId: string;
-    documents: any[];
+    documents: Document[];
   }) => {
     try {
       await apiFetcher(urls.dataHandlers.create, {
@@ -50,7 +50,13 @@ export function useCreateDataHandlers(query?: DataQuery) {
 }
 
 export function useUpdateDataHandlers(query?: DataQuery) {
-  const updateDataHandlers = async ({ pageId, document }: { pageId: string; document: any }) => {
+  const updateDataHandlers = async ({
+    pageId,
+    document,
+  }: {
+    pageId: string;
+    document: Document;
+  }) => {
     try {
       const res = await apiFetcher(`${urls.dataHandlers.update}1`, {
         method: 'PUT',
@@ -70,4 +76,33 @@ export function useUpdateDataHandlers(query?: DataQuery) {
   };
 
   return { updateDataHandlers };
+}
+
+export function usePatchDataHandlers(query?: DataQuery) {
+  const patchDataHandlers = async ({
+    pageId,
+    documents,
+  }: {
+    pageId: string;
+    documents: Document[];
+  }) => {
+    try {
+      const res = await apiFetcher(`${urls.dataHandlers.update}1`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          data_handler: {
+            query_id: query?.id,
+            collection_name: query?.collection_name,
+            page_id: pageId,
+            documents,
+          },
+        }),
+      });
+      return res;
+    } catch (error: any) {
+      throw new Error(t(`errors.${error.message}`));
+    }
+  };
+
+  return { patchDataHandlers };
 }

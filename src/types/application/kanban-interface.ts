@@ -31,7 +31,7 @@ export interface KanbanData {
       content: string;
     }[];
     columns: {
-      id: string;
+      id: number;
       title: string;
     }[];
     queries: DataQuery[];
