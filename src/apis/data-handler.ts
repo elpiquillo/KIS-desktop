@@ -30,7 +30,7 @@ export function useCreateDataHandlers(query?: DataQuery) {
     documents: Document[];
   }) => {
     try {
-      await apiFetcher(urls.dataHandlers.create, {
+      const res = await apiFetcher(urls.dataHandlers.create, {
         method: 'POST',
         body: JSON.stringify({
           data_handler: {
@@ -41,6 +41,7 @@ export function useCreateDataHandlers(query?: DataQuery) {
           },
         }),
       });
+      return res;
     } catch (error: any) {
       throw new Error(t(`errors.${error.message}`));
     }

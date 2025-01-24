@@ -16,8 +16,7 @@
     "disconnect": "Disconnect",
     "close": "Close",
     "cancel": "Cancel",
-    "saveChanges": "Save changes",
-    "info": "Info"
+    "saveChanges": "Save changes"
   },
   "auth": {
     "passwordRequired": "Password is required",

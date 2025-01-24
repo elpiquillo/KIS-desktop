@@ -10,12 +10,12 @@ import { t } from 'i18next';
 import KanbanTaskItem from './kanban-task-item';
 
 interface Props {
-  index: number;
   column: { id: number; title: string; tasks: Document[] };
+  handleOpenAddModal: () => void;
   handleOpenEditModal: (task?: Document) => void;
 }
 
-export default function KanbanColumn({ column, handleOpenEditModal }: Props) {
+export default function KanbanColumn({ column, handleOpenAddModal, handleOpenEditModal }: Props) {
   return (
     <Paper
       sx={{
@@ -64,7 +64,7 @@ export default function KanbanColumn({ column, handleOpenEditModal }: Props) {
             size="large"
             color="inherit"
             startIcon={<Iconify icon="mingcute:add-line" width={18} sx={{ mr: -0.5 }} />}
-            onClick={() => handleOpenEditModal()}
+            onClick={() => handleOpenAddModal()}
             sx={{ fontSize: 14 }}
           >
             {t('applications.kanban.addTask')}

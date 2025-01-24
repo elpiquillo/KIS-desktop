@@ -8,10 +8,10 @@ import { DropResult, DragDropContext } from '@hello-pangea/dnd';
 import KanbanColumnSkeleton from 'src/components/kanban/kanban-column-skeleton';
 import { KanbanData } from 'src/types/application/kanban-interface';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { usePatchDataHandlers } from 'src/apis/data-handler';
+import { useCreateDataHandlers, usePatchDataHandlers } from 'src/apis/data-handler';
 import { useParams } from 'src/routes/hooks';
 import KanbanColumn from './kanban-column';
-import TaskModal from './modal';
+import { AddTaskModal, EditTaskModal } from './modal';
 
 interface Props {
   blockInfo: { blocs: KanbanData[] };
@@ -23,23 +23,28 @@ interface Props {
 
 export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
+  const { pageId } = useParams();
 
   const [isLoadingTasks, setIsLoadingTasks] = useState<boolean>(false);
   const [finalData, setFinalData] = useState<KanbanData['data']>({ ...data });
   const [columnsWithTasks, setColumnsWithTasks] = useState<
     { id: number; title: string; tasks: Document[] }[]
   >([]);
+  const [queriesRequest, setQueriesRequest] = useState<DataQuery[]>([]);
   const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);
 
-  const [taskInfoForModal, setTaskInfoForModal] = useState<Document | null>(null);
-  const openTaskModal = useBoolean();
-  const { pageId } = useParams();
+  const [taskInfoForEditModal, setTaskInfoForEditModal] = useState<Document | null>(null);
+  const [projectStatusForAddTask, setProjectStatusForAddTask] = useState<string>('');
+  const openAddTaskModal = useBoolean();
+  const openEditTaskModal = useBoolean();
 
+  const { createDataHandlers } = useCreateDataHandlers(data.queries?.[0]);
   const { patchDataHandlers } = usePatchDataHandlers(data.queries?.[0]);
 
   const handleGetDocuments = useCallback(async () => {
     setIsLoadingTasks(true);
-    const { queriesResponse: response } = (await handleGetHandlers({})) || {};
+    const { queriesRequest: request, queriesResponse: response } =
+      (await handleGetHandlers({})) || {};
 
     setFinalData((prevFinalData) =>
       dispatchFetchedData({
@@ -48,6 +53,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
         finalData: prevFinalData,
       })
     );
+    setQueriesRequest(request || []);
     setQueriesResponse(response || []);
 
     const updatedColumns = data.columns.map((column) => {
@@ -64,7 +70,31 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
     handleGetDocuments();
   }, [handleGetDocuments]);
 
-  const saveCards = useCallback(
+  const handleAddTask = useCallback(
+    async (newTask: Document) => {
+      const res = await createDataHandlers({
+        pageId: pageId || '?',
+        documents: [newTask],
+      });
+
+      setQueriesResponse((prevQueriesResponse) => {
+        const newDocuments = [...prevQueriesResponse[0].documents, ...res.created];
+
+        const updatedColumns = data.columns.map((column) => {
+          const docs: Document[] = newDocuments.filter(
+            (doc) => doc.project_status === column.title
+          );
+          return { ...column, tasks: docs };
+        });
+        setColumnsWithTasks(updatedColumns);
+
+        return [{ ...prevQueriesResponse[0], documents: newDocuments }];
+      });
+    },
+    [createDataHandlers, data.columns, pageId]
+  );
+
+  const handleSaveUpdatedTasks = useCallback(
     async (dataForUpdate: Document[]) => {
       const res = await patchDataHandlers({ pageId: pageId || '1', documents: dataForUpdate });
       const { updated: updatedDocuments } = res;
@@ -121,21 +151,31 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
         }
       }
 
-      saveCards([...(columnForChanging?.tasks || [])]);
+      handleSaveUpdatedTasks([...(columnForChanging?.tasks || [])]);
     },
-    [columnsWithTasks, saveCards]
+    [columnsWithTasks, handleSaveUpdatedTasks]
   );
 
-  const handleOpenTaskModal = (taskData?: Document) => {
-    openTaskModal.onTrue();
+  const handleOpenAddTaskModal = (projectStatus: string) => {
+    openAddTaskModal.onTrue();
+    setProjectStatusForAddTask(projectStatus);
+  };
+
+  const handleCloseAddTaskModal = () => {
+    openAddTaskModal.onFalse();
+    setProjectStatusForAddTask('');
+  };
+
+  const handleOpenEditTaskModal = (taskData?: Document) => {
+    openEditTaskModal.onTrue();
     if (taskData) {
-      setTaskInfoForModal(taskData);
+      setTaskInfoForEditModal(taskData);
     }
   };
 
-  const handleCloseTaskModal = () => {
-    openTaskModal.onFalse();
-    setTaskInfoForModal(null);
+  const handleCloseEditTaskModal = () => {
+    openEditTaskModal.onFalse();
+    setTaskInfoForEditModal(null);
   };
 
   return (
@@ -184,12 +224,12 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
                 height: 1,
               }}
             >
-              {columnsWithTasks.map((column, index) => (
+              {columnsWithTasks.map((column) => (
                 <KanbanColumn
-                  index={index}
                   key={column.id}
                   column={column}
-                  handleOpenEditModal={handleOpenTaskModal}
+                  handleOpenAddModal={() => handleOpenAddTaskModal(column.title)}
+                  handleOpenEditModal={handleOpenEditTaskModal}
                 />
               ))}
             </Stack>
@@ -197,11 +237,20 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
         </DragDropContext>
       )}
 
-      <TaskModal
+      <AddTaskModal
+        open={openAddTaskModal.value}
+        projectStatus={projectStatusForAddTask}
+        handleAddTask={handleAddTask}
+        handleClose={handleCloseAddTaskModal}
+      />
+
+      <EditTaskModal
+        queriesRequest={queriesRequest}
         blockData={finalData}
-        open={openTaskModal.value}
-        task={taskInfoForModal}
-        handleClose={handleCloseTaskModal}
+        open={openEditTaskModal.value}
+        task={taskInfoForEditModal}
+        handleSaveUpdatedTasks={handleSaveUpdatedTasks}
+        handleClose={handleCloseEditTaskModal}
       />
     </Container>
   );
