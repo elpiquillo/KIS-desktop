@@ -14,7 +14,7 @@ import { ApiError } from '../utils/apiErrors';
 export function usePutUserInfos() {
   const { setUserInfos } = useUserState();
 
-  const putUserInfos = async ({ first_name, last_name, id }: UserInfosUpdate) => {
+  const putUserInfos = async ({ first_name, last_name, id, avatar_data }: UserInfosUpdate) => {
     try {
       const res = await apiFetcher(`${urls.userInfos.update}${id}`, {
         method: 'PUT',
@@ -22,6 +22,7 @@ export function usePutUserInfos() {
           user: {
             first_name,
             last_name,
+            avatar_data,
           },
         }),
       });

@@ -29,7 +29,7 @@ export default function AccountPopover() {
 
   const user = useUserState((s) => s.userInfos);
   const { logout } = useLogin();
-
+  const userAvatar = user && `${user?.first_name?.[0] || ''}${user?.last_name?.[0] || ''}`;
   const { enqueueSnackbar } = useSnackbar();
 
   const popover = usePopover();
@@ -71,17 +71,28 @@ export default function AccountPopover() {
           },
         }}
       >
-        <Avatar
-          sx={{
-            backgroundColor: 'transparent',
-          }}
-          variant="square"
-        >
-          <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
-            {user &&
-              Upercase(String(`${user?.first_name?.[0] || ''}${user?.last_name?.[0] || ''}`))}
-          </Typography>
-        </Avatar>
+        {user?.avatar_data ? (
+          <Avatar
+            src={user?.avatar_data}
+            alt="Profile Picture"
+            sx={{
+              width: 50,
+              height: 50,
+            }}
+            variant="square"
+          />
+        ) : (
+          <Avatar
+            sx={{
+              backgroundColor: 'transparent',
+            }}
+            variant="square"
+          >
+            <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
+              {userAvatar}
+            </Typography>
+          </Avatar>
+        )}
       </IconButton>
       <CustomPopover
         open={popover.open}

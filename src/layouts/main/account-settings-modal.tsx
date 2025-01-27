@@ -1,13 +1,25 @@
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import i18next, { t } from 'i18next';
-import { Divider, Grid, IconButton, InputAdornment, MenuItem, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Divider,
+  Grid,
+  IconButton,
+  Input,
+  InputAdornment,
+  MenuItem,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import Uppy from '@uppy/core';
+import AwsS3, { type AwsBody } from '@uppy/aws-s3';
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import { useForm } from 'react-hook-form';
@@ -20,15 +32,20 @@ import { languages } from 'src/locales/config-lang';
 import themesColor from 'src/utils/themes-color';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
 import useThemeStore from 'src/store/themeModeState';
+import { useEffect, useState } from 'react';
+import { urls } from 'src/utils/urls';
 
 interface ModalProps {
   open: boolean;
   onClose: () => void; // Add the onClose property
 }
 
+type Meta = { license: string };
+
 // ----------------------------------------------------------------------
 
 export function AccountSettingsModal({ open, onClose }: ModalProps) {
+  const theme = useTheme();
   const { putUserInfos } = usePutUserInfos();
   const { putPassword } = usePutPassword();
   const { paletteMode, togglePaletteMode } = useThemeMode();
@@ -38,8 +55,28 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
 
   const password = useBoolean();
   const passwordConfirmation = useBoolean();
-
+  const [profilePicture, setProfilePicture] = useState('');
+  const [appInfo, setAppInfo] = useState({
+    name: '',
+    description: '',
+    logo: '' as any,
+  });
   const user = useUserState((s) => s.userInfos);
+  const userAvatar = user && `${user?.first_name?.[0]}${user?.last_name?.[0]}`;
+  const uppy = new Uppy<Meta, AwsBody>().use(AwsS3, {
+    endpoint: `${process.env.REACT_APP_API_BASE_URL}${urls.userInfos.updateUser}`,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accesstoken')}`,
+    },
+  });
+
+  // Destroy uppy instance
+  useEffect(
+    () => () => {
+      uppy.cancelAll();
+    },
+    [uppy]
+  );
 
   const AccountInfos = Yup.object().shape({
     firstName: Yup.string().default(user?.first_name),
@@ -85,8 +122,8 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
         first_name: formData.firstName,
         last_name: formData.lastName,
         id: user.id,
+        avatar_data: profilePicture,
       });
-
       enqueueSnackbar(t('settings.userInfosUpdated'), {
         variant: 'success',
         anchorOrigin: { vertical: 'top', horizontal: 'center' },
@@ -234,6 +271,8 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       </RHFSelect>
     </FormProvider>
   );
+  const setNewTheme = (themeParam: string) => () => {
+    localStorage.setItem('theme-color', themeParam);
 
   const setNewTheme = (theme: string) => () => {
     setThemeName(theme);
@@ -283,11 +322,102 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       />
     ));
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      uppy.addFile({ name: file.name, data: file });
+      setProfilePicture(URL.createObjectURL(file));
+    }
+
+    try {
+      uppy
+        .upload()
+        .then((response: any) => {
+          if (response.successful.length) {
+            const { uploadURL, name } = response.successful[0];
+            setAppInfo((prev) => ({
+              ...prev,
+              logo: {
+                id: uploadURL,
+                storage: 'cache',
+                small_url: profilePicture,
+                metadata: { filename: name },
+              },
+            }));
+          }
+          enqueueSnackbar(t('settings.uploadSuccess'), {
+            variant: 'success',
+            anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          });
+        })
+        .catch(() => {
+          enqueueSnackbar(t('settings.errorUpload'), {
+            variant: 'error',
+            anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          });
+        });
+    } catch (error) {
+      enqueueSnackbar(t('settings.errorUpload'), {
+        variant: 'error',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle>{t('settings.profileSettings')}</DialogTitle>
 
       <DialogContent>
+        <Box>
+          <Typography>{t('settings.profilePicture')}</Typography>
+          <IconButton
+            aria-label="account settings"
+            component={Avatar}
+            sx={{
+              borderRadius: 1.4,
+              width: 48,
+              height: 48,
+              background: 'red',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginBottom: 1,
+              mt: 1,
+              backgroundColor: theme.palette.primary.darker,
+              '&:hover': {
+                backgroundColor: theme.palette.action.hover,
+              },
+              '&:active': {
+                backgroundColor: theme.palette.action.hover,
+              },
+            }}
+          >
+            {profilePicture || user?.avatar_data ? (
+              <Avatar
+                src={profilePicture || user?.avatar_data}
+                alt="Profile Picture"
+                sx={{
+                  width: 50,
+                  height: 50,
+                }}
+                variant="square"
+              />
+            ) : (
+              <Avatar
+                sx={{
+                  backgroundColor: 'transparent',
+                }}
+                variant="square"
+              >
+                <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
+                  {userAvatar}
+                </Typography>
+              </Avatar>
+            )}
+          </IconButton>
+          <Input sx={{ ml: 1, overflow: 'hidden' }} type="file" onChange={handleImageUpload} />
+        </Box>
+        <Divider sx={{ my: 2 }} />
         {infosForm}
         {passwordForm}
         {languageField}

@@ -17,12 +17,14 @@ export interface UserInfos {
   u_at: string;
   uid: string;
   id: string;
+  avatar_data: any;
 }
 
 export interface UserInfosUpdate {
   id: string;
   first_name: string;
   last_name: string;
+  avatar_data: any;
 }
 
 export interface UserInfosUpdatePassword {

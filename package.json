@@ -41,6 +41,8 @@
     "@mui/x-charts": "^7.20.0",
     "@mui/x-data-grid": "^7.4.0",
     "@mui/x-date-pickers": "^7.7.0",
+    "@uppy/aws-s3": "^4.2.3",
+    "@uppy/core": "^4.4.1",
     "apexcharts": "^4.0.0",
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",

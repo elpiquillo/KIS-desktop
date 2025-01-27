@@ -14,7 +14,6 @@ const icon = (name: string) => (
   // https://icon-sets.iconify.design/solar/
   // https://www.streamlinehq.com/icons
 );
-/* eslint-disable react-refresh/only-export-components */
 const ICONS = {
   home: icon('lets-icons:home-duotone'),
   apps: icon('solar:window-frame-bold-duotone'),
