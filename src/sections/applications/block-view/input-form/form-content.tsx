@@ -1,8 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
 import React, { Children, useEffect, useMemo } from 'react';
 import FormProvider from 'src/components/hook-form';
-import { useCreateDataHandlers } from 'src/apis/data-handler';
+import { useCreateDataHandlers, useUpdateDataHandlers } from 'src/apis/data-handler';
 import { useParams } from 'src/routes/hooks';
+import { refreshDataLink, useDataLink } from 'src/hooks/use-data-link';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -32,12 +33,14 @@ interface Props {
 
 export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   const {
-    data: { title, submit, queries },
+    data: { title, type, submit, queries },
   } = blockInfo.blocs[0];
   const { enqueueSnackbar } = useSnackbar();
   const { pageId } = useParams();
+  const { data_link } = useDataLink();
 
   const { createDataHandlers } = useCreateDataHandlers(queries?.[0]);
+  const { updateDataHandlers } = useUpdateDataHandlers(queries?.[0]);
 
   const validationSchema = Yup.object().shape(
     fieldsData.reduce((acc: any, field) => {
@@ -133,16 +136,34 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   }, [defaultFormValues, reset]);
 
   const onSubmit = handleSubmit(async (formData: Record<string, string | number | boolean>) => {
-    await createDataHandlers({
-      pageId: pageId || '?',
-      documents: [formData as Document],
-    });
+    if (type === 'update') {
+      await updateDataHandlers({
+        pageId: pageId || '?',
+        document: {
+          ...formData,
+          _id: {
+            $oid: data_link!.data._id.$oid,
+          },
+        } as Document,
+      });
+      refreshDataLink(queries[0].collection_name, data_link!.data._id.$oid);
 
-    enqueueSnackbar(t('applications.formCreatedSuccess'), {
-      variant: 'success',
-      anchorOrigin: { vertical: 'top', horizontal: 'center' },
-    });
-    reset({});
+      enqueueSnackbar(t('applications.formCreatedSuccess'), {
+        variant: 'success',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
+    } else {
+      await createDataHandlers({
+        pageId: pageId || '?',
+        documents: [formData as Document],
+      });
+
+      enqueueSnackbar(t('applications.formCreatedSuccess'), {
+        variant: 'success',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
+      reset({});
+    }
   });
 
   return (

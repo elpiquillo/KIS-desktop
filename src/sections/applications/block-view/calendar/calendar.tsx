@@ -9,6 +9,7 @@ import i18next from 'i18next';
 import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { useBoolean } from 'src/hooks/use-boolean';
+import { refreshDataLink } from 'src/hooks/use-data-link';
 import { useParams } from 'src/routes/hooks';
 import { useUpdateDataHandlers } from 'src/apis/data-handler';
 import { CalendarData } from 'src/types/application/calendar-interface';
@@ -104,6 +105,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
       copyDocuments[qIndex] = updatedDocument;
 
       setDocuments(copyDocuments);
+      refreshDataLink(data.queries[0].collection_name, id);
     }
   };
 
