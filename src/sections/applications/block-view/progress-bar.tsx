@@ -1,8 +1,10 @@
 import { Box, Card, CardContent, CardHeader, LinearProgress, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDataLink } from 'src/hooks/use-data-link';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { ProgressBarData } from 'src/types/application/progress-bar-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
+import PageDataInCheck from '../helpers/pageDataInCheck';
 
 interface Props {
   blockInfo: { blocs: ProgressBarData[] };
@@ -17,6 +19,7 @@ export default function ProgressBarView({ blockInfo, handleGetHandlers }: Props)
   const [finalData, setFinalData] = useState<ProgressBarData['data']>({
     ...data,
   });
+  const { data_link, data_link_ready } = useDataLink();
 
   const handleGetFinalData = useCallback(async () => {
     const { queriesResponse: response } = (await handleGetHandlers({})) || {};
@@ -33,6 +36,18 @@ export default function ProgressBarView({ blockInfo, handleGetHandlers }: Props)
   useEffect(() => {
     handleGetFinalData();
   }, [handleGetFinalData]);
+
+  useEffect(() => {
+    if (data_link_ready) {
+      setFinalData({
+        ...data,
+        card_title: PageDataInCheck(data.card_title, data_link),
+        sub_title: PageDataInCheck(data.sub_title, data_link),
+        force_percent: PageDataInCheck(data.force_percent, data_link),
+        devise: PageDataInCheck(data.devise, data_link),
+      });
+    }
+  }, [data, data_link, data_link_ready]);
 
   const progressColor = (percent: number) => {
     if (percent < 75) {

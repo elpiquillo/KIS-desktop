@@ -3,6 +3,8 @@ import { TextWithIconData } from 'src/types/application/text-with-icon-interface
 import { useCallback, useEffect, useState } from 'react';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { useDataLink } from 'src/hooks/use-data-link';
+import PageDataInCheck from '../helpers/pageDataInCheck';
 
 interface Props {
   blockInfo: { blocs: TextWithIconData[] };
@@ -17,6 +19,7 @@ export default function TextWithIconView({ blockInfo, handleGetHandlers }: Props
   const [finalData, setFinalData] = useState<TextWithIconData['data']>({
     ...data,
   });
+  const { data_link, data_link_ready } = useDataLink();
 
   const handleGetFinalData = useCallback(async () => {
     const { queriesResponse: response } = (await handleGetHandlers({})) || {};
@@ -33,6 +36,18 @@ export default function TextWithIconView({ blockInfo, handleGetHandlers }: Props
   useEffect(() => {
     handleGetFinalData();
   }, [handleGetFinalData]);
+
+  useEffect(() => {
+    if (data_link_ready) {
+      setFinalData({
+        title: PageDataInCheck(data.title, data_link),
+        icon: data.icon,
+        description: PageDataInCheck(data.description, data_link),
+        queries: data.queries,
+        queries_dispatch: data.queries_dispatch,
+      });
+    }
+  }, [data, data_link, data_link_ready]);
 
   return (
     <Card
