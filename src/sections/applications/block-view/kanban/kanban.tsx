@@ -12,6 +12,7 @@ import { useCreateDataHandlers, usePatchDataHandlers } from 'src/apis/data-handl
 import { useParams } from 'src/routes/hooks';
 import KanbanColumn from './kanban-column';
 import { AddTaskModal, EditTaskModal } from './modal';
+import getDataFromQueries from '../../helpers/getDataFromQueries';
 
 interface Props {
   blockInfo: { blocs: KanbanData[] };
@@ -39,7 +40,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
   const openEditTaskModal = useBoolean();
 
   const { createDataHandlers } = useCreateDataHandlers(data.queries?.[0]);
-  const { patchDataHandlers } = usePatchDataHandlers(data.queries?.[0]);
+  const { patchDataHandlers } = usePatchDataHandlers();
 
   const handleGetDocuments = useCallback(async () => {
     setIsLoadingTasks(true);
@@ -96,7 +97,18 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
 
   const handleSaveUpdatedTasks = useCallback(
     async (dataForUpdate: Document[]) => {
-      const res = await patchDataHandlers({ pageId: pageId || '1', documents: dataForUpdate });
+      const collectionName = getDataFromQueries({
+        queries: data.queries,
+        queries_dispatch: data.queries_dispatch,
+        field: 'card_origin',
+        type: 'collection_name',
+      });
+
+      const res = await patchDataHandlers({
+        pageId: pageId || '1',
+        collectionName,
+        documents: dataForUpdate,
+      });
       const { updated: updatedDocuments } = res;
       const updatedDocumentsIds = updatedDocuments.map((doc: Document) => doc._id.$oid);
 
@@ -117,7 +129,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
         return [{ ...prevQueriesResponse[0], documents: newDocuments }];
       });
     },
-    [data.columns, pageId, patchDataHandlers]
+    [data.columns, data.queries, data.queries_dispatch, pageId, patchDataHandlers]
   );
 
   const onDragEnd = useCallback(
@@ -228,6 +240,12 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
                 <KanbanColumn
                   key={column.id}
                   column={column}
+                  previewField={getDataFromQueries({
+                    queries: data.queries,
+                    queries_dispatch: data.queries_dispatch,
+                    field: 'preview_text',
+                    type: 'collection_field',
+                  })}
                   handleOpenAddModal={() => handleOpenAddTaskModal(column.title)}
                   handleOpenEditModal={handleOpenEditTaskModal}
                 />

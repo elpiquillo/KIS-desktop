@@ -10,10 +10,18 @@ import { Box } from '@mui/material';
 type Props = PaperProps & {
   index: number;
   task: Document;
+  previewField: string;
   onUpdateTask: (updateTask: Document) => void;
 };
 
-export default function KanbanTaskItem({ task, index, onUpdateTask, sx, ...other }: Props) {
+export default function KanbanTaskItem({
+  index,
+  task,
+  previewField,
+  onUpdateTask,
+  sx,
+  ...other
+}: Props) {
   const statuses = [
     task.project_label_red && 'error.main',
     task.project_label_green && 'success.main',
@@ -54,7 +62,7 @@ export default function KanbanTaskItem({ task, index, onUpdateTask, sx, ...other
               py: 2.5,
             }}
           >
-            <Typography variant="subtitle2">{task.client}</Typography>
+            <Typography variant="subtitle2">{task[previewField]}</Typography>
 
             <Box sx={{ display: 'flex', gap: 1 }}>
               {statuses.map((status) => (

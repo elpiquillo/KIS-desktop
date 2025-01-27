@@ -11,11 +11,17 @@ import KanbanTaskItem from './kanban-task-item';
 
 interface Props {
   column: { id: number; title: string; tasks: Document[] };
+  previewField: string;
   handleOpenAddModal: () => void;
   handleOpenEditModal: (task?: Document) => void;
 }
 
-export default function KanbanColumn({ column, handleOpenAddModal, handleOpenEditModal }: Props) {
+export default function KanbanColumn({
+  column,
+  previewField,
+  handleOpenAddModal,
+  handleOpenEditModal,
+}: Props) {
   return (
     <Paper
       sx={{
@@ -45,6 +51,7 @@ export default function KanbanColumn({ column, handleOpenAddModal, handleOpenEdi
                   key={task._id.$oid}
                   index={taskIndex}
                   task={task}
+                  previewField={previewField}
                   onUpdateTask={handleOpenEditModal}
                 />
               ))}

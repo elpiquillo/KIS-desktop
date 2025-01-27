@@ -79,12 +79,14 @@ export function useUpdateDataHandlers(query?: DataQuery) {
   return { updateDataHandlers };
 }
 
-export function usePatchDataHandlers(query?: DataQuery) {
+export function usePatchDataHandlers() {
   const patchDataHandlers = async ({
     pageId,
+    collectionName,
     documents,
   }: {
     pageId: string;
+    collectionName: string;
     documents: Document[];
   }) => {
     try {
@@ -92,9 +94,8 @@ export function usePatchDataHandlers(query?: DataQuery) {
         method: 'PATCH',
         body: JSON.stringify({
           data_handler: {
-            query_id: query?.id,
-            collection_name: query?.collection_name,
             page_id: pageId,
+            collection_name: collectionName,
             documents,
           },
         }),
