@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiDataHandlerResponse } from 'src/types/queries-interface';
 import { useGetDataHandlersList } from 'src/apis/data-handler';
 
