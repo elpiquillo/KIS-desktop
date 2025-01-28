@@ -60,7 +60,7 @@ export default function InputFormView({ blockInfo, handleGetHandlers }: Props) {
   }, [data_link, fields, handleGetHandlers, queries_dispatch]);
 
   useEffect(() => {
-    if (queries?.length > 1) {
+    if (queries?.length > 0) {
       handleGetFields();
     }
   }, [handleGetFields, queries?.length]);
