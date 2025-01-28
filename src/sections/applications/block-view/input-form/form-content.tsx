@@ -136,33 +136,40 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   }, [defaultFormValues, reset]);
 
   const onSubmit = handleSubmit(async (formData: Record<string, string | number | boolean>) => {
-    if (type === 'update') {
-      await updateDataHandlers({
-        pageId: pageId || '?',
-        document: {
-          ...formData,
-          _id: {
-            $oid: data_link!.data._id.$oid,
-          },
-        } as Document,
-      });
-      refreshDataLink(queries[0].collection_name, data_link!.data._id.$oid);
+    try {
+      if (type === 'update') {
+        await updateDataHandlers({
+          pageId: pageId || '?',
+          document: {
+            ...formData,
+            _id: {
+              $oid: data_link!.data._id.$oid,
+            },
+          } as Document,
+        });
+        refreshDataLink(queries[0].collection_name, data_link!.data._id.$oid);
 
-      enqueueSnackbar(t('applications.formCreatedSuccess'), {
-        variant: 'success',
+        enqueueSnackbar(t('applications.formUpdatedSuccess'), {
+          variant: 'success',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+      } else {
+        await createDataHandlers({
+          pageId: pageId || '?',
+          documents: [formData as Document],
+        });
+
+        enqueueSnackbar(t('applications.formCreatedSuccess'), {
+          variant: 'success',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+        reset({});
+      }
+    } catch (err) {
+      enqueueSnackbar(t('applications.somethingWentWrong'), {
+        variant: 'error',
         anchorOrigin: { vertical: 'top', horizontal: 'center' },
       });
-    } else {
-      await createDataHandlers({
-        pageId: pageId || '?',
-        documents: [formData as Document],
-      });
-
-      enqueueSnackbar(t('applications.formCreatedSuccess'), {
-        variant: 'success',
-        anchorOrigin: { vertical: 'top', horizontal: 'center' },
-      });
-      reset({});
     }
   });
 

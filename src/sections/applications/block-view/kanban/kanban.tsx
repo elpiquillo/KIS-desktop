@@ -10,6 +10,8 @@ import { KanbanData } from 'src/types/application/kanban-interface';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useCreateDataHandlers, usePatchDataHandlers } from 'src/apis/data-handler';
 import { useParams } from 'src/routes/hooks';
+import { useSnackbar } from 'notistack';
+import { t } from 'i18next';
 import KanbanColumn from './kanban-column';
 import { AddTaskModal, EditTaskModal } from './modal';
 import getDataFromQueries from '../../helpers/getDataFromQueries';
@@ -24,6 +26,7 @@ interface Props {
 
 export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
+  const { enqueueSnackbar } = useSnackbar();
   const { pageId } = useParams();
 
   const [isLoadingTasks, setIsLoadingTasks] = useState<boolean>(false);
@@ -73,63 +76,87 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
 
   const handleAddTask = useCallback(
     async (newTask: Document) => {
-      const res = await createDataHandlers({
-        pageId: pageId || '?',
-        documents: [newTask],
-      });
-
-      setQueriesResponse((prevQueriesResponse) => {
-        const newDocuments = [...prevQueriesResponse[0].documents, ...res.created];
-
-        const updatedColumns = data.columns.map((column) => {
-          const docs: Document[] = newDocuments.filter(
-            (doc) => doc.project_status === column.title
-          );
-          return { ...column, tasks: docs };
+      try {
+        const res = await createDataHandlers({
+          pageId: pageId || '?',
+          documents: [newTask],
         });
-        setColumnsWithTasks(updatedColumns);
 
-        return [{ ...prevQueriesResponse[0], documents: newDocuments }];
-      });
+        setQueriesResponse((prevQueriesResponse) => {
+          const newDocuments = [...prevQueriesResponse[0].documents, ...res.created];
+
+          const updatedColumns = data.columns.map((column) => {
+            const docs: Document[] = newDocuments.filter(
+              (doc) => doc.project_status === column.title
+            );
+            return { ...column, tasks: docs };
+          });
+          setColumnsWithTasks(updatedColumns);
+
+          return [{ ...prevQueriesResponse[0], documents: newDocuments }];
+        });
+
+        enqueueSnackbar(t('applications.kanban.addTaskSuccess'), {
+          variant: 'success',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+      } catch (err) {
+        enqueueSnackbar(t('applications.somethingWentWrong'), {
+          variant: 'error',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+      }
     },
-    [createDataHandlers, data.columns, pageId]
+    [createDataHandlers, data.columns, enqueueSnackbar, pageId]
   );
 
   const handleSaveUpdatedTasks = useCallback(
     async (dataForUpdate: Document[]) => {
-      const collectionName = getDataFromQueries({
-        queries: data.queries,
-        queries_dispatch: data.queries_dispatch,
-        field: 'card_origin',
-        type: 'collection_name',
-      });
-
-      const res = await patchDataHandlers({
-        pageId: pageId || '1',
-        collectionName,
-        documents: dataForUpdate,
-      });
-      const { updated: updatedDocuments } = res;
-      const updatedDocumentsIds = updatedDocuments.map((doc: Document) => doc._id.$oid);
-
-      setQueriesResponse((prevQueriesResponse) => {
-        const oldDocuments = prevQueriesResponse[0].documents.filter(
-          (doc) => !updatedDocumentsIds.includes(doc._id.$oid)
-        );
-        const newDocuments = [...oldDocuments, ...updatedDocuments];
-
-        const updatedColumns = data.columns.map((column) => {
-          const docs: Document[] = newDocuments.filter(
-            (doc) => doc.project_status === column.title
-          );
-          return { ...column, tasks: docs };
+      try {
+        const collectionName = getDataFromQueries({
+          queries: data.queries,
+          queries_dispatch: data.queries_dispatch,
+          field: 'card_origin',
+          type: 'collection_name',
         });
-        setColumnsWithTasks(updatedColumns);
 
-        return [{ ...prevQueriesResponse[0], documents: newDocuments }];
-      });
+        const res = await patchDataHandlers({
+          pageId: pageId || '1',
+          collectionName,
+          documents: dataForUpdate,
+        });
+        const { updated: updatedDocuments } = res;
+        const updatedDocumentsIds = updatedDocuments.map((doc: Document) => doc._id.$oid);
+
+        setQueriesResponse((prevQueriesResponse) => {
+          const oldDocuments = prevQueriesResponse[0].documents.filter(
+            (doc) => !updatedDocumentsIds.includes(doc._id.$oid)
+          );
+          const newDocuments = [...oldDocuments, ...updatedDocuments];
+
+          const updatedColumns = data.columns.map((column) => {
+            const docs: Document[] = newDocuments.filter(
+              (doc) => doc.project_status === column.title
+            );
+            return { ...column, tasks: docs };
+          });
+          setColumnsWithTasks(updatedColumns);
+
+          return [{ ...prevQueriesResponse[0], documents: newDocuments }];
+        });
+
+        enqueueSnackbar(t('applications.kanban.editTaskSuccess'), {
+          variant: 'success',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+      } catch (err) {
+        enqueueSnackbar(t('applications.somethingWentWrong'), {
+          variant: 'error',
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        });
+      }
     },
-    [data.columns, data.queries, data.queries_dispatch, pageId, patchDataHandlers]
+    [data.columns, data.queries, data.queries_dispatch, enqueueSnackbar, pageId, patchDataHandlers]
   );
 
   const onDragEnd = useCallback(

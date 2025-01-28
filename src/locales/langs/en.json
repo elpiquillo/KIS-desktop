@@ -60,12 +60,15 @@
     "uploadDocument": "Swipe or click to upload your document",
     "uploadImage": "Swipe or click to upload your image",
     "formCreatedSuccess": "Congratulations, everything was created!",
+    "formUpdatedSuccess": "Congratulations, everything was updated!",
     "details": "Details",
     "saveDataFromCsv": "Save data from CSV",
     "successSaved": "The data has been saved successfully",
+    "somethingWentWrong": "Something went wrong",
     "calendar": {
       "start": "Start date",
-      "end": "End date"
+      "end": "End date",
+      "editSuccess": "The event has been updated successfully"
     },
     "csvImport": {
       "extractFromFile": "Extract from your CSV file",
@@ -73,7 +76,9 @@
     },
     "kanban": {
       "addTask": "Add a task",
-      "editTask": "Edit task"
+      "addTaskSuccess": "The task has been added successfully",
+      "editTask": "Edit task",
+      "editTaskSuccess": "The task has been updated successfully"
     }
   },
   "errors": {}

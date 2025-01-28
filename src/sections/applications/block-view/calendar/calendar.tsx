@@ -5,7 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 import enLocale from '@fullcalendar/core/locales/en-gb';
-import i18next from 'i18next';
+import i18next, { t } from 'i18next';
 import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -14,6 +14,7 @@ import { useParams } from 'src/routes/hooks';
 import { useUpdateDataHandlers } from 'src/apis/data-handler';
 import { CalendarData } from 'src/types/application/calendar-interface';
 import { DatesSetArg, EventChangeArg, EventClickArg } from '@fullcalendar/core';
+import { useSnackbar } from 'notistack';
 import CalendarStyleWrapper from './style-wrapper';
 import EventModal from './modal';
 
@@ -37,6 +38,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
 
   const eventModal = useBoolean();
   const { pageId } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { updateDataHandlers } = useUpdateDataHandlers(data.queries?.[0]);
 
@@ -89,23 +91,35 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
 
     const eventForUpdating = documents.find((f) => f._id.$oid === id);
 
-    if (eventForUpdating) {
-      const copyEvent = JSON.parse(JSON.stringify(eventForUpdating));
+    try {
+      if (eventForUpdating) {
+        const copyEvent = JSON.parse(JSON.stringify(eventForUpdating));
 
-      copyEvent[getNameFieldFromQueriesDispatch('event_start') as string] = startStr;
-      copyEvent[getNameFieldFromQueriesDispatch('event_end') as string] = endStr || startStr;
+        copyEvent[getNameFieldFromQueriesDispatch('event_start') as string] = startStr;
+        copyEvent[getNameFieldFromQueriesDispatch('event_end') as string] = endStr || startStr;
 
-      const res = await updateDataHandlers({ pageId: pageId || '1', document: copyEvent });
-      const {
-        updated: [updatedDocument],
-      } = res;
+        const res = await updateDataHandlers({ pageId: pageId || '1', document: copyEvent });
+        const {
+          updated: [updatedDocument],
+        } = res;
 
-      const copyDocuments = [...documents];
-      const qIndex = documents.findIndex((tq) => tq._id.$oid === updatedDocument._id.$oid);
-      copyDocuments[qIndex] = updatedDocument;
+        const copyDocuments = [...documents];
+        const qIndex = documents.findIndex((tq) => tq._id.$oid === updatedDocument._id.$oid);
+        copyDocuments[qIndex] = updatedDocument;
 
-      setDocuments(copyDocuments);
-      refreshDataLink(data.queries[0].collection_name, id);
+        setDocuments(copyDocuments);
+        refreshDataLink(data.queries[0].collection_name, id);
+      }
+
+      enqueueSnackbar(t('applications.calendar.editSuccess'), {
+        variant: 'success',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
+    } catch (err) {
+      enqueueSnackbar(t('applications.somethingWentWrong'), {
+        variant: 'error',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
     }
   };
 
