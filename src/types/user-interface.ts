@@ -31,3 +31,15 @@ export interface UserInfosUpdatePassword {
   password: string;
   password_confirmation: string;
 }
+
+interface IUserAvatar {
+  id: string;
+  storage: string;
+  metadate: {
+    filename: string;
+    size: number;
+    mime_type: string;
+  };
+  url: string;
+  small_url: string;
+}
