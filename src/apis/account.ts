@@ -1,13 +1,13 @@
+import { t } from 'i18next';
 import { useEffect } from 'react';
 import useSWR from 'swr';
-import { t } from 'i18next';
 
-import { UserInfos, UserInfosUpdate, UserInfosUpdatePassword } from 'src/types/user-interface';
 import { useUserState } from 'src/store/userState';
+import { UserInfos, UserInfosUpdate, UserInfosUpdatePassword } from 'src/types/user-interface';
 
+import { ApiError } from '../utils/apiErrors';
 import { apiFetcher } from '../utils/fetchers';
 import { urls } from '../utils/urls';
-import { ApiError } from '../utils/apiErrors';
 
 // ----------------------------------------------------------------------
 

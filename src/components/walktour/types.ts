@@ -1,7 +1,7 @@
-import type * as NsWalktourRoot from 'react-joyride';
 import type { ButtonProps } from '@mui/material/Button';
-import type { Theme, SxProps } from '@mui/material/styles';
 import type { IconButtonProps } from '@mui/material/IconButton';
+import type { Theme, SxProps } from '@mui/material/styles';
+import type * as NsWalktourRoot from 'react-joyride';
 
 // ----------------------------------------------------------------------
 

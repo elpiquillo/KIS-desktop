@@ -1,5 +1,5 @@
-import { UserInfos } from 'src/types/user-interface';
 import { create } from 'zustand';
+import { UserInfos } from 'src/types/user-interface';
 
 export interface AuthToken {
   authorization: string;

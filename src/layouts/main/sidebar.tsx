@@ -1,12 +1,12 @@
-import { hideScroll } from 'src/theme/css';
 
 import Box, { BoxProps } from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
 
+import { useGetDashboardAccessesAll } from 'src/apis/dashboard-access';
 import { NavAppSection } from 'src/components/nav-app-section';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
-import { useGetDashboardAccessesAll } from 'src/apis/dashboard-access';
+import { hideScroll } from 'src/theme/css';
 
 import { NAV } from '../config-layout';
 

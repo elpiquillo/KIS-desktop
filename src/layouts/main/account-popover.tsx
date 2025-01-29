@@ -1,22 +1,22 @@
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+import { IconButton, useTheme } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
+import { t } from 'i18next';
+import { useLogin } from 'src/auth/useLogin';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
+import { useBoolean } from 'src/hooks/use-boolean';
 import { useRouter } from 'src/routes/hooks';
 
-import { useSnackbar } from 'src/components/snackbar';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useLogin } from 'src/auth/useLogin';
-import Upercase from 'src/utils/upercase';
 import { useUserState } from 'src/store/userState';
-import { IconButton, useTheme } from '@mui/material';
 import { action } from 'src/theme/palette';
-import { t } from 'i18next';
-import Iconify from 'src/components/iconify';
-import { useBoolean } from 'src/hooks/use-boolean';
+import Upercase from 'src/utils/upercase';
 import { AccountSettingsModal } from './account-settings-modal';
 
 // ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ export default function AccountPopover() {
       >
         {user?.avatar_data ? (
           <Avatar
-            src={user?.avatar_data}
+            src={user?.avatar_data.small_url}
             alt="Profile Picture"
             sx={{
               width: 50,

@@ -1,13 +1,14 @@
 import { t } from 'i18next';
-import useSWR from 'swr';
 import { useEffect } from 'react';
+import useSWR from 'swr';
 
 import { useDashboardState } from 'src/store/dashboardState';
 import { DashboardContent } from 'src/types/dashboard-interface';
+import { DashboardPageCreate, PageInterface } from 'src/types/page-interface';
 
+import { ApiError } from '../utils/apiErrors';
 import { apiFetcher } from '../utils/fetchers';
 import { urls } from '../utils/urls';
-import { ApiError } from '../utils/apiErrors';
 
 export function useGetDashboardPage({
   dashboardId,

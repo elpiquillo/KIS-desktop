@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { t } from 'i18next';
-
 import { Box } from '@mui/material';
+import { t } from 'i18next';
+import { useEffect, useState } from 'react';
+
 
 import { useGetDashboardAccessesAll } from 'src/apis/dashboard-access';
 import HeaderSearch from 'src/components/header-search';
-import { useGlobalState } from 'src/store/globalState';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
+import { useGlobalState } from 'src/store/globalState';
 import ApplicationsList from './apps-list';
 
 export default function HomeView() {

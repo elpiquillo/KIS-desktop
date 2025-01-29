@@ -1,6 +1,6 @@
 import Checkbox from '@mui/material/Checkbox';
-import Typography from '@mui/material/Typography';
 import Stack, { StackProps } from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { t } from 'i18next';
 
 // ----------------------------------------------------------------------

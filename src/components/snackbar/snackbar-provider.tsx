@@ -1,10 +1,10 @@
-import { useRef } from 'react';
-import { closeSnackbar, SnackbarProvider as NotistackProvider } from 'notistack';
-import { t } from 'i18next';
 import { Button } from '@mui/material';
 
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
+import { t } from 'i18next';
+import { closeSnackbar, SnackbarProvider as NotistackProvider } from 'notistack';
+import { useRef } from 'react';
 
 import Iconify from '../iconify';
 import { StyledIcon, StyledNotistack } from './styles';

@@ -17,14 +17,14 @@ export interface UserInfos {
   u_at: string;
   uid: string;
   id: string;
-  avatar_data: any;
+  avatar_data: IUserAvatar;
 }
 
 export interface UserInfosUpdate {
   id: string;
   first_name: string;
   last_name: string;
-  avatar_data: any;
+  avatar_data: IUserAvatar;
 }
 
 export interface UserInfosUpdatePassword {
@@ -35,7 +35,7 @@ export interface UserInfosUpdatePassword {
 interface IUserAvatar {
   id: string;
   storage: string;
-  metadate: {
+  metadata: {
     filename: string;
     size: number;
     mime_type: string;

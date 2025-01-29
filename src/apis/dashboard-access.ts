@@ -1,13 +1,13 @@
+import { t } from 'i18next';
 import { useEffect } from 'react';
 import useSWR from 'swr';
-import { t } from 'i18next';
 
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { sortApplicationsByFavorite } from 'src/utils/sortApplications';
+import { ApiError } from '../utils/apiErrors';
 import { apiFetcher } from '../utils/fetchers';
 import { urls } from '../utils/urls';
-import { ApiError } from '../utils/apiErrors';
 
 export function useGetDashboardAccessesAll(shouldRefetch: boolean) {
   const { error, data, isLoading } = useSWR<DashboardAccessInterface[]>(

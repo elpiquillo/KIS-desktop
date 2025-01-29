@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
+import Iconify from 'src/components/iconify';
 import { paths } from 'src/routes/paths';
 
 // import SvgColor from 'components/svg-color';
-import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 

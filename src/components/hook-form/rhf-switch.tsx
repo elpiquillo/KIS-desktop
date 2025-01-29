@@ -1,8 +1,8 @@
+import FormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import Switch from '@mui/material/Switch';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import Switch from '@mui/material/Switch';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel';
 
 // ----------------------------------------------------------------------
 

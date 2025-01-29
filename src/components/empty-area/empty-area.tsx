@@ -1,7 +1,7 @@
+import { Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { Paper } from '@mui/material';
 import Iconify from '../iconify';
 
 // ----------------------------------------------------------------------

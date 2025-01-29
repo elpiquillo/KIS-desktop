@@ -1,11 +1,4 @@
-import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import i18next, { t } from 'i18next';
 import {
   Avatar,
   Box,
@@ -18,21 +11,28 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import Uppy from '@uppy/core';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import AwsS3, { type AwsBody } from '@uppy/aws-s3';
-import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useForm } from 'react-hook-form';
+import Uppy from '@uppy/core';
+import i18next, { t } from 'i18next';
 import { useSnackbar } from 'notistack';
-import { useUserState } from 'src/store/userState';
-import { usePutPassword, usePutUserInfos } from 'src/apis/account';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { changeLanguage } from 'src/locales/i18n';
-import { languages } from 'src/locales/config-lang';
-import themesColor from 'src/utils/themes-color';
-import { useThemeMode } from 'src/theme/ThemeModeContext';
-import useThemeStore from 'src/store/themeModeState';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import { usePutPassword, usePutUserInfos } from 'src/apis/account';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import Iconify from 'src/components/iconify';
+import { useBoolean } from 'src/hooks/use-boolean';
+import { languages } from 'src/locales/config-lang';
+import { changeLanguage } from 'src/locales/i18n';
+import useThemeStore from 'src/store/themeModeState';
+import { useUserState } from 'src/store/userState';
+import { useThemeMode } from 'src/theme/ThemeModeContext';
+import themesColor from 'src/utils/themes-color';
 import { urls } from 'src/utils/urls';
 
 interface ModalProps {
@@ -56,6 +56,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   const password = useBoolean();
   const passwordConfirmation = useBoolean();
   const [profilePicture, setProfilePicture] = useState('');
+  const [fileState, setFileState] = useState<File>();
   const [appInfo, setAppInfo] = useState({
     name: '',
     description: '',
@@ -122,7 +123,17 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
         first_name: formData.firstName,
         last_name: formData.lastName,
         id: user.id,
-        avatar_data: profilePicture,
+        avatar_data: {
+          id: appInfo.logo.id,
+          storage: 'cache',
+          small_url: profilePicture,
+          metadata: {
+            filename: fileState?.name || '',
+            mime_type: fileState?.type || 'image/jpeg',
+            size: fileState?.size || 0,
+          },
+          url: profilePicture,
+        },
       });
       enqueueSnackbar(t('settings.userInfosUpdated'), {
         variant: 'success',
@@ -271,13 +282,11 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       </RHFSelect>
     </FormProvider>
   );
+
   const setNewTheme = (themeParam: string) => () => {
-    localStorage.setItem('theme-color', themeParam);
+    setThemeName(themeParam);
 
-  const setNewTheme = (theme: string) => () => {
-    setThemeName(theme);
-
-    const isDarkTheme = theme.includes('Dark');
+    const isDarkTheme = themeParam.includes('Dark');
     const isLightMode = paletteMode === 'light';
     const isDarkMode = paletteMode === 'dark';
 
@@ -287,7 +296,8 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       togglePaletteMode();
     }
 
-    document.body.style.background = themesColor[theme as keyof typeof themesColor].app_background;
+    document.body.style.background =
+      themesColor[themeParam as keyof typeof themesColor].app_background;
 
     onClose();
     enqueueSnackbar(t('global.goodChoice'), {
@@ -325,6 +335,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setFileState(file);
       uppy.addFile({ name: file.name, data: file });
       setProfilePicture(URL.createObjectURL(file));
     }
@@ -394,7 +405,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
           >
             {profilePicture || user?.avatar_data ? (
               <Avatar
-                src={profilePicture || user?.avatar_data}
+                src={profilePicture || user?.avatar_data.small_url}
                 alt="Profile Picture"
                 sx={{
                   width: 50,

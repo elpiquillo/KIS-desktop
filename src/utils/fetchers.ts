@@ -1,5 +1,5 @@
-import { useUserState } from '../store/userState';
 import { getErrorCode } from './apiErrors';
+import { useUserState } from '../store/userState';
 
 /**
  * Get raw response, usefull if you want to read headers

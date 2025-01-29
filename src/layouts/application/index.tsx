@@ -1,8 +1,8 @@
 import { Box, Card, CardHeader, Grid, useTheme } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import Label from 'src/components/label';
 import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 
-import Label from 'src/components/label';
-import { useParams } from 'react-router-dom';
 import { useDashboardState } from 'src/store/dashboardState';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
 

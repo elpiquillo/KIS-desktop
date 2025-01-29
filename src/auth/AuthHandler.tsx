@@ -1,8 +1,8 @@
 import { ReactNode, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useValidateTokenApi } from '../apis/auth';
-import { useUserState } from '../store/userState';
 import { paths } from '../routes/paths';
+import { useUserState } from '../store/userState';
 
 export function AuthHandler() {
   const { isLoading, data, isLoggued } = useValidateTokenApi();
