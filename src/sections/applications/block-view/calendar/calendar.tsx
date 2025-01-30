@@ -98,7 +98,7 @@ export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
         copyEvent[getNameFieldFromQueriesDispatch('event_start') as string] = startStr;
         copyEvent[getNameFieldFromQueriesDispatch('event_end') as string] = endStr || startStr;
 
-        const res = await updateDataHandlers({ pageId: pageId || '1', document: copyEvent });
+        const res = await updateDataHandlers({ pageId: pageId || '1', documents: [copyEvent] });
         const {
           updated: [updatedDocument],
         } = res;

@@ -140,12 +140,14 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
       if (type === 'update') {
         await updateDataHandlers({
           pageId: pageId || '?',
-          document: {
-            ...formData,
-            _id: {
-              $oid: data_link!.data._id.$oid,
+          documents: [
+            {
+              ...formData,
+              _id: {
+                $oid: data_link!.data._id.$oid,
+              },
             },
-          } as Document,
+          ] as Document[],
         });
         refreshDataLink(queries[0].collection_name, data_link!.data._id.$oid);
 

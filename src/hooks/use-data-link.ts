@@ -53,7 +53,7 @@ export const useDataLink = () => {
   const { getDataHandlers } = useGetDataHandlersList();
 
   useEffect(() => {
-    const CursubscribedId = subscribedId.current;
+    const cursubscribedId = subscribedId.current;
     if (location.state && location.state.data && location.state.data.query && !data) {
       const { collection, id, query } = location.state.data;
       subscribedKey.current = `${collection}_${id}`;
@@ -91,7 +91,7 @@ export const useDataLink = () => {
       if (!subscribed[subscribedKey.current]) {
         subscribed[subscribedKey.current] = {};
       }
-      subscribed[subscribedKey.current][CursubscribedId] = {
+      subscribed[subscribedKey.current][cursubscribedId] = {
         refresh,
       };
       refresh();
@@ -102,11 +102,11 @@ export const useDataLink = () => {
 
   // When component is gone for good, we remove it from the subscribe bank.
   useEffect(() => {
-    const CursubscribedId = subscribedId.current;
+    const cursubscribedId = subscribedId.current;
     return () => {
       if (subscribedKey.current && subscribed[subscribedKey.current]) {
-        if (subscribed[subscribedKey.current][CursubscribedId]) {
-          delete subscribed[subscribedKey.current][CursubscribedId];
+        if (subscribed[subscribedKey.current][cursubscribedId]) {
+          delete subscribed[subscribedKey.current][cursubscribedId];
         }
         if (Object.keys(subscribed[subscribedKey.current]).length === 0) {
           delete subscribed[subscribedKey.current];

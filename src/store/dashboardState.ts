@@ -1,10 +1,7 @@
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { DashboardContent } from 'src/types/dashboard-interface';
 import { MenuData } from 'src/types/dashboard-menu-interface';
-import { ApiDataHandlerResponse } from 'src/types/queries-interface';
 import { create } from 'zustand';
-import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
-import { getIndexesForBlockById } from './helpers/getIndexesForBlockById';
 
 interface DashboardState {
   dashboard?: DashboardContent;
