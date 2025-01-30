@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import React from 'react';
 
 interface Props {
-  blockInfo: any | null;
+  blockInfo: any;
 }
 
 export default function DefaultView({ blockInfo }: Props) {

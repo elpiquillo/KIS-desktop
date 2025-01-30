@@ -1,4 +1,7 @@
 {
+  "component": {
+    "failedLoadPdf": "Failed to load PDF file"
+  },
   "date": {
     "format": "{{value, datetime}}"
   },
@@ -11,7 +14,9 @@
     "addToFavorites": "Add to favorites",
     "removeFromFavorites": "Remove from favorites",
     "disconnect": "Disconnect",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes"
   },
   "auth": {
     "passwordRequired": "Password is required",
@@ -49,7 +54,32 @@
     "disconnect": "Disconnect",
     "exportCsv": "Export CSV",
     "filter": "Filter",
-    "orDndCsvFile": "or drag & drop your .CSV file here"
+    "include": "include",
+    "orDndCsvFile": "or drag & drop your .CSV file here",
+    "strict": "strict",
+    "uploadDocument": "Swipe or click to upload your document",
+    "uploadImage": "Swipe or click to upload your image",
+    "formCreatedSuccess": "Congratulations, everything was created!",
+    "formUpdatedSuccess": "Congratulations, everything was updated!",
+    "details": "Details",
+    "saveDataFromCsv": "Save data from CSV",
+    "successSaved": "The data has been saved successfully",
+    "somethingWentWrong": "Something went wrong",
+    "calendar": {
+      "start": "Start date",
+      "end": "End date",
+      "editSuccess": "The event has been updated successfully"
+    },
+    "csvImport": {
+      "extractFromFile": "Extract from your CSV file",
+      "makeReadingEasier": "To make reading easier, a maximum of 100 lines of your file are displayed."
+    },
+    "kanban": {
+      "addTask": "Add a task",
+      "addTaskSuccess": "The task has been added successfully",
+      "editTask": "Edit task",
+      "editTaskSuccess": "The task has been updated successfully"
+    }
   },
   "errors": {}
 }

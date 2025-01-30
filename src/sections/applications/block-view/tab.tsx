@@ -1,15 +1,10 @@
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { TabData } from 'src/types/application/tab-interface';
 import ContainerView from '../container-view';
 
-interface TabContent {
-  id: string;
-  title: string;
-  component: null | any;
-}
-
 interface Props {
-  blockInfo: any;
+  blockInfo: { blocs: TabData[] };
 }
 
 export default function TabView({ blockInfo }: Props) {
@@ -20,8 +15,10 @@ export default function TabView({ blockInfo }: Props) {
   const [currentTabContainer, setCurrentTabContainer] = useState(tabsContent[0].container);
 
   useEffect(() => {
-    const newTab = tabsContent.find((tab: TabContent) => tab.id === currentTabId);
-    setCurrentTabContainer(newTab?.container);
+    const newTab = tabsContent.find((tab) => tab.id === currentTabId);
+    if (newTab) {
+      setCurrentTabContainer(newTab.container);
+    }
   }, [currentTabId, tabsContent]);
 
   return (
@@ -35,7 +32,7 @@ export default function TabView({ blockInfo }: Props) {
         onChange={(_, value) => setCurrentTabId(value)}
         sx={{ mb: 2 }}
       >
-        {tabsContent.map((tab: TabContent) => (
+        {tabsContent.map((tab) => (
           <ToggleButton
             key={tab.id}
             value={tab.id}

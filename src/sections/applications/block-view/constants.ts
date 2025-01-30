@@ -1,14 +1,15 @@
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import BreadcrumbView from './breadcrumb';
-import CalendarView from './calendar';
-import CsvImportView from './csv-import';
+import CalendarView from './calendar/calendar';
+import CsvImportView from './csv-import/csv-import';
 import DefaultView from './default';
 import GaugeView from './gauge';
-import InputFormView from './input-form';
-import ItemListView from './item-list';
-import KanbanView from './kanban';
+import InputFormView from './input-form/input-form';
+import ItemListView from './item-list/item-list';
+import KanbanView from './kanban/kanban';
 import ProgressBarView from './progress-bar';
 import TabView from './tab';
-import TableView from './table';
+import TableView from './table/table';
 import TextWithIconView from './text-with-icon';
 
 export enum ComponentType {
@@ -26,9 +27,15 @@ export enum ComponentType {
 }
 
 export const BlockViewByComponentType: Record<
-  string,
+  ComponentType | 'default',
   {
-    content: any;
+    content: React.FC<{
+      blockInfo: { id: string; blocs: any[] };
+      handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
+        queriesRequest: DataQuery[];
+        queriesResponse: QueryResult[];
+      }>;
+    }>;
   }
 > = {
   [ComponentType.BC]: {

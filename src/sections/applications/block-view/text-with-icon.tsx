@@ -1,12 +1,53 @@
 import { Box, Card, IconButton } from '@mui/material';
-import '../../../assets/fonts/style.css';
+import { TextWithIconData } from 'src/types/application/text-with-icon-interface';
+import { useCallback, useEffect, useState } from 'react';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
+import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { useDataLink } from 'src/hooks/use-data-link';
+import PageDataInCheck from '../helpers/pageDataInCheck';
 
 interface Props {
-  blockInfo: any;
+  blockInfo: { blocs: TextWithIconData[] };
+  handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
+    queriesRequest: DataQuery[];
+    queriesResponse: QueryResult[];
+  }>;
 }
 
-export default function TextWithIconView({ blockInfo }: Props) {
+export default function TextWithIconView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
+  const [finalData, setFinalData] = useState<TextWithIconData['data']>({
+    ...data,
+  });
+  const { data_link, data_link_ready } = useDataLink();
+
+  const handleGetFinalData = useCallback(async () => {
+    const { queriesResponse: response } = (await handleGetHandlers({})) || {};
+
+    setFinalData((prevFinalData) =>
+      dispatchFetchedData({
+        dataQueries: response,
+        dispatchQueries: data.queries_dispatch,
+        finalData: prevFinalData,
+      })
+    );
+  }, [data.queries_dispatch, handleGetHandlers]);
+
+  useEffect(() => {
+    handleGetFinalData();
+  }, [handleGetFinalData]);
+
+  useEffect(() => {
+    if (data_link_ready) {
+      setFinalData({
+        title: PageDataInCheck(data.title, data_link),
+        icon: data.icon,
+        description: PageDataInCheck(data.description, data_link),
+        queries: data.queries,
+        queries_dispatch: data.queries_dispatch,
+      });
+    }
+  }, [data, data_link, data_link_ready]);
 
   return (
     <Card
@@ -18,8 +59,8 @@ export default function TextWithIconView({ blockInfo }: Props) {
       }}
     >
       <Box sx={{ flexGrow: 1 }}>
-        <Box sx={{ typography: 'subtitle2' }}>{data.description}</Box>
-        <Box sx={{ mt: 1.5, mb: 1, typography: 'h4' }}>{data.title}</Box>
+        <Box sx={{ typography: 'subtitle2' }}>{finalData.title}</Box>
+        <Box sx={{ mt: 1.5, mb: 1, typography: 'h4' }}>{finalData.description}</Box>
       </Box>
       <IconButton
         disableRipple
@@ -35,7 +76,7 @@ export default function TextWithIconView({ blockInfo }: Props) {
           },
         }}
       >
-        <i className={data.icon} style={{ fontSize: 24, padding: 3, color: 'white' }}>
+        <i className={finalData.icon} style={{ fontSize: 24, padding: 3, color: 'white' }}>
           <span className="path1" />
           <span className="path2" />
         </i>

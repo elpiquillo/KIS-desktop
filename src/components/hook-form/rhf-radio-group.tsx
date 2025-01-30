@@ -6,12 +6,13 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioGroup, { RadioGroupProps } from '@mui/material/RadioGroup';
+import { SelectOption } from 'src/types/queries-interface';
 
 // ----------------------------------------------------------------------
 
 type Props = RadioGroupProps & {
   name: string;
-  options: { label: string; value: any }[];
+  options: SelectOption[];
   label?: string;
   spacing?: number;
   helperText?: React.ReactNode;
@@ -25,7 +26,7 @@ export default function RHFRadioGroup({
   options,
   spacing,
   helperText,
-  color='default',
+  color = 'default',
   ...other
 }: Props) {
   const { control } = useFormContext();

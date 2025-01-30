@@ -42,11 +42,9 @@ export default function ApplicationCardItem({ application }: ApplicationCardItem
         favorite: !currentApplication.id.favorite,
       } as DashboardAccessInterface);
       enqueueSnackbar(
-        t(
-          !currentApplication.favorite
-            ? 'applications.favoriteSuccess'
-            : 'applications.removeFromFavoritesSuccess'
-        ),
+        !currentApplication.favorite
+          ? t('applications.favoriteSuccess')
+          : t('applications.removeFromFavoritesSuccess'),
         {
           variant: 'success',
           anchorOrigin: { vertical: 'top', horizontal: 'center' },

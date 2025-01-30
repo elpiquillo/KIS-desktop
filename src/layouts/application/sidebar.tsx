@@ -12,12 +12,15 @@ import { useDashboardAccessState } from 'src/store/dashboardAccessState';
 import { useDashboardState } from 'src/store/dashboardState';
 import '../../assets/fonts/style.css';
 import { MenuItemData } from 'src/types/dashboard-menu-interface';
-import { alpha, Avatar, Card, Chip, Divider, IconButton, Tooltip, useTheme } from '@mui/material';
+import { alpha, Avatar, Card, Chip, IconButton, Tooltip, useTheme } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function ApplicationMenuSidebar() {
-  const { applicationId } = useParams();
+  const { applicationId, pageId } = useParams();
+  const navigate = useNavigate();
   const theme = useTheme();
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)
@@ -28,6 +31,13 @@ function ApplicationMenuSidebar() {
   const { setCollapseAppMenu, collapseAppMenu } = useCollapseDashboardMenu();
 
   const ActiveLink = (url: string) => useActiveLink(url, true);
+
+  useEffect(() => {
+    if (!pageId && !isLoading && dashboardMenu?.content && dashboardMenu.content.length > 0) {
+      const page = dashboardMenu?.content.find((content) => content.is_title === false);
+      navigate(`/${applicationId}/${page?.menu_item_url.url}`);
+    }
+  }, [applicationId, dashboardMenu?.content, isLoading, navigate, pageId]);
 
   const renderMenuItem = () =>
     !isLoading &&

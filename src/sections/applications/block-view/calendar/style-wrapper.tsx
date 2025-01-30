@@ -1,20 +1,13 @@
 import React from 'react';
-import { alpha, Box, Typography, useTheme } from '@mui/material';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import frLocale from '@fullcalendar/core/locales/fr';
-import enLocale from '@fullcalendar/core/locales/en-gb';
+import { alpha, useTheme } from '@mui/material';
 import styled from '@emotion/styled';
-import i18next from 'i18next';
 
 interface Props {
-  blockInfo: any;
+  children: React.ReactNode;
 }
 
-export default function CalendarView({ blockInfo }: Props) {
+export default function CalendarStyleWrapper({ children }: Props) {
   const theme = useTheme();
-  const { data } = blockInfo.blocs[0];
 
   const StyleWrapper = styled.div`
     .fc button {
@@ -115,27 +108,5 @@ export default function CalendarView({ blockInfo }: Props) {
     }
   `;
 
-  return (
-    <Box>
-      <Typography variant="h6" sx={{ height: '28px', mb: 1 }}>
-        {data.card_title}
-      </Typography>
-      <StyleWrapper>
-        <FullCalendar
-          locale={i18next.language === 'fr' ? frLocale : enLocale}
-          locales={[enLocale, frLocale]}
-          plugins={[dayGridPlugin, interactionPlugin]}
-          handleWindowResize
-          themeSystem="mui"
-          headerToolbar={{
-            left: 'prev next today',
-            center: 'title',
-            right: 'dayGridMonth,dayGridWeek,dayGridDay',
-          }}
-          editable
-          selectable
-        />
-      </StyleWrapper>
-    </Box>
-  );
+  return <StyleWrapper>{children}</StyleWrapper>;
 }

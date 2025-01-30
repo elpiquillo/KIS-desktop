@@ -1,7 +1,6 @@
 import SimpleBar from 'simplebar-react';
 import { Box, useTheme } from '@mui/material';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
-
 import { useDashboardState } from 'src/store/dashboardState';
 import ContainerView from './container-view';
 

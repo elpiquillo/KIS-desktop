@@ -21,11 +21,11 @@ export interface DashboardInfoData {
   name: string;
   status: string;
   u_at: string;
-  structure?: any[];
+  structure: any[];
 }
 
 export interface MenuContextProps {
-  menu: MenuData | any;
+  menu: MenuData;
 }
 
 export interface DashboardCreate {

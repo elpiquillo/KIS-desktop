@@ -3,9 +3,10 @@ import { Box, Breadcrumbs, Typography } from '@mui/material';
 import { RouterLink } from 'src/routes/components';
 import { useParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { BreadcrumbData } from 'src/types/application/breadcrumb-interface';
 
 interface Props {
-  blockInfo: any;
+  blockInfo: { blocs: BreadcrumbData[] };
 }
 
 export default function BreadcrumbView({ blockInfo }: Props) {
@@ -29,7 +30,7 @@ export default function BreadcrumbView({ blockInfo }: Props) {
           },
         }}
       >
-        {data.right_links.map((link: any) => (
+        {data.right_links.map((link) => (
           <Typography
             key={link.id}
             variant="body2"
