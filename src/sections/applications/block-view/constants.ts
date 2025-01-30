@@ -6,6 +6,7 @@ import CalendarView from './calendar/calendar';
 import CsvImportView from './csv-import/csv-import';
 import DefaultView from './default';
 import GaugeView from './gauge';
+import { GenericChartView } from './generic-chart/genericChart';
 import InputFormView from './input-form/input-form';
 import ItemListView from './item-list/item-list';
 import KanbanView from './kanban/kanban';
@@ -13,7 +14,6 @@ import ProgressBarView from './progress-bar';
 import TabView from './tab';
 import TableView from './table/table';
 import TextWithIconView from './text-with-icon';
-import { GenericChartView } from './generic-chart/genericChart';
 
 export enum ComponentType {
   BC = 'BC',

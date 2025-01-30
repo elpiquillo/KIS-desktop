@@ -4,8 +4,8 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup, { RadioGroupProps } from '@mui/material/RadioGroup';
-import { SelectOption } from 'src/types/queries-interface';
 import { Controller, useFormContext } from 'react-hook-form';
+import { SelectOption } from 'src/types/queries-interface';
 
 // ----------------------------------------------------------------------
 

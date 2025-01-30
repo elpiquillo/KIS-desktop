@@ -5,20 +5,19 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SimpleBar from 'simplebar-react';
 import { useGetDashboardMenu } from 'src/apis/dashboard-menu';
 import Iconify from 'src/components/iconify';
 import NavItem from 'src/components/nav-section/mini/nav-item';
 import { useActiveLink, useParams } from 'src/routes/hooks';
+import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
 import { useDashboardState } from 'src/store/dashboardState';
 import '../../assets/fonts/style.css';
-import { MenuItemData } from 'src/types/dashboard-menu-interface';
-import { alpha, Avatar, Card, Chip, IconButton, Tooltip, useTheme } from '@mui/material';
-import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import useThemeStore from 'src/store/themeModeState';
+import { MenuItemData } from 'src/types/dashboard-menu-interface';
 import themesColor from 'src/utils/themes-color';
 
 function ApplicationMenuSidebar() {

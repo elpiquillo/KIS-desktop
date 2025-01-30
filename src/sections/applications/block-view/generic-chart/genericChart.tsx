@@ -4,11 +4,11 @@ import Chart, { useChart } from 'src/components/chart';
 import { ChartLegends } from 'src/components/chart/chartLegend';
 import { useDataLink } from 'src/hooks/use-data-link';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
-import { GenericChartData } from 'src/types/application/generic-chart-interface';
 import { BlockInterface } from 'src/types/application/general-interface';
+import { GenericChartData } from 'src/types/application/generic-chart-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
-import { ComponentType } from '../constants';
 import PageDataInCheck from '../../helpers/pageDataInCheck';
+import { ComponentType } from '../constants';
 import { donutChartOptions, pieChartOptions, radialBarChartOptions } from './chartOptions';
 
 interface Props {

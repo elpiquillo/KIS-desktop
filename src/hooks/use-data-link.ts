@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ApiDataHandlerResponse } from 'src/types/queries-interface';
 import { useGetDataHandlersList } from 'src/apis/data-handler';
+import { ApiDataHandlerResponse } from 'src/types/queries-interface';
 
 // Subscribe Bank, allow a component to be registered here
 // First level key is collection + id

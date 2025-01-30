@@ -1,9 +1,9 @@
 import { Draggable } from '@hello-pangea/dnd';
+import { Box } from '@mui/material';
+import Paper, { PaperProps } from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Paper, { PaperProps } from '@mui/material/Paper';
 import { Document } from 'src/types/queries-interface';
-import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
