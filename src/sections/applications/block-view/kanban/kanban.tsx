@@ -220,7 +220,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
 
   return (
     <Container
-      maxWidth={false}
+      maxWidth="xl"
       sx={{
         width: 'auto',
         ml: -5,
