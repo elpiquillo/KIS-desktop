@@ -1,5 +1,6 @@
 import { BlockInterface } from 'src/types/application/general-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
+import AreaChartView from './areaChart';
 import BreadcrumbView from './breadcrumb';
 import CalendarView from './calendar/calendar';
 import CsvImportView from './csv-import/csv-import';
@@ -25,6 +26,7 @@ export enum ComponentType {
   UPCSV = 'UPCSV',
   GG = 'GG',
   PBS = 'PBS',
+  AREA = 'AREA',
 }
 
 export const BlockViewByComponentType: Record<
@@ -71,6 +73,9 @@ export const BlockViewByComponentType: Record<
   },
   [ComponentType.PBS]: {
     content: ProgressBarView,
+  },
+  [ComponentType.AREA]: {
+    content: AreaChartView,
   },
   default: {
     content: DefaultView,
