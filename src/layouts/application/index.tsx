@@ -35,7 +35,8 @@ export default function ApplicationLayout({ children }: Props) {
           width: collapseAppMenu ? '100%' : 'calc(100% - 200px)',
           maxWidth: '100vw',
           ml: -2,
-          background: paletteMode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
+          background:
+            paletteMode === 'light' ? theme.palette.background.paper : theme.palette.grey[900],
           border: 'none',
           transition: 'width 0.3s ease-in-out',
         }}
