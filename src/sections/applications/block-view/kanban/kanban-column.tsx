@@ -26,8 +26,8 @@ export default function KanbanColumn({
     <Paper
       sx={{
         px: 2,
-        borderRadius: 2,
         bgcolor: 'background.neutral',
+        borderRadius: 1,
       }}
     >
       <Stack>

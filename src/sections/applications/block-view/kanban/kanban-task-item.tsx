@@ -42,8 +42,9 @@ export default function KanbanTaskItem({
           {...provided.dragHandleProps}
           onClick={handleClickTask}
           sx={{
+            boxShadow: 1,
             width: 1,
-            borderRadius: 1.5,
+            borderRadius: 1,
             overflow: 'hidden',
             position: 'relative',
             '&:hover': {
@@ -60,6 +61,7 @@ export default function KanbanTaskItem({
             sx={{
               px: 2,
               py: 2.5,
+              minHeight: 80,
             }}
           >
             <Typography variant="subtitle2">{task[previewField]}</Typography>
@@ -68,8 +70,8 @@ export default function KanbanTaskItem({
               {statuses.map((status) => (
                 <Box
                   sx={{
-                    width: '20px',
-                    height: '20px',
+                    width: 10,
+                    height: 10,
                     backgroundColor: status,
                     borderRadius: '50%',
                   }}
