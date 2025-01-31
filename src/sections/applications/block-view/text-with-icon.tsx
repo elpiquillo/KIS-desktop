@@ -1,4 +1,5 @@
 import { Box, Card, IconButton } from '@mui/material';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { TextWithIconData } from 'src/types/application/text-with-icon-interface';
 import { useCallback, useEffect, useState } from 'react';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
@@ -7,7 +8,7 @@ import { useDataLink } from 'src/hooks/use-data-link';
 import PageDataInCheck from '../helpers/pageDataInCheck';
 
 interface Props {
-  blockInfo: { blocs: TextWithIconData[] };
+  blockInfo: BlockInterface<TextWithIconData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
@@ -16,7 +17,7 @@ interface Props {
 
 export default function TextWithIconView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
-  const [finalData, setFinalData] = useState<TextWithIconData['data']>({
+  const [finalData, setFinalData] = useState<TextWithIconData>({
     ...data,
   });
   const { data_link, data_link_ready } = useDataLink();

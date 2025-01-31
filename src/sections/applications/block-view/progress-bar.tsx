@@ -2,12 +2,13 @@ import { Box, Card, CardContent, CardHeader, LinearProgress, Typography } from '
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDataLink } from 'src/hooks/use-data-link';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { ProgressBarData } from 'src/types/application/progress-bar-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import PageDataInCheck from '../helpers/pageDataInCheck';
 
 interface Props {
-  blockInfo: { blocs: ProgressBarData[] };
+  blockInfo: BlockInterface<ProgressBarData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
@@ -16,7 +17,7 @@ interface Props {
 
 export default function ProgressBarView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
-  const [finalData, setFinalData] = useState<ProgressBarData['data']>({
+  const [finalData, setFinalData] = useState<ProgressBarData>({
     ...data,
   });
   const { data_link, data_link_ready } = useDataLink();

@@ -1,3 +1,5 @@
+import { ContainerInterface } from './application/general-interface';
+
 export interface PagesData {
   company_id: string;
   dashboard_id: string;
@@ -17,7 +19,7 @@ export interface PageInterface {
     _id: {
       $oid: string;
     };
-    structure: any;
+    structure: ContainerInterface[];
   };
 }
 

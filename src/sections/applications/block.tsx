@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useGetDataHandlersList } from 'src/apis/data-handler';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { CustomFilter, DataQuery, QueriesDispatch } from 'src/types/queries-interface';
 import { useDataLink } from 'src/hooks/use-data-link';
 import { BlockViewByComponentType, ComponentType } from './block-view/constants';
@@ -7,7 +8,7 @@ import cable from './helpers/cable';
 import PageDataInCheck from './helpers/pageDataInCheck';
 
 interface Props {
-  block: any;
+  block: BlockInterface;
 }
 
 export default function Block({ block }: Props) {

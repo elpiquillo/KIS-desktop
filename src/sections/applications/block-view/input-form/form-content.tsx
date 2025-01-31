@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { t } from 'i18next';
 import { useSnackbar } from 'notistack';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { FieldData, InputFormData } from 'src/types/application/input-form-interface';
 import { Document } from 'src/types/queries-interface';
 import Field from './field';
@@ -27,7 +28,7 @@ const defaultValueByTypeField: Record<string, string | number | boolean> = {
 };
 
 interface Props {
-  blockInfo: { blocs: InputFormData[] };
+  blockInfo: BlockInterface<InputFormData>;
   fieldsData: FieldData[];
 }
 
@@ -43,7 +44,7 @@ export default function InputFormContent({ blockInfo, fieldsData }: Props) {
   const { updateDataHandlers } = useUpdateDataHandlers(queries?.[0]);
 
   const validationSchema = Yup.object().shape(
-    fieldsData.reduce((acc: any, field) => {
+    fieldsData.reduce((acc, field) => {
       if (['image', 'document'].includes(field.type)) {
         return {
           ...acc,

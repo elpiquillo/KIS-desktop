@@ -22,7 +22,7 @@ export default function PageView() {
           background: paletteMode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
         }}
       >
-        {structure?.map((container: any) => <ContainerView container={container} sx={{ p: 2 }} />)}
+        {structure?.map((container) => <ContainerView container={container} sx={{ p: 2 }} />)}
       </Box>
     </SimpleBar>
   );

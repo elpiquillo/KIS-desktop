@@ -3,23 +3,24 @@ import { Box, Typography } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { DatesSetArg, EventChangeArg, EventClickArg } from '@fullcalendar/core';
 import frLocale from '@fullcalendar/core/locales/fr';
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import i18next, { t } from 'i18next';
-import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { refreshDataLink } from 'src/hooks/use-data-link';
 import { useParams } from 'src/routes/hooks';
 import { useUpdateDataHandlers } from 'src/apis/data-handler';
 import { CalendarData } from 'src/types/application/calendar-interface';
-import { DatesSetArg, EventChangeArg, EventClickArg } from '@fullcalendar/core';
+import { BlockInterface } from 'src/types/application/general-interface';
+import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import { useSnackbar } from 'notistack';
 import CalendarStyleWrapper from './style-wrapper';
 import EventModal from './modal';
 
 interface Props {
-  blockInfo: { blocs: CalendarData[] };
+  blockInfo: BlockInterface<CalendarData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
@@ -28,7 +29,7 @@ interface Props {
 
 export default function CalendarView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
-  const [finalData, setFinalData] = useState<CalendarData['data']>({ ...data });
+  const [finalData, setFinalData] = useState<CalendarData>({ ...data });
   const [documents, setDocuments] = useState<Document[]>([]);
   const [eventInfoForModal, setEventInfoForModal] = useState<Document | null>(null);
   const [queriesResponse, setQueriesResponse] = useState<QueryResult[]>([]);

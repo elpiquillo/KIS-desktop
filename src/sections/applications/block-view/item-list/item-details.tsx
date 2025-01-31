@@ -11,7 +11,7 @@ interface Props {
   queriesDispatch: QueriesDispatch[];
   queriesRequest: DataQuery[];
   queriesResponse: QueryResult[];
-  blockData: ItemListData['data'];
+  blockData: ItemListData;
   current_document: Document;
 }
 

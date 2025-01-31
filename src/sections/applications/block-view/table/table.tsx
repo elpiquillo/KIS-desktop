@@ -2,14 +2,15 @@ import { Box, Button, Typography } from '@mui/material';
 import { t } from 'i18next';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePopover } from 'src/components/custom-popover';
-import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { TableData, TableFinalData } from 'src/types/application/table-interface';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import FilterModal from './modal';
 import TableContent from './table-content/table-content';
 
 interface Props {
-  blockInfo: { id: string; blocs: TableData[] };
+  blockInfo: BlockInterface<TableData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];

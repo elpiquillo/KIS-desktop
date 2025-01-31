@@ -1,10 +1,11 @@
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { TabData } from 'src/types/application/tab-interface';
 import ContainerView from '../container-view';
 
 interface Props {
-  blockInfo: { blocs: TabData[] };
+  blockInfo: BlockInterface<TabData>;
 }
 
 export default function TabView({ blockInfo }: Props) {

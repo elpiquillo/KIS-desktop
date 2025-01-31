@@ -30,52 +30,50 @@ export type DataValueFile = {
 export type DataValue = DataValueFile | string | number;
 
 export interface InputFormData {
-  data: {
+  title: string;
+  type: string;
+  document_id?: any;
+  fields: {
+    name: string;
+    label: string;
     title: string;
-    type: string;
-    document_id?: any;
-    fields: {
+    value: DataValue;
+    file_name?: string;
+    alt?: string;
+    original?: string;
+    options?: {
       name: string;
-      label: string;
-      title: string;
-      value: DataValue;
-      file_name?: string;
-      alt?: string;
-      original?: string;
-      options?: {
-        name: string;
-        value: string;
-      }[];
-      type: FieldType;
-      validate: {
-        required: {
-          active: boolean;
-          value: boolean;
-          errorMessage: string;
-        };
-        pattern?: ValidateContent;
-        minLength: ValidateContent;
-        maxLength: ValidateContent;
-      };
-      condition?: {
-        active: boolean;
-        target: string;
-        type: string;
-        value: string;
-        activation: string;
-        checked?: 'true' | 'false';
-      };
+      value: string;
     }[];
-    submit: {
-      button: string;
-      url: string;
-      column: number;
-      httpAction: string;
-      collection: string;
+    type: FieldType;
+    validate: {
+      required: {
+        active: boolean;
+        value: boolean;
+        errorMessage: string;
+      };
+      pattern?: ValidateContent;
+      minLength: ValidateContent;
+      maxLength: ValidateContent;
     };
-    queries: DataQuery[];
-    queries_dispatch: QueriesDispatch[];
+    condition?: {
+      active: boolean;
+      target: string;
+      type: string;
+      value: string;
+      activation: string;
+      checked?: 'true' | 'false';
+    };
+  }[];
+  submit: {
+    button: string;
+    url: string;
+    column: number;
+    httpAction: string;
+    collection: string;
   };
+  queries: DataQuery[];
+  queries_dispatch: QueriesDispatch[];
 }
 
-export type FieldData = InputFormData['data']['fields'][number];
+export type FieldData = InputFormData['fields'][number];

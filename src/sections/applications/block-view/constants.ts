@@ -1,3 +1,4 @@
+import { BlockInterface } from 'src/types/application/general-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import BreadcrumbView from './breadcrumb';
 import CalendarView from './calendar/calendar';
@@ -30,7 +31,7 @@ export const BlockViewByComponentType: Record<
   ComponentType | 'default',
   {
     content: React.FC<{
-      blockInfo: { id: string; blocs: any[] };
+      blockInfo: BlockInterface;
       handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
         queriesRequest: DataQuery[];
         queriesResponse: QueryResult[];

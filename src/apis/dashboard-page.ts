@@ -3,7 +3,6 @@ import useSWR from 'swr';
 import { useEffect } from 'react';
 
 import { useDashboardState } from 'src/store/dashboardState';
-import { DashboardPageCreate, PageInterface } from 'src/types/page-interface';
 import { DashboardContent } from 'src/types/dashboard-interface';
 
 import { apiFetcher } from '../utils/fetchers';

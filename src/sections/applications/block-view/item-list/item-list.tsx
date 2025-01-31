@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { ItemListData } from 'src/types/application/item-list-interface';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import ItemDetails from './item-details';
 
 interface Props {
-  blockInfo: { blocs: ItemListData[] };
+  blockInfo: BlockInterface<ItemListData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];

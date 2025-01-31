@@ -1,3 +1,4 @@
+import { ContainerInterface } from './application/general-interface';
 import { MenuData } from './dashboard-menu-interface';
 import { PagesData } from './page-interface';
 
@@ -21,7 +22,7 @@ export interface DashboardInfoData {
   name: string;
   status: string;
   u_at: string;
-  structure: any[];
+  structure: ContainerInterface[];
 }
 
 export interface MenuContextProps {

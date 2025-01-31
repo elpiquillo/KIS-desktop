@@ -4,13 +4,14 @@ import React, { useState } from 'react';
 import { useParams } from 'src/routes/hooks';
 import { useCreateDataHandlers } from 'src/apis/data-handler';
 import { CsvImportData } from 'src/types/application/csv-import-interface';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { Document } from 'src/types/queries-interface';
 import { useSnackbar } from 'notistack';
 import UploadCsv from './upload-csv';
 import CsvTable from './csv-table';
 
 interface Props {
-  blockInfo: { blocs: CsvImportData[] };
+  blockInfo: BlockInterface<CsvImportData>;
 }
 
 export default function CsvImportView({ blockInfo }: Props) {
