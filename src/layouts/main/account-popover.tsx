@@ -15,8 +15,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useRouter } from 'src/routes/hooks';
 
 import { useUserState } from 'src/store/userState';
-import { action } from 'src/theme/palette';
-import Upercase from 'src/utils/upercase';
 import { AccountSettingsModal } from './account-settings-modal';
 
 // ----------------------------------------------------------------------
@@ -73,7 +71,7 @@ export default function AccountPopover() {
       >
         {user?.avatar_data ? (
           <Avatar
-            src={user?.avatar_data.small_url}
+            src={user?.avatar_data.id}
             alt="Profile Picture"
             sx={{
               width: 50,

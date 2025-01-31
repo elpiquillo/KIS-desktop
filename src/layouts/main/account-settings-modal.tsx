@@ -32,6 +32,7 @@ import { changeLanguage } from 'src/locales/i18n';
 import useThemeStore from 'src/store/themeModeState';
 import { useUserState } from 'src/store/userState';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
+import { apiFetcher } from 'src/utils/fetchers';
 import themesColor from 'src/utils/themes-color';
 import { urls } from 'src/utils/urls';
 
@@ -56,6 +57,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   const password = useBoolean();
   const passwordConfirmation = useBoolean();
   const [profilePicture, setProfilePicture] = useState('');
+  const [pictureUrlState, setPictureUrlState] = useState('');
   const [fileState, setFileState] = useState<File>();
   const [appInfo, setAppInfo] = useState({
     name: '',
@@ -64,20 +66,6 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   });
   const user = useUserState((s) => s.userInfos);
   const userAvatar = user && `${user?.first_name?.[0]}${user?.last_name?.[0]}`;
-  const uppy = new Uppy<Meta, AwsBody>().use(AwsS3, {
-    endpoint: `${process.env.REACT_APP_API_BASE_URL}${urls.userInfos.updateUser}`,
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accesstoken')}`,
-    },
-  });
-
-  // Destroy uppy instance
-  useEffect(
-    () => () => {
-      uppy.cancelAll();
-    },
-    [uppy]
-  );
 
   const AccountInfos = Yup.object().shape({
     firstName: Yup.string().default(user?.first_name),
@@ -117,7 +105,6 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
 
   const onSubmitAccountInfos = handleSubmit(async (formData: any) => {
     if (!user) return;
-
     try {
       await putUserInfos({
         first_name: formData.firstName,
@@ -126,13 +113,13 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
         avatar_data: {
           id: appInfo.logo.id,
           storage: 'cache',
-          small_url: profilePicture,
+          small_url: pictureUrlState,
           metadata: {
             filename: fileState?.name || '',
             mime_type: fileState?.type || 'image/jpeg',
             size: fileState?.size || 0,
           },
-          url: profilePicture,
+          url: pictureUrlState,
         },
       });
       enqueueSnackbar(t('settings.userInfosUpdated'), {
@@ -333,28 +320,42 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
     ));
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const uppy = new Uppy<Meta, AwsBody>({ autoProceed: true }).use(AwsS3, {
+      endpoint: `${process.env.REACT_APP_API_BASE_URL}/users`,
+      headers: {
+        Authorization: `${localStorage.getItem('authorization')}`,
+      },
+    });
+
     const file = event.target.files?.[0];
     if (file) {
       setFileState(file);
-      uppy.addFile({ name: file.name, data: file });
+      uppy.addFile(file);
       setProfilePicture(URL.createObjectURL(file));
     }
 
     try {
       uppy
         .upload()
-        .then((response: any) => {
-          if (response.successful.length) {
+        .then(async (response: any) => {
+          if (response.successful.length === 1) {
             const { uploadURL, name } = response.successful[0];
-            setAppInfo((prev) => ({
-              ...prev,
-              logo: {
-                id: uploadURL,
-                storage: 'cache',
-                small_url: profilePicture,
-                metadata: { filename: name },
-              },
-            }));
+            setPictureUrlState(uploadURL);
+            await apiFetcher(urls.userInfos.updateUser, {
+              method: 'PUT',
+              body: JSON.stringify({
+                data: {
+                  attributes: {
+                    avatar: {
+                      id: uploadURL,
+                      storage: 'cache',
+                      small_url: uploadURL,
+                      metadata: { filename: name },
+                    },
+                  },
+                },
+              }),
+            });
           }
           enqueueSnackbar(t('settings.uploadSuccess'), {
             variant: 'success',
@@ -362,7 +363,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
           });
         })
         .catch(() => {
-          enqueueSnackbar(t('settings.errorUpload'), {
+          enqueueSnackbar(t('settings.uploadError'), {
             variant: 'error',
             anchorOrigin: { vertical: 'top', horizontal: 'center' },
           });

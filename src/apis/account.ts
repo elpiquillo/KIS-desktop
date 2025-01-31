@@ -16,7 +16,8 @@ export function usePutUserInfos() {
 
   const putUserInfos = async ({ first_name, last_name, id, avatar_data }: UserInfosUpdate) => {
     try {
-      const res = await apiFetcher(`${urls.userInfos.update}${id}`, {
+      // const res = await apiFetcher(`${urls.userInfos.update}${id}`, {
+      const res = await apiFetcher(`${urls.userInfos.updateUser}`, {
         method: 'PUT',
         body: JSON.stringify({
           user: {
