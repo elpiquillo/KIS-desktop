@@ -221,7 +221,9 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
     <Container
       maxWidth={false}
       sx={{
-        height: 1,
+        width: 'auto',
+        ml: -5,
+        height: '100%',
       }}
     >
       {isLoadingTasks && (
@@ -260,7 +262,6 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
               alignItems="flex-start"
               sx={{
                 p: 0.25,
-                height: 1,
               }}
             >
               {columnsWithTasks.map((column) => (
