@@ -19,7 +19,8 @@ export default function PageView() {
           p: 2,
           gap: 2,
           flexGrow: 1,
-          background: paletteMode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+          background:
+            paletteMode === 'light' ? theme.palette.background.paper : theme.palette.grey[900],
         }}
       >
         {structure?.map((container: any) => <ContainerView container={container} sx={{ p: 2 }} />)}
