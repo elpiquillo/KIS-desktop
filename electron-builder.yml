@@ -1,8 +1,12 @@
 appId: fr.kis.kis
-productName: KIS,
-copyright: Copyright 2024 © KIS
+productName: KIS
+copyright: Copyright 2025 © KIS
 directories:
   output: build
+  buildResources: assets # Ensure this points to resources like icons
+files:
+  - dist/**/* # Ensure built frontend is included
+  - electron.cjs
 dmg:
   sign: true
 mac:
@@ -13,4 +17,4 @@ publish:
   owner: elpiquillo
   repo: KIS-desktop
 # Mac Notoarization
-afterSign: "./src/electron/notorize.cjs"
+afterSign: './src/electron/notorize.cjs'
