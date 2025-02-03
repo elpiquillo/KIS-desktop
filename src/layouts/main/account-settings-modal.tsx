@@ -19,6 +19,7 @@ import { changeLanguage } from 'src/locales/i18n';
 import { languages } from 'src/locales/config-lang';
 import themesColor from 'src/utils/themes-color';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
+import useThemeStore from 'src/store/themeModeState';
 
 interface ModalProps {
   open: boolean;
@@ -32,6 +33,9 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   const { putPassword } = usePutPassword();
   const { paletteMode, togglePaletteMode } = useThemeMode();
   const { enqueueSnackbar } = useSnackbar();
+
+  const { setThemeName } = useThemeStore();
+
   const password = useBoolean();
   const passwordConfirmation = useBoolean();
 
@@ -232,7 +236,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   );
 
   const setNewTheme = (theme: string) => () => {
-    localStorage.setItem('theme-color', theme);
+    setThemeName(theme);
 
     const isDarkTheme = theme.includes('Dark');
     const isLightMode = paletteMode === 'light';
@@ -244,7 +248,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       togglePaletteMode();
     }
 
-    document.body.style.background = themesColor[theme as keyof typeof themesColor];
+    document.body.style.background = themesColor[theme as keyof typeof themesColor].app_background;
 
     onClose();
     enqueueSnackbar(t('global.goodChoice'), {
@@ -261,7 +265,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
           acc[key as keyof typeof themesColor] = value;
           return acc;
         },
-        {} as { [key: string]: string }
+        {} as { [key: string]: { app_background: string; item_background: string } }
       );
 
   const themesSelection = (themeType: 'light' | 'dark') =>
@@ -270,7 +274,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
         key={key}
         item
         xs={5}
-        sx={{ background: value }}
+        sx={{ background: value.app_background }}
         component={Button}
         height={40}
         m={0.7}

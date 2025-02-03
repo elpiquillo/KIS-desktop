@@ -11,6 +11,7 @@ import { componentsOverrides } from './overrides';
 import { GlobalStyles } from '@mui/material';
 import { ThemeModeProvider, useThemeMode } from './ThemeModeContext';
 import themesColor from 'src/utils/themes-color';
+import useThemeStore from 'src/store/themeModeState';
 
 type Props = {
   children: React.ReactNode;
@@ -18,13 +19,14 @@ type Props = {
 
 function CustomThemeProvider({ children }: Props) {
   const { paletteMode } = useThemeMode();
+  const { themeName } = useThemeStore();
 
   useEffect(() => {
-    const customTheme = localStorage.getItem('theme-color');
-    if (customTheme) {
-      document.body.style.background = themesColor[customTheme as keyof typeof themesColor];
+    if (themeName && themesColor[themeName as keyof typeof themesColor]) {
+      document.body.style.background =
+        themesColor[themeName as keyof typeof themesColor].app_background;
     }
-  }, [paletteMode, localStorage]);
+  }, [paletteMode, localStorage, themeName]);
 
   const memoizedValue = useMemo<ThemeOptions>(
     () => ({
@@ -41,10 +43,7 @@ function CustomThemeProvider({ children }: Props) {
 
   theme.components = componentsOverrides(theme);
 
-  const bgGradient =
-    paletteMode === 'light'
-      ? 'linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);'
-      : 'linear-gradient(135deg, #212b36 0%, #38495c 50%, #212b36 100%);';
+  const bgGradient = paletteMode === 'light' ? themesColor.sunrise : themesColor.midnight_glowDark;
 
   return (
     <MuiThemeProvider theme={theme}>
