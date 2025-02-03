@@ -17,10 +17,15 @@ import Iconify from 'src/components/iconify';
 import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import useThemeStore from 'src/store/themeModeState';
+import themesColor from 'src/utils/themes-color';
 
 function ApplicationMenuSidebar() {
   const { applicationId, pageId } = useParams();
   const navigate = useNavigate();
+
+  const { themeName } = useThemeStore();
+
   const theme = useTheme();
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)
@@ -86,6 +91,11 @@ function ApplicationMenuSidebar() {
                   </i>
                 }
                 active={ActiveLink(`${applicationId}/${menuItemUrl.url}`)}
+                sx={{
+                  '&:hover, &:focus, &:active': {
+                    background: themesColor[themeName as keyof typeof themesColor].item_background,
+                  },
+                }}
               />
             </Tooltip>
           );
@@ -103,6 +113,17 @@ function ApplicationMenuSidebar() {
               </i>
             }
             active={ActiveLink(`${applicationId}/${menuItemUrl.url}`)}
+            sx={{
+              background: ActiveLink(`${applicationId}/${menuItemUrl.url}`)
+                ? alpha(themesColor[themeName as keyof typeof themesColor].item_background, 0.5)
+                : 'none',
+              '&:hover': {
+                background: alpha(
+                  themesColor[themeName as keyof typeof themesColor].item_background,
+                  0.3
+                ),
+              },
+            }}
           />
         );
       }
