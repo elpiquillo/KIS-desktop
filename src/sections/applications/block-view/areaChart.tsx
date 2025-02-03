@@ -18,11 +18,26 @@ interface Props {
 
 export default function AreaChartView({ blockInfo, handleGetHandlers }: Props) {
   const { data } = blockInfo.blocs[0];
+  const { data_link, data_link_ready } = useDataLink();
+
   const [key, setKey] = useState(0);
   const [finalData, setFinalData] = useState<AreaChartData>({
     ...data,
   });
-  const { data_link, data_link_ready } = useDataLink();
+
+  const chartColors = useMemo(
+    () => finalData.series[0].data.map((item) => item.color),
+    [finalData.series]
+  );
+  const chartLabels = finalData.series[0].data.map((item) => item.label);
+
+  const areaChartOptions = useChart({
+    legend: {
+      show: false,
+    },
+    colors: chartColors,
+    xaxis: { categories: finalData.categories },
+  });
 
   const handleGetFinalData = useCallback(async () => {
     const { queriesResponse: response } = (await handleGetHandlers({})) || {};
@@ -50,25 +65,9 @@ export default function AreaChartView({ blockInfo, handleGetHandlers }: Props) {
     }
   }, [data, data_link, data_link_ready]);
 
-  const chartColors = useMemo(
-    () => finalData.series[0].data.map((item) => item.color),
-    [finalData.series]
-  );
-  const chartLabels = finalData.series[0].data.map((item) => item.label);
-
-  const areaChartOptions = useChart({
-    legend: {
-      show: false,
-    },
-    colors: chartColors,
-    xaxis: { categories: finalData.categories },
-  });
-
   useEffect(() => {
     setKey((prev) => prev + 1);
   }, [chartColors]);
-
-  const currentSeries = finalData?.series[0];
 
   return (
     <Card sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -79,7 +78,7 @@ export default function AreaChartView({ blockInfo, handleGetHandlers }: Props) {
       <Chart
         key={key}
         type="area"
-        series={currentSeries.data}
+        series={finalData?.series[0].data}
         options={areaChartOptions}
         width="100%"
         height="100%"
