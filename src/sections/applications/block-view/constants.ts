@@ -13,6 +13,7 @@ import ProgressBarView from './progress-bar';
 import TabView from './tab';
 import TableView from './table/table';
 import TextWithIconView from './text-with-icon';
+import { GenericChartView } from './generic-chart/genericChart';
 
 export enum ComponentType {
   BC = 'BC',
@@ -26,6 +27,9 @@ export enum ComponentType {
   UPCSV = 'UPCSV',
   GG = 'GG',
   PBS = 'PBS',
+  RB = 'RB',
+  PIE = 'PIE',
+  DONUT = 'DONUT',
   AREA = 'AREA',
 }
 
@@ -73,6 +77,15 @@ export const BlockViewByComponentType: Record<
   },
   [ComponentType.PBS]: {
     content: ProgressBarView,
+  },
+  [ComponentType.RB]: {
+    content: GenericChartView,
+  },
+  [ComponentType.PIE]: {
+    content: GenericChartView,
+  },
+  [ComponentType.DONUT]: {
+    content: GenericChartView,
   },
   [ComponentType.AREA]: {
     content: AreaChartView,
