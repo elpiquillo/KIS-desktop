@@ -348,7 +348,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
                     avatar: {
                       id: uploadURL,
                       storage: 'cache',
-                      small_url: uploadURL,
+                      url: uploadURL,
                       metadata: { filename: name },
                     },
                   },
@@ -380,53 +380,49 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       <DialogTitle>{t('settings.profileSettings')}</DialogTitle>
 
       <DialogContent>
-        <Box>
-          <Typography>{t('settings.profilePicture')}</Typography>
+        <Box textAlign="center">
           <IconButton
-            aria-label="account settings"
-            component={Avatar}
+            aria-label="upload profile picture"
+            component="label"
             sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              m: 'auto',
               borderRadius: 1.4,
-              width: 48,
-              height: 48,
-              background: 'red',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginBottom: 1,
+              width: 150,
+              height: 150,
+              mb: 1,
               mt: 1,
               backgroundColor: theme.palette.primary.darker,
               '&:hover': {
-                backgroundColor: theme.palette.action.hover,
-              },
-              '&:active': {
-                backgroundColor: theme.palette.action.hover,
+                backgroundColor: theme.palette.primary.darker,
               },
             }}
           >
-            {user?.avatar_data.url ? (
-              <Avatar
-                src={user?.avatar_data.url}
-                alt="Profile Picture"
-                sx={{
-                  width: 50,
-                  height: 50,
-                }}
-                variant="square"
-              />
-            ) : (
-              <Avatar
-                sx={{
-                  backgroundColor: 'transparent',
-                }}
-                variant="square"
-              >
+            <input type="file" hidden onChange={handleImageUpload} />
+
+            <Avatar
+              src={profilePicture || user?.avatar_data?.url || undefined}
+              alt="Profile Picture"
+              sx={{ width: 150, height: 150, backgroundColor: 'transparent' }}
+              variant="square"
+            >
+              {!profilePicture && !user?.avatar_data && (
                 <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
                   {userAvatar}
                 </Typography>
-              </Avatar>
-            )}
+              )}
+            </Avatar>
           </IconButton>
-          <Input sx={{ ml: 1, overflow: 'hidden' }} type="file" onChange={handleImageUpload} />
+
+          <Button
+            variant="outlined"
+            component="label"
+            sx={{ ml: 2, display: 'flex', alignItems: 'center' }}
+          >
+            {t('settings.uploadProfilePicture')}
+            <input type="file" hidden onChange={handleImageUpload} />
+          </Button>
         </Box>
         <Divider sx={{ my: 2 }} />
         {infosForm}
