@@ -108,6 +108,7 @@
     "profileSettings": "Profile settings",
     "uploadError": "An error occurred while uploading the profile picture",
     "uploadProfilePicture": "Upload profile picture",
+    "uploading": "Uploading...",
     "uploadSuccess": "Profile picture uploaded successfully",
     "userInfosUpdated": "User infos updated successfully"
   }
