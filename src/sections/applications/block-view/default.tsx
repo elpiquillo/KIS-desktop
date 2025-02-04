@@ -1,8 +1,9 @@
 import { Box } from '@mui/material';
 import React from 'react';
+import { BlockInterface } from 'src/types/application/general-interface';
 
 interface Props {
-  blockInfo: any;
+  blockInfo: BlockInterface;
 }
 
 export default function DefaultView({ blockInfo }: Props) {

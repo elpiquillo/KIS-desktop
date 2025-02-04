@@ -15,26 +15,24 @@ export interface CardOrigin {
 }
 
 export interface KanbanData {
-  data: {
-    allow_card_edit: boolean;
-    allow_card_create: boolean;
-    allow_card_drag: boolean;
-    allow_card_destroy: boolean;
-    preview_text: string;
-    card_origin: string | CardOrigin[];
-    button_action: ButtonAction[];
-    card_content: {
-      id: string;
-      index: number;
-      title: string;
-      name: string;
-      content: string;
-    }[];
-    columns: {
-      id: number;
-      title: string;
-    }[];
-    queries: DataQuery[];
-    queries_dispatch: QueriesDispatch[];
-  };
+  allow_card_edit: boolean;
+  allow_card_create: boolean;
+  allow_card_drag: boolean;
+  allow_card_destroy: boolean;
+  preview_text: string;
+  card_origin: string | CardOrigin[];
+  button_action: ButtonAction[];
+  card_content: {
+    id: string;
+    index: number;
+    title: string;
+    name: string;
+    content: string;
+  }[];
+  columns: {
+    id: number;
+    title: string;
+  }[];
+  queries: DataQuery[];
+  queries_dispatch: QueriesDispatch[];
 }

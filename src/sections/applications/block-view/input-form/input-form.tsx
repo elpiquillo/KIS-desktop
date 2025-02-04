@@ -2,12 +2,13 @@ import { Box, Card } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import { useDataLink } from 'src/hooks/use-data-link';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { FieldData, InputFormData } from 'src/types/application/input-form-interface';
 import PageDataInCheck from '../../helpers/pageDataInCheck';
 import InputFormContent from './form-content';
 
 interface Props {
-  blockInfo: { blocs: InputFormData[] };
+  blockInfo: BlockInterface<InputFormData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];

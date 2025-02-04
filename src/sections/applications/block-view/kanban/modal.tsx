@@ -108,7 +108,7 @@ interface EditTaskProps {
   queriesRequest: DataQuery[];
   open: boolean;
   task: Document | null;
-  blockData: KanbanData['data'];
+  blockData: KanbanData;
   handleSaveUpdatedTasks: (updatedTasks: Document[]) => void;
   handleClose: () => void;
 }

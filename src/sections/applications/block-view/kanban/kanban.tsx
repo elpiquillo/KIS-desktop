@@ -3,21 +3,22 @@ import React, { Children, useCallback, useEffect, useState } from 'react';
 import EmptyContent from 'src/components/empty-content';
 import Scrollbar from 'src/components/scrollbar';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
-import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import { DropResult, DragDropContext } from '@hello-pangea/dnd';
 import KanbanColumnSkeleton from 'src/components/kanban/kanban-column-skeleton';
-import { KanbanData } from 'src/types/application/kanban-interface';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useCreateDataHandlers, usePatchDataHandlers } from 'src/apis/data-handler';
 import { useParams } from 'src/routes/hooks';
 import { useSnackbar } from 'notistack';
 import { t } from 'i18next';
+import { BlockInterface } from 'src/types/application/general-interface';
+import { KanbanData } from 'src/types/application/kanban-interface';
+import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import KanbanColumn from './kanban-column';
 import { AddTaskModal, EditTaskModal } from './modal';
 import getDataFromQueries from '../../helpers/getDataFromQueries';
 
 interface Props {
-  blockInfo: { blocs: KanbanData[] };
+  blockInfo: BlockInterface<KanbanData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
@@ -30,7 +31,7 @@ export default function KanbanView({ blockInfo, handleGetHandlers }: Props) {
   const { pageId } = useParams();
 
   const [isLoadingTasks, setIsLoadingTasks] = useState<boolean>(false);
-  const [finalData, setFinalData] = useState<KanbanData['data']>({ ...data });
+  const [finalData, setFinalData] = useState<KanbanData>({ ...data });
   const [columnsWithTasks, setColumnsWithTasks] = useState<
     { id: number; title: string; tasks: Document[] }[]
   >([]);

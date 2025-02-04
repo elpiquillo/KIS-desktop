@@ -3,13 +3,13 @@ import { Gauge, gaugeClasses } from '@mui/x-charts';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDataLink } from 'src/hooks/use-data-link';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
-import { success } from 'src/theme/palette';
 import { GaugeData } from 'src/types/application/gauge-interface';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import PageDataInCheck from '../helpers/pageDataInCheck';
 
 interface Props {
-  blockInfo: { blocs: GaugeData[] };
+  blockInfo: BlockInterface<GaugeData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
@@ -19,7 +19,7 @@ interface Props {
 export default function GaugeView({ blockInfo, handleGetHandlers }: Props) {
   const theme = useTheme();
   const { data } = blockInfo.blocs[0];
-  const [finalData, setFinalData] = useState<GaugeData['data']>({
+  const [finalData, setFinalData] = useState<GaugeData>({
     ...data,
   });
   const { data_link, data_link_ready } = useDataLink();

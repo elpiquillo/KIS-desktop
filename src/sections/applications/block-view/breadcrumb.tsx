@@ -4,9 +4,10 @@ import { RouterLink } from 'src/routes/components';
 import { useParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 import { BreadcrumbData } from 'src/types/application/breadcrumb-interface';
+import { BlockInterface } from 'src/types/application/general-interface';
 
 interface Props {
-  blockInfo: { blocs: BreadcrumbData[] };
+  blockInfo: BlockInterface<BreadcrumbData>;
 }
 
 export default function BreadcrumbView({ blockInfo }: Props) {
