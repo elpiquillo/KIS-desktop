@@ -5,13 +5,14 @@ import { ChartLegends } from 'src/components/chart/chartLegend';
 import { useDataLink } from 'src/hooks/use-data-link';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { GenericChartData } from 'src/types/application/generic-chart-interface';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import { ComponentType } from '../constants';
 import PageDataInCheck from '../../helpers/pageDataInCheck';
 import { donutChartOptions, pieChartOptions, radialBarChartOptions } from './chartOptions';
 
 interface Props {
-  blockInfo: { blocs: { bloc_id: string; data: GenericChartData }[] };
+  blockInfo: BlockInterface<GenericChartData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
@@ -106,7 +107,7 @@ export function GenericChartView({ blockInfo, handleGetHandlers }: Props) {
       {chartOptions && (
         <Chart
           key={key}
-          type={blocIdInfo === 'RB' ? 'radialBar' : (blocIdInfo.toLowerCase() as any)}
+          type={blocIdInfo === ComponentType.RB ? 'radialBar' : (blocIdInfo.toLowerCase() as any)}
           series={chartSeries}
           options={chartOptions}
           width={240}

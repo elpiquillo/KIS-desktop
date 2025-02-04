@@ -5,11 +5,12 @@ import { ChartLegends } from 'src/components/chart/chartLegend';
 import { useDataLink } from 'src/hooks/use-data-link';
 import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { AreaChartData } from 'src/types/application/area-chart-interface';
+import { BlockInterface } from 'src/types/application/general-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import PageDataInCheck from '../helpers/pageDataInCheck';
 
 interface Props {
-  blockInfo: { blocs: { data: AreaChartData }[] };
+  blockInfo: BlockInterface<AreaChartData>;
   handleGetHandlers: (props: { additionalFilters?: CustomFilter[]; page?: number }) => Promise<{
     queriesRequest: DataQuery[];
     queriesResponse: QueryResult[];
