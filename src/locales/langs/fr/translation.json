@@ -105,9 +105,9 @@
     "lightThemes": "",
     "password": "",
     "passwordConfirmation": "",
-    "profilePicture": "",
     "profileSettings": "",
     "uploadError": "",
+    "uploadProfilePicture": "",
     "uploadSuccess": "",
     "userInfosUpdated": ""
   }
