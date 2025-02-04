@@ -57,7 +57,6 @@ export default function AccountPopover() {
           borderRadius: 1.4,
           width: 48,
           height: 48,
-          background: 'red',
           marginLeft: 'auto',
           marginRight: 'auto',
           backgroundColor: theme.palette.primary.darker,
@@ -69,28 +68,18 @@ export default function AccountPopover() {
           },
         }}
       >
-        {user?.avatar_data ? (
-          <Avatar
-            src={user?.avatar_data.url}
-            alt="Profile Picture"
-            sx={{
-              width: 50,
-              height: 50,
-            }}
-            variant="square"
-          />
-        ) : (
-          <Avatar
-            sx={{
-              backgroundColor: 'transparent',
-            }}
-            variant="square"
-          >
+        <Avatar
+          src={user?.avatar_data?.url || undefined}
+          alt="Profile Picture"
+          sx={{ width: 48, height: 48, backgroundColor: 'transparent', borderRadius: 1.4 }}
+          variant="square"
+        >
+          {!user?.avatar_data && (
             <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
               {userAvatar}
             </Typography>
-          </Avatar>
-        )}
+          )}
+        </Avatar>
       </IconButton>
       <CustomPopover
         open={popover.open}

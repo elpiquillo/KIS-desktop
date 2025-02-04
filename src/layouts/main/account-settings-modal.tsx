@@ -2,10 +2,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Avatar,
   Box,
+  CircularProgress,
   Divider,
   Grid,
   IconButton,
-  Input,
   InputAdornment,
   MenuItem,
   Typography,
@@ -20,7 +20,7 @@ import AwsS3, { type AwsBody } from '@uppy/aws-s3';
 import Uppy from '@uppy/core';
 import i18next, { t } from 'i18next';
 import { useSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { usePutPassword, usePutUserInfos } from 'src/apis/account';
@@ -53,12 +53,13 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   const { enqueueSnackbar } = useSnackbar();
 
   const { setThemeName } = useThemeStore();
+  const { setUserInfos } = useUserState();
 
   const password = useBoolean();
   const passwordConfirmation = useBoolean();
-  const [profilePicture, setProfilePicture] = useState('');
   const [pictureUrlState, setPictureUrlState] = useState('');
   const [fileState, setFileState] = useState<File>();
+  const [fileUploading, setFileUploading] = useState(false);
   const [appInfo, setAppInfo] = useState({
     name: '',
     description: '',
@@ -328,9 +329,9 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
 
     const file = event.target.files?.[0];
     if (file) {
+      setFileUploading(true);
       setFileState(file);
       uppy.addFile(file);
-      setProfilePicture(URL.createObjectURL(file));
     }
 
     try {
@@ -340,7 +341,8 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
           if (response.successful.length === 1) {
             const { uploadURL, name } = response.successful[0];
             setPictureUrlState(uploadURL);
-            await apiFetcher(urls.userInfos.updateUser, {
+
+            const res = await apiFetcher(urls.userInfos.updateUser, {
               method: 'PUT',
               body: JSON.stringify({
                 data: {
@@ -355,13 +357,35 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
                 },
               }),
             });
+
+            setUserInfos({
+              id: user?.id || '',
+              email: user?.email || '',
+              first_name: user?.first_name || '',
+              last_name: user?.last_name || '',
+              u_at: user?.u_at || '',
+              c_at: user?.c_at || '',
+              type: user?.type || '',
+              avatar_data: {
+                id: uploadURL,
+                storage: 'cache',
+                metadata: {
+                  filename: name || '',
+                  size: fileState?.size || 0,
+                  mime_type: fileState?.type || 'image/jpeg',
+                },
+                url: res.data.attributes.avatar.url,
+              },
+            });
           }
+          setFileUploading(false);
           enqueueSnackbar(t('settings.uploadSuccess'), {
             variant: 'success',
             anchorOrigin: { vertical: 'top', horizontal: 'center' },
           });
         })
         .catch(() => {
+          setFileUploading(false);
           enqueueSnackbar(t('settings.uploadError'), {
             variant: 'error',
             anchorOrigin: { vertical: 'top', horizontal: 'center' },
@@ -385,8 +409,10 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
             aria-label="upload profile picture"
             component="label"
             sx={{
+              position: 'relative',
               display: 'flex',
               justifyContent: 'center',
+              alignItems: 'center',
               m: 'auto',
               borderRadius: 1.4,
               width: 150,
@@ -402,25 +428,44 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
             <input type="file" hidden onChange={handleImageUpload} />
 
             <Avatar
-              src={profilePicture || user?.avatar_data?.url || undefined}
+              src={user?.avatar_data?.url}
               alt="Profile Picture"
               sx={{ width: 150, height: 150, backgroundColor: 'transparent' }}
               variant="square"
             >
-              {!profilePicture && !user?.avatar_data && (
+              {!user?.avatar_data.url && (
                 <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
                   {userAvatar}
                 </Typography>
               )}
             </Avatar>
-          </IconButton>
 
+            {fileUploading && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent overlay
+                  borderRadius: 1.4,
+                }}
+              >
+                <CircularProgress size={40} sx={{ color: 'white' }} />
+              </Box>
+            )}
+          </IconButton>
           <Button
             variant="outlined"
             component="label"
-            sx={{ ml: 2, display: 'flex', alignItems: 'center' }}
+            sx={{ ml: 2, display: 'flex', alignItems: 'center', gap: 1, minWidth: 180 }}
+            disabled={fileUploading}
           >
-            {t('settings.uploadProfilePicture')}
+            {fileUploading ? t('settings.uploading') : t('settings.uploadProfilePicture')}
             <input type="file" hidden onChange={handleImageUpload} />
           </Button>
         </Box>
