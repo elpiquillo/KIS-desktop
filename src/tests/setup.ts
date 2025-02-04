@@ -2,7 +2,7 @@ import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 
-import translations from 'src/locales/langs/en.json';
+import translations from 'src/locales/langs/en/translation.json';
 
 const getNestedTranslation = (obj: any, key: string, options: any = {}) => {
   const translation = key.split('.').reduce((acc, part) => acc && acc[part], obj) || key;
