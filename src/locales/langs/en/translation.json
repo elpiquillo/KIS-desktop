@@ -1,0 +1,156 @@
+{
+  "component": {
+    "failedLoadPdf": "Failed to load PDF file"
+  },
+  "date": {
+    "format": "{{value, datetime}}"
+  },
+  "global": {
+    "action": "Action",
+    "searchByName": "Search by name",
+    "welcomeUser": "👋 Hey {{name}}! What are the priorities of the day?",
+    "options": "Options",
+    "favorites": "Favorites",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "disconnect": "Disconnect",
+    "close": "Close",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "total": "Total"
+  },
+  "auth": {
+    "passwordRequired": "Password is required",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordConfirmation": "Password confirmation is required",
+    "passwordMatch": "Passwords must match",
+    "passwordInvalid": "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
+    "loginPage": {
+      "title": "Access your Applications!",
+      "subTitle": "Please login to continue.",
+      "forgotPassword": "Forgot your password ?",
+      "action": "Login"
+    },
+    "forgotPasswordPage": {
+      "title": "Forgot your password ?",
+      "subTitle": "Enter your email address to reset your password.",
+      "action": "Reset password"
+    },
+    "verificationLinkPage": {
+      "title": "Check your email!",
+      "subTitle": "Follow the instructions sent to your email to reset your password.",
+      "action": "Return to login"
+    }
+  },
+  "applications": {
+    "applicationsPage": {
+      "emailInvalid": "Email is invalid",
+      "required": "Email is required"
+    },
+    "browse": "Browse",
+    "calendar": {
+      "editSuccess": "The event has been updated successfully",
+      "end": "End date",
+      "start": "Start date"
+    },
+    "csvImport": {
+      "extractFromFile": "Extract from your CSV file",
+      "makeReadingEasier": "To make reading easier, a maximum of 100 lines of your file are displayed."
+    },
+    "delete": "Delete",
+    "details": "Details",
+    "editForm": {
+      "noColumnsAdded": "No columns added"
+    },
+    "exportCsv": "Export CSV",
+    "favoriteSuccess": "Application added to favorites",
+    "filter": "Filter",
+    "formCreatedSuccess": "Congratulations, everything was created!",
+    "formUpdatedSuccess": "Congratulations, everything was updated!",
+    "include": "include",
+    "kanban": {
+      "addTask": "Add a task",
+      "addTaskSuccess": "The task has been added successfully",
+      "editTaskSuccess": "The task has been updated successfully"
+    },
+    "orDndCsvFile": "or drag & drop your .CSV file here",
+    "removeFromFavoritesSuccess": "Application removed from favorites",
+    "saveDataFromCsv": "Save data from CSV",
+    "somethingWentWrong": "Something went wrong",
+    "strict": "strict",
+    "successSaved": "The data has been saved successfully"
+  },
+  "auth": {
+    "forgotPasswordPage": {
+      "action": "Reset password",
+      "subTitle": "Enter your email address to reset your password.",
+      "title": "Forgot your password ?"
+    },
+    "loginPage": {
+      "action": "Login",
+      "forgotPassword": "Forgot your password ?",
+      "register": "Register",
+      "title": "Access your Applications!"
+    },
+    "passwordConfirmation": "Password confirmation is required",
+    "passwordInvalid": "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
+    "passwordMatch": "Passwords must match",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordRequired": "Password is required",
+    "verificationLinkPage": {
+      "action": "Return to login",
+      "subTitle": "Follow the instructions sent to your email to reset your password.",
+      "title": "Check your email!"
+    }
+  },
+  "component": {
+    "failedLoadPdf": "Failed to load PDF file"
+  },
+  "database": {
+    "dataPage": {
+      "xRowsSelected": ""
+    }
+  },
+  "date": {
+    "format": "{{value, datetime}}"
+  },
+  "favoriteError": "An error occurred while adding the application to favorites",
+  "global": {
+    "action": "Action",
+    "addToFavorites": "Add to favorites",
+    "cancel": "Cancel",
+    "close": "Close",
+    "deleteSelection": "Delete selection",
+    "disconnect": "Disconnect",
+    "emailInvalid": "Email is invalid",
+    "emailRequired": "Email is required",
+    "favorite": "Favorite",
+    "goodChoice": "Good choice!",
+    "options": "Options",
+    "removeFromFavorites": "Remove from favorites",
+    "saveChanges": "Save changes",
+    "searchByName": "Search by name",
+    "selected": "Selected",
+    "welcomeUser": "👋 Hey {{name}}! What are the priorities of the day?"
+  },
+  "logout": "Logout",
+  "settings": {
+    "changePassword": "Change password",
+    "darkMode": "Dark mode",
+    "darkThemes": "Dark themes",
+    "emailAddress": "Email address",
+    "errorUpload": "An error occurred while uploading the profile picture",
+    "firstName": "First name",
+    "language": "Language",
+    "lastName": "Last name",
+    "lightMode": "Light mode",
+    "lightThemes": "Light themes",
+    "password": "Password",
+    "passwordConfirmation": "Password confirmation",
+    "profilePicture": "Profile picture",
+    "profileSettings": "Profile settings",
+    "uploadError": "An error occurred while uploading the profile picture",
+    "uploadSuccess": "Profile picture uploaded successfully",
+    "userInfosUpdated": "User infos updated successfully"
+  }
+}
