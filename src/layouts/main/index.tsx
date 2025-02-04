@@ -1,12 +1,12 @@
+import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
 
-import Box from '@mui/material/Box';
 
 import { useSidebarState } from 'src/store/sidebarState';
 
-import Sidebar from './sidebar';
-import Main from './main';
 import Header from './header';
+import Main from './main';
+import Sidebar from './sidebar';
 // ----------------------------------------------------------------------
 
 type Props = {

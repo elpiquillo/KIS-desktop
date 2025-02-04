@@ -1,10 +1,10 @@
 import { Box, Card, IconButton } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
+import { useDataLink } from 'src/hooks/use-data-link';
+import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { BlockInterface } from 'src/types/application/general-interface';
 import { TextWithIconData } from 'src/types/application/text-with-icon-interface';
-import { useCallback, useEffect, useState } from 'react';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
-import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
-import { useDataLink } from 'src/hooks/use-data-link';
 import PageDataInCheck from '../helpers/pageDataInCheck';
 
 interface Props {

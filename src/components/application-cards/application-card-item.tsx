@@ -10,16 +10,16 @@ import {
   useTheme,
 } from '@mui/material';
 import { t } from 'i18next';
-import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 
-import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { usePutDashboardAccess } from 'src/apis/dashboard-access';
+import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { getTestId } from 'src/utils/data-test-id.helper';
 
+import CustomPopover, { usePopover } from '../custom-popover';
 import Iconify from '../iconify';
 
-import CustomPopover, { usePopover } from '../custom-popover';
 
 interface ApplicationCardItemProps {
   application?: DashboardAccessInterface;

@@ -1,10 +1,10 @@
+import { alpha } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
 
-import { alpha } from '@mui/material';
 import { grey } from 'src/theme/palette';
 
 import type { WalktourTooltipProps } from './types';

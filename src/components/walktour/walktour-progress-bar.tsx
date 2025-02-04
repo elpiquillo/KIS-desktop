@@ -1,6 +1,6 @@
+import ButtonBase from '@mui/material/ButtonBase';
 import Stack from '@mui/material/Stack';
 import { alpha, useTheme } from '@mui/material/styles';
-import ButtonBase from '@mui/material/ButtonBase';
 
 import type { WalktourProgressBarProps } from './types';
 

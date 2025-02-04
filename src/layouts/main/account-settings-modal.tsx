@@ -1,34 +1,52 @@
-import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
+import {
+  Avatar,
+  Box,
+  Divider,
+  Grid,
+  IconButton,
+  Input,
+  InputAdornment,
+  MenuItem,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import AwsS3, { type AwsBody } from '@uppy/aws-s3';
+import Uppy from '@uppy/core';
 import i18next, { t } from 'i18next';
-import { Divider, Grid, IconButton, InputAdornment, MenuItem, Typography } from '@mui/material';
-import Iconify from 'src/components/iconify';
-import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
-import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
-import { useUserState } from 'src/store/userState';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 import { usePutPassword, usePutUserInfos } from 'src/apis/account';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
+import Iconify from 'src/components/iconify';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { changeLanguage } from 'src/locales/i18n';
 import { languages } from 'src/locales/config-lang';
-import themesColor from 'src/utils/themes-color';
-import { useThemeMode } from 'src/theme/ThemeModeContext';
+import { changeLanguage } from 'src/locales/i18n';
 import useThemeStore from 'src/store/themeModeState';
+import { useUserState } from 'src/store/userState';
+import { useThemeMode } from 'src/theme/ThemeModeContext';
+import { apiFetcher } from 'src/utils/fetchers';
+import themesColor from 'src/utils/themes-color';
+import { urls } from 'src/utils/urls';
 
 interface ModalProps {
   open: boolean;
   onClose: () => void; // Add the onClose property
 }
 
+type Meta = { license: string };
+
 // ----------------------------------------------------------------------
 
 export function AccountSettingsModal({ open, onClose }: ModalProps) {
+  const theme = useTheme();
   const { putUserInfos } = usePutUserInfos();
   const { putPassword } = usePutPassword();
   const { paletteMode, togglePaletteMode } = useThemeMode();
@@ -38,8 +56,16 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
 
   const password = useBoolean();
   const passwordConfirmation = useBoolean();
-
+  const [profilePicture, setProfilePicture] = useState('');
+  const [pictureUrlState, setPictureUrlState] = useState('');
+  const [fileState, setFileState] = useState<File>();
+  const [appInfo, setAppInfo] = useState({
+    name: '',
+    description: '',
+    logo: '' as any,
+  });
   const user = useUserState((s) => s.userInfos);
+  const userAvatar = user && `${user?.first_name?.[0]}${user?.last_name?.[0]}`;
 
   const AccountInfos = Yup.object().shape({
     firstName: Yup.string().default(user?.first_name),
@@ -79,14 +105,22 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
 
   const onSubmitAccountInfos = handleSubmit(async (formData: any) => {
     if (!user) return;
-
     try {
       await putUserInfos({
         first_name: formData.firstName,
         last_name: formData.lastName,
         id: user.id,
+        avatar_data: {
+          id: appInfo.logo.id,
+          storage: 'cache',
+          metadata: {
+            filename: fileState?.name || '',
+            mime_type: fileState?.type || 'image/jpeg',
+            size: fileState?.size || 0,
+          },
+          url: pictureUrlState,
+        },
       });
-
       enqueueSnackbar(t('settings.userInfosUpdated'), {
         variant: 'success',
         anchorOrigin: { vertical: 'top', horizontal: 'center' },
@@ -235,10 +269,10 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
     </FormProvider>
   );
 
-  const setNewTheme = (theme: string) => () => {
-    setThemeName(theme);
+  const setNewTheme = (themeParam: string) => () => {
+    setThemeName(themeParam);
 
-    const isDarkTheme = theme.includes('Dark');
+    const isDarkTheme = themeParam.includes('Dark');
     const isLightMode = paletteMode === 'light';
     const isDarkMode = paletteMode === 'dark';
 
@@ -248,7 +282,8 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       togglePaletteMode();
     }
 
-    document.body.style.background = themesColor[theme as keyof typeof themesColor].app_background;
+    document.body.style.background =
+      themesColor[themeParam as keyof typeof themesColor].app_background;
 
     onClose();
     enqueueSnackbar(t('global.goodChoice'), {
@@ -283,11 +318,113 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
       />
     ));
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const uppy = new Uppy<Meta, AwsBody>({ autoProceed: true }).use(AwsS3, {
+      endpoint: `${process.env.REACT_APP_API_BASE_URL}/users`,
+      headers: {
+        Authorization: `${localStorage.getItem('authorization')}`,
+      },
+    });
+
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileState(file);
+      uppy.addFile(file);
+      setProfilePicture(URL.createObjectURL(file));
+    }
+
+    try {
+      uppy
+        .upload()
+        .then(async (response: any) => {
+          if (response.successful.length === 1) {
+            const { uploadURL, name } = response.successful[0];
+            setPictureUrlState(uploadURL);
+            await apiFetcher(urls.userInfos.updateUser, {
+              method: 'PUT',
+              body: JSON.stringify({
+                data: {
+                  attributes: {
+                    avatar: {
+                      id: uploadURL,
+                      storage: 'cache',
+                      url: uploadURL,
+                      metadata: { filename: name },
+                    },
+                  },
+                },
+              }),
+            });
+          }
+          enqueueSnackbar(t('settings.uploadSuccess'), {
+            variant: 'success',
+            anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          });
+        })
+        .catch(() => {
+          enqueueSnackbar(t('settings.uploadError'), {
+            variant: 'error',
+            anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          });
+        });
+    } catch (error) {
+      enqueueSnackbar(t('settings.errorUpload'), {
+        variant: 'error',
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      });
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle>{t('settings.profileSettings')}</DialogTitle>
 
       <DialogContent>
+        <Box textAlign="center">
+          <IconButton
+            aria-label="upload profile picture"
+            component="label"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              m: 'auto',
+              borderRadius: 1.4,
+              width: 150,
+              height: 150,
+              mb: 1,
+              mt: 1,
+              backgroundColor: theme.palette.primary.darker,
+              '&:hover': {
+                backgroundColor: theme.palette.primary.darker,
+              },
+            }}
+          >
+            <input type="file" hidden onChange={handleImageUpload} />
+
+            <Avatar
+              src={profilePicture || user?.avatar_data?.url || undefined}
+              alt="Profile Picture"
+              sx={{ width: 150, height: 150, backgroundColor: 'transparent' }}
+              variant="square"
+            >
+              {!profilePicture && !user?.avatar_data && (
+                <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
+                  {userAvatar}
+                </Typography>
+              )}
+            </Avatar>
+          </IconButton>
+
+          <Button
+            variant="outlined"
+            component="label"
+            sx={{ ml: 2, display: 'flex', alignItems: 'center' }}
+          >
+            {t('settings.uploadProfilePicture')}
+            <input type="file" hidden onChange={handleImageUpload} />
+          </Button>
+        </Box>
+        <Divider sx={{ my: 2 }} />
         {infosForm}
         {passwordForm}
         {languageField}

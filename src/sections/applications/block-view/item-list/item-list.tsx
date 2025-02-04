@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
+import { useCallback, useEffect, useState } from 'react';
 import { BlockInterface } from 'src/types/application/general-interface';
 import { ItemListData } from 'src/types/application/item-list-interface';
 import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';

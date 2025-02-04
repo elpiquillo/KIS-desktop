@@ -1,6 +1,6 @@
-import React from 'react';
 import {useDraggable, useDroppable} from '@dnd-kit/core';
 import { Box } from '@mui/material';
+import React from 'react';
 
 interface Props {
     id: string;

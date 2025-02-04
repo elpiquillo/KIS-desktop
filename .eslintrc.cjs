@@ -35,19 +35,41 @@ module.exports = {
         tsx: 'never',
       },
     ],
-    'import/prefer-default-export': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/jsx-no-constructed-context-values': 'off',
-    'no-underscore-dangle': 'off',
-    'import/no-cycle': 'off',
-    'no-restricted-exports': 'off',
-    'react/jsx-props-no-spreading': 'off',
-    'no-console': 'error',
-    'import/no-unresolved': 'off',
-    'react/require-default-props': 'off',
-    'no-use-before-define': 'off',
-    'no-undef': 'off',
-    'import/no-extraneous-dependencies': ['error', { devDependencies: false }],
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin', // Import natif (ex: fs, path)
+          'external', // Librairies externes (ex: react, lodash)
+          'internal', // Fichiers internes (ex: hooks, interfaces, utils)
+        ],
+        pathGroups: [
+          {
+            pattern: 'src/**', // Tous les fichiers internes commençant par 'src'
+            group: 'internal',
+            position: 'after',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['builtin'],
+        alphabetize: {
+          order: 'asc', // Tri alphabétique
+          caseInsensitive: true, // Ignore la casse
+        },
+      },
+    ],
+    "import/prefer-default-export": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-no-constructed-context-values": "off",
+    "no-underscore-dangle": "off",
+    "import/no-cycle": "off",
+    "no-restricted-exports": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-console": "error",
+    "import/no-unresolved": "off",
+    "react/require-default-props": "off",
+    "no-use-before-define": "off",
+    "no-undef": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": false }]
   },
   overrides: [
     {

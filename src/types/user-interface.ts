@@ -17,15 +17,52 @@ export interface UserInfos {
   u_at: string;
   uid: string;
   id: string;
+  avatar_data: IUserAvatar;
+}
+
+export interface IUserInfosData {
+  id: string;
+  attributes: {
+    email: string;
+    first_name: string;
+    last_name: string;
+    avatar: IUserAvatar;
+    u_at: string;
+    c_at: string;
+  };
+  type: string;
+}
+
+export interface IUserInfos {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar_data: IUserAvatar;
+  u_at: string;
+  c_at: string;
+  type: string;
 }
 
 export interface UserInfosUpdate {
   id: string;
   first_name: string;
   last_name: string;
+  avatar_data: IUserAvatar;
 }
 
 export interface UserInfosUpdatePassword {
   password: string;
   password_confirmation: string;
+}
+
+interface IUserAvatar {
+  id: string;
+  storage: string;
+  metadata: {
+    filename: string;
+    size: number;
+    mime_type: string;
+  };
+  url: string;
 }

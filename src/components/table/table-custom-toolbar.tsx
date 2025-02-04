@@ -1,6 +1,6 @@
 import { IconButton, Box, Button, useTheme, Typography, Fade } from '@mui/material';
-import { Trans } from 'react-i18next';
 import { t } from 'i18next';
+import { Trans } from 'react-i18next';
 
 import Iconify from '../iconify';
 

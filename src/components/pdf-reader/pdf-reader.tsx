@@ -1,6 +1,6 @@
-import React from 'react';
 import { Button, Dialog } from '@mui/material';
 import { t } from 'i18next';
+import React from 'react';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 interface Props {

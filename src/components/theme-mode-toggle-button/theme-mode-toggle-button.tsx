@@ -1,8 +1,8 @@
 // src/components/ThemeToggleButton.tsx
-import { useThemeMode } from 'src/theme/ThemeModeContext';
-import { t } from 'i18next';
-
 import { Box, Button, Typography } from '@mui/material';
+import { t } from 'i18next';
+import { useThemeMode } from 'src/theme/ThemeModeContext';
+
 import Iconify from '../iconify';
 
 interface ToogleModeInterface {

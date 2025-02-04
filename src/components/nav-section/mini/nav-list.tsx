@@ -1,7 +1,7 @@
+import Popover from '@mui/material/Popover';
+import Stack from '@mui/material/Stack';
 import { useRef, useState, useEffect, useCallback } from 'react';
 
-import Stack from '@mui/material/Stack';
-import Popover from '@mui/material/Popover';
 
 import { usePathname } from 'src/routes/hooks';
 import { useActiveLink } from 'src/routes/hooks/use-active-link';

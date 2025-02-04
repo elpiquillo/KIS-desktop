@@ -2,9 +2,9 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { describe, beforeEach, vi } from 'vitest';
 
 import '@testing-library/jest-dom';
-import HomeView from 'src/sections/home/view';
-import ApplicationsList from 'src/sections/home/apps-list';
 import { APPLICATIONS_MOCK } from 'src/__mocks__/applications.mock';
+import ApplicationsList from 'src/sections/home/apps-list';
+import HomeView from 'src/sections/home/view';
 
 describe('App list page', () => {
   beforeEach(() => {

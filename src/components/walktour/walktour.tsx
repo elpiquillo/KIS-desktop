@@ -1,11 +1,11 @@
+import { alpha, useTheme } from '@mui/material/styles';
 import Joyride from 'react-joyride';
 
-import { alpha, useTheme } from '@mui/material/styles';
 import { grey } from 'src/theme/palette';
 
+import type { WalktourProps } from './types';
 import { WalktourTooltip } from './walktour-tooltip';
 
-import type { WalktourProps } from './types';
 
 // ----------------------------------------------------------------------
 

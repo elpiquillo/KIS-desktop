@@ -1,6 +1,6 @@
+import { create } from 'zustand';
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { sortApplicationsByFavorite } from 'src/utils/sortApplications';
-import { create } from 'zustand';
 
 interface DashboardAccessState {
   applications: DashboardAccessInterface[];

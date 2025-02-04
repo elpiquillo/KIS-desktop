@@ -1,7 +1,7 @@
 import { Box, FormControl, FormHelperText, FormLabel, Stack, Typography } from '@mui/material';
+import { t } from 'i18next';
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { t } from 'i18next';
 import UploadBox from '../uploader/uploader';
 
 interface Props {

@@ -1,12 +1,10 @@
-// export const API_BASE_URL = 'https://api.getkis.io/api/v1';
-
 export const urls = {
   auth: {
     signIn: '/user_auth/sign_in',
     signOut: '/user_auth/sign_out',
     forgotPassword: '/user_auth/password/new',
     resetPassword: '/user_auth/password',
-    validateToken: '/user_auth/validate_token',
+    validateToken: '/users/me',
   },
   dashboards: {
     list: '/users/dashboard_accesses',
@@ -23,6 +21,7 @@ export const urls = {
   },
   userInfos: {
     update: '/users/users/',
+    updateUser: '/users/me',
     password: '/user_auth/password',
   },
   dashboardAcceses: {

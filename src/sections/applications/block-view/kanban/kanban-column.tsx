@@ -1,12 +1,12 @@
-import React from 'react';
 import { Droppable } from '@hello-pangea/dnd';
+import { Typography } from '@mui/material';
+import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+import { t } from 'i18next';
+import React from 'react';
 import Iconify from 'src/components/iconify';
 import { Document } from 'src/types/queries-interface';
-import { Typography } from '@mui/material';
-import { t } from 'i18next';
 import KanbanTaskItem from './kanban-task-item';
 
 interface Props {

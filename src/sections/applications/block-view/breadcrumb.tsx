@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box, Breadcrumbs, Typography } from '@mui/material';
+import React from 'react';
 import { RouterLink } from 'src/routes/components';
 import { useParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';

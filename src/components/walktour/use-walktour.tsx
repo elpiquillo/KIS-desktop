@@ -1,7 +1,7 @@
+import { useRef, useState } from 'react';
 import type { StoreHelpers, CallBackProps } from 'react-joyride';
 
 import { STATUS } from 'react-joyride';
-import { useRef, useState } from 'react';
 
 import type { UseWalktourProps, UseWalktourReturn } from './types';
 

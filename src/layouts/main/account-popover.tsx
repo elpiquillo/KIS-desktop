@@ -1,22 +1,20 @@
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+import { IconButton, useTheme } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
+import { t } from 'i18next';
+import { useLogin } from 'src/auth/useLogin';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
+import { useSnackbar } from 'src/components/snackbar';
+import { useBoolean } from 'src/hooks/use-boolean';
 import { useRouter } from 'src/routes/hooks';
 
-import { useSnackbar } from 'src/components/snackbar';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useLogin } from 'src/auth/useLogin';
-import Upercase from 'src/utils/upercase';
 import { useUserState } from 'src/store/userState';
-import { IconButton, useTheme } from '@mui/material';
-import { action } from 'src/theme/palette';
-import { t } from 'i18next';
-import Iconify from 'src/components/iconify';
-import { useBoolean } from 'src/hooks/use-boolean';
 import { AccountSettingsModal } from './account-settings-modal';
 
 // ----------------------------------------------------------------------
@@ -29,7 +27,7 @@ export default function AccountPopover() {
 
   const user = useUserState((s) => s.userInfos);
   const { logout } = useLogin();
-
+  const userAvatar = user && `${user?.first_name?.[0] || ''}${user?.last_name?.[0] || ''}`;
   const { enqueueSnackbar } = useSnackbar();
 
   const popover = usePopover();
@@ -71,17 +69,28 @@ export default function AccountPopover() {
           },
         }}
       >
-        <Avatar
-          sx={{
-            backgroundColor: 'transparent',
-          }}
-          variant="square"
-        >
-          <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
-            {user &&
-              Upercase(String(`${user?.first_name?.[0] || ''}${user?.last_name?.[0] || ''}`))}
-          </Typography>
-        </Avatar>
+        {user?.avatar_data ? (
+          <Avatar
+            src={user?.avatar_data.url}
+            alt="Profile Picture"
+            sx={{
+              width: 50,
+              height: 50,
+            }}
+            variant="square"
+          />
+        ) : (
+          <Avatar
+            sx={{
+              backgroundColor: 'transparent',
+            }}
+            variant="square"
+          >
+            <Typography variant="subtitle2" sx={{ color: theme.palette.action.active }}>
+              {userAvatar}
+            </Typography>
+          </Avatar>
+        )}
       </IconButton>
       <CustomPopover
         open={popover.open}

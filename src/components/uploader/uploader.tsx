@@ -1,8 +1,8 @@
 // UploadBox.tsx
-import React, { useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
 import { Box, SxProps, Theme, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
+import React, { useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { grey } from 'src/theme/palette';
 import Label from '../label';
 

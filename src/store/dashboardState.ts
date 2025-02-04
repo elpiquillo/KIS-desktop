@@ -1,7 +1,7 @@
+import { create } from 'zustand';
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { DashboardContent } from 'src/types/dashboard-interface';
 import { MenuData } from 'src/types/dashboard-menu-interface';
-import { create } from 'zustand';
 
 interface DashboardState {
   dashboard?: DashboardContent;

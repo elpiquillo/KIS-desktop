@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import { TableHeadCustom } from 'src/components/table';
 import TableContainerCustom from 'src/components/table/table-container-custom';
-import { TableFinalData } from 'src/types/application/table-interface';
 import { DataValue } from 'src/types/application/input-form-interface';
-import TableViewPagination from './table-pagination';
+import { TableFinalData } from 'src/types/application/table-interface';
+import { CustomFilter, DataQuery, QueryResult } from 'src/types/queries-interface';
 import TableViewBody from './table-body';
+import TableViewPagination from './table-pagination';
 
 interface Props {
   finalData: TableFinalData;

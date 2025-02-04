@@ -1,13 +1,13 @@
 import { Button, TableBody, TableCell, TableRow } from '@mui/material';
-import React, { Children } from 'react';
-import { RouterLink } from 'src/routes/components';
-import { paths } from 'src/routes/paths';
-import { useParams } from 'src/routes/hooks';
-import { DataQuery } from 'src/types/queries-interface';
-import { TableNoData } from 'src/components/table';
-import { TableFinalData } from 'src/types/application/table-interface';
-import { DataValue } from 'src/types/application/input-form-interface';
 import { t } from 'i18next';
+import React, { Children } from 'react';
+import { TableNoData } from 'src/components/table';
+import { RouterLink } from 'src/routes/components';
+import { useParams } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { DataValue } from 'src/types/application/input-form-interface';
+import { TableFinalData } from 'src/types/application/table-interface';
+import { DataQuery } from 'src/types/queries-interface';
 import TableCellContent from './cell-content';
 
 interface Props {

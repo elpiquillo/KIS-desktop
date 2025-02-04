@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
+import Iconify from 'src/components/iconify';
 import { paths } from 'src/routes/paths';
 
 // import SvgColor from 'components/svg-color';
-import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -14,7 +14,6 @@ const icon = (name: string) => (
   // https://icon-sets.iconify.design/solar/
   // https://www.streamlinehq.com/icons
 );
-/* eslint-disable react-refresh/only-export-components */
 const ICONS = {
   home: icon('lets-icons:home-duotone'),
   apps: icon('solar:window-frame-bold-duotone'),

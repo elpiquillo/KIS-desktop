@@ -1,13 +1,13 @@
 import { Card, CardHeader, Stack } from '@mui/material';
 import { motion } from 'framer-motion';
+import { Children } from 'react';
+import SimpleBar from 'simplebar-react';
 import { ApplicationCards, ApplicationCardSkeleton } from 'src/components/application-cards';
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 
-import SimpleBar from 'simplebar-react';
 import { applyFilter, removeAccents } from 'src/utils/applyFilter';
-import { Children } from 'react';
-import { sortApplicationsByFavorite } from 'src/utils/sortApplications';
 import { getTestId } from 'src/utils/data-test-id.helper';
+import { sortApplicationsByFavorite } from 'src/utils/sortApplications';
 
 interface ApplicationsListProps {
   title: string;

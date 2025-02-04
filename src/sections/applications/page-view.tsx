@@ -1,7 +1,7 @@
-import SimpleBar from 'simplebar-react';
 import { Box, useTheme } from '@mui/material';
-import { useThemeMode } from 'src/theme/ThemeModeContext';
+import SimpleBar from 'simplebar-react';
 import { useDashboardState } from 'src/store/dashboardState';
+import { useThemeMode } from 'src/theme/ThemeModeContext';
 import ContainerView from './container-view';
 
 export default function PageView() {

@@ -1,8 +1,8 @@
+import { Box, Button, Divider, Grid } from '@mui/material';
 import { t } from 'i18next';
 
-import { Box, Button, Divider, Grid } from '@mui/material';
-import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 import { useGlobalState } from 'src/store/globalState';
+import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 
 import { getTestId } from 'src/utils/data-test-id.helper';
 import ApplicationCardItem from './application-card-item';

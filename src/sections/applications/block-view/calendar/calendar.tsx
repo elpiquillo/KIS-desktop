@@ -1,23 +1,23 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Typography } from '@mui/material';
-import FullCalendar from '@fullcalendar/react';
+import { DatesSetArg, EventChangeArg, EventClickArg } from '@fullcalendar/core';
+import enLocale from '@fullcalendar/core/locales/en-gb';
+import frLocale from '@fullcalendar/core/locales/fr';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { DatesSetArg, EventChangeArg, EventClickArg } from '@fullcalendar/core';
-import frLocale from '@fullcalendar/core/locales/fr';
-import enLocale from '@fullcalendar/core/locales/en-gb';
+import FullCalendar from '@fullcalendar/react';
+import { Box, Typography } from '@mui/material';
 import i18next, { t } from 'i18next';
-import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
+import { useSnackbar } from 'notistack';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useUpdateDataHandlers } from 'src/apis/data-handler';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { refreshDataLink } from 'src/hooks/use-data-link';
 import { useParams } from 'src/routes/hooks';
-import { useUpdateDataHandlers } from 'src/apis/data-handler';
+import dispatchFetchedData from 'src/store/helpers/dispatchFetchedData';
 import { CalendarData } from 'src/types/application/calendar-interface';
 import { BlockInterface } from 'src/types/application/general-interface';
 import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
-import { useSnackbar } from 'notistack';
-import CalendarStyleWrapper from './style-wrapper';
 import EventModal from './modal';
+import CalendarStyleWrapper from './style-wrapper';
 
 interface Props {
   blockInfo: BlockInterface<CalendarData>;

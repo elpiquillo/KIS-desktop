@@ -1,11 +1,11 @@
 import { Box, Card } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import { useDataLink } from 'src/hooks/use-data-link';
 import { BlockInterface } from 'src/types/application/general-interface';
 import { FieldData, InputFormData } from 'src/types/application/input-form-interface';
-import PageDataInCheck from '../../helpers/pageDataInCheck';
+import { CustomFilter, DataQuery, Document, QueryResult } from 'src/types/queries-interface';
 import InputFormContent from './form-content';
+import PageDataInCheck from '../../helpers/pageDataInCheck';
 
 interface Props {
   blockInfo: BlockInterface<InputFormData>;

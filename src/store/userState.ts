@@ -1,5 +1,5 @@
-import { UserInfos } from 'src/types/user-interface';
 import { create } from 'zustand';
+import { IUserInfos, UserInfos } from 'src/types/user-interface';
 
 export interface AuthToken {
   authorization: string;
@@ -10,8 +10,8 @@ interface UserState {
   setAuth: (auth: AuthToken) => void;
   tokenValidated: boolean;
   setTokenValidated: (val: boolean) => void;
-  userInfos?: UserInfos;
-  setUserInfos: (val: UserInfos | undefined) => void;
+  userInfos?: IUserInfos;
+  setUserInfos: (val: IUserInfos | undefined) => void;
 }
 
 export const useUserState = create<UserState>()((set) => ({

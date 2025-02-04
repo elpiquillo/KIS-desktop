@@ -1,0 +1,114 @@
+{
+  "applications": {
+    "applicationsPage": {
+      "emailInvalid": "",
+      "required": ""
+    },
+    "browse": "",
+    "calendar": {
+      "editSuccess": "",
+      "end": "",
+      "start": ""
+    },
+    "csvImport": {
+      "extractFromFile": "",
+      "makeReadingEasier": ""
+    },
+    "delete": "",
+    "details": "",
+    "editForm": {
+      "noColumnsAdded": ""
+    },
+    "exportCsv": "",
+    "favoriteSuccess": "",
+    "filter": "",
+    "formCreatedSuccess": "",
+    "formUpdatedSuccess": "",
+    "include": "",
+    "kanban": {
+      "addTask": "",
+      "addTaskSuccess": "",
+      "editTaskSuccess": ""
+    },
+    "orDndCsvFile": "",
+    "removeFromFavoritesSuccess": "",
+    "saveDataFromCsv": "",
+    "somethingWentWrong": "",
+    "strict": "",
+    "successSaved": ""
+  },
+  "auth": {
+    "forgotPasswordPage": {
+      "action": "",
+      "subTitle": "",
+      "title": ""
+    },
+    "loginPage": {
+      "action": "",
+      "forgotPassword": "",
+      "register": "",
+      "title": ""
+    },
+    "passwordConfirmation": "",
+    "passwordInvalid": "",
+    "passwordMatch": "",
+    "passwordMin": "",
+    "passwordRequired": "",
+    "verificationLinkPage": {
+      "action": "",
+      "subTitle": "",
+      "title": ""
+    }
+  },
+  "component": {
+    "failedLoadPdf": ""
+  },
+  "database": {
+    "dataPage": {
+      "xRowsSelected": ""
+    }
+  },
+  "date": {
+    "format": ""
+  },
+  "favoriteError": "",
+  "global": {
+    "action": "",
+    "addToFavorites": "",
+    "cancel": "",
+    "close": "",
+    "deleteSelection": "",
+    "disconnect": "",
+    "emailInvalid": "",
+    "emailRequired": "",
+    "favorite": "",
+    "goodChoice": "",
+    "options": "",
+    "removeFromFavorites": "",
+    "saveChanges": "",
+    "searchByName": "",
+    "selected": "",
+    "total": "",
+    "welcomeUser": ""
+  },
+  "logout": "",
+  "settings": {
+    "changePassword": "",
+    "darkMode": "",
+    "darkThemes": "",
+    "emailAddress": "",
+    "errorUpload": "",
+    "firstName": "",
+    "language": "",
+    "lastName": "",
+    "lightMode": "",
+    "lightThemes": "",
+    "password": "",
+    "passwordConfirmation": "",
+    "profileSettings": "",
+    "uploadError": "",
+    "uploadProfilePicture": "",
+    "uploadSuccess": "",
+    "userInfosUpdated": ""
+  }
+}

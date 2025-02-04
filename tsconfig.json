@@ -31,6 +31,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/**/*",
+    "i18next-parser.config.cjs",
   ],
   "references": [
     {
