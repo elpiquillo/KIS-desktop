@@ -1,7 +1,6 @@
-import merge from 'lodash/merge';
-import { ApexOptions } from 'apexcharts';
-
 import { alpha, useTheme } from '@mui/material/styles';
+import { ApexOptions } from 'apexcharts';
+import merge from 'lodash/merge';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -162,18 +161,31 @@ export default function useChart(options?: ApexOptions) {
         },
       },
 
-      // Radialbar
       radialBar: {
+        ...options?.plotOptions?.radialBar,
+        hollow: {
+          margin: -8,
+          size: '100%',
+          ...options?.plotOptions?.radialBar?.hollow,
+        },
         track: {
-          strokeWidth: '100%',
+          margin: -8,
+          strokeWidth: '50%',
           background: alpha(theme.palette.grey[500], 0.16),
+          ...options?.plotOptions?.radialBar?.track,
         },
         dataLabels: {
-          value: LABEL_VALUE,
-          total: LABEL_TOTAL,
+          ...options?.plotOptions?.radialBar?.dataLabels,
+          value: {
+            ...LABEL_VALUE,
+            ...options?.plotOptions?.radialBar?.dataLabels?.value,
+          },
+          total: {
+            ...LABEL_TOTAL,
+            ...options?.plotOptions?.radialBar?.dataLabels?.total,
+          },
         },
       },
-
       // Radar
       radar: {
         polygons: {
