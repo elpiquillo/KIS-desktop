@@ -113,7 +113,6 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
         avatar_data: {
           id: appInfo.logo.id,
           storage: 'cache',
-          small_url: pictureUrlState,
           metadata: {
             filename: fileState?.name || '',
             mime_type: fileState?.type || 'image/jpeg',
@@ -404,9 +403,9 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
               },
             }}
           >
-            {profilePicture || user?.avatar_data ? (
+            {user?.avatar_data.url ? (
               <Avatar
-                src={profilePicture || user?.avatar_data.small_url}
+                src={user?.avatar_data.url}
                 alt="Profile Picture"
                 sx={{
                   width: 50,

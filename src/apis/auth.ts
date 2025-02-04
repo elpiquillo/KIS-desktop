@@ -1,11 +1,11 @@
 import useSWR from 'swr';
-import { UserInfos } from 'src/types/user-interface';
+import { IUserInfos, IUserInfosData, UserInfos } from 'src/types/user-interface';
 
 import { apiFetcher, apiFetcherRaw } from '../utils/fetchers';
 import { urls } from '../utils/urls';
 
 export function useValidateTokenApi() {
-  const { error, data, isLoading } = useSWR<{ data: UserInfos }>(
+  const { error, data, isLoading } = useSWR<{ data: IUserInfosData }>(
     urls.auth.validateToken,
     apiFetcher,
     {
@@ -31,7 +31,7 @@ export async function apiLogin(email: string, password: string) {
 
   return {
     raw: res,
-    json: (await res.json()).data as UserInfos,
+    json: (await res.json()).data as IUserInfos,
   };
 }
 

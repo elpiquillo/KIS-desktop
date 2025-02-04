@@ -20,6 +20,30 @@ export interface UserInfos {
   avatar_data: IUserAvatar;
 }
 
+export interface IUserInfosData {
+  id: string;
+  attributes: {
+    email: string;
+    first_name: string;
+    last_name: string;
+    avatar: IUserAvatar;
+    u_at: string;
+    c_at: string;
+  };
+  type: string;
+}
+
+export interface IUserInfos {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  avatar_data: IUserAvatar;
+  u_at: string;
+  c_at: string;
+  type: string;
+}
+
 export interface UserInfosUpdate {
   id: string;
   first_name: string;
@@ -41,5 +65,4 @@ interface IUserAvatar {
     mime_type: string;
   };
   url: string;
-  small_url: string;
 }

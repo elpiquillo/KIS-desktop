@@ -1,11 +1,25 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { IUserInfos } from 'src/types/user-interface';
 import { useValidateTokenApi } from '../apis/auth';
 import { paths } from '../routes/paths';
 import { useUserState } from '../store/userState';
 
 export function AuthHandler() {
   const { isLoading, data, isLoggued } = useValidateTokenApi();
+  const userInfosData = useMemo(
+    () => ({
+      id: data?.id || '',
+      type: data?.type || '',
+      email: data?.attributes.email || '',
+      avatar_data: data?.attributes.avatar,
+      c_at: data?.attributes.c_at || '',
+      u_at: data?.attributes.u_at || '',
+      first_name: data?.attributes.first_name || '',
+      last_name: data?.attributes.last_name || '',
+    }),
+    [data]
+  );
   const setTokenValidated = useUserState((s) => s.setTokenValidated);
   const tokenValidated = useUserState((s) => s.tokenValidated);
   const setUserInfos = useUserState((s) => s.setUserInfos);
@@ -23,7 +37,7 @@ export function AuthHandler() {
       }
     } else if (!isLoading && isLoggued) {
       setTokenValidated(true);
-      setUserInfos(data);
+      setUserInfos(userInfosData as IUserInfos);
     }
   }, [
     isLoading,
@@ -34,6 +48,7 @@ export function AuthHandler() {
     tokenValidated,
     setUserInfos,
     data,
+    userInfosData,
   ]);
 
   return null;

@@ -3,7 +3,12 @@ import { useEffect } from 'react';
 import useSWR from 'swr';
 
 import { useUserState } from 'src/store/userState';
-import { UserInfos, UserInfosUpdate, UserInfosUpdatePassword } from 'src/types/user-interface';
+import {
+  IUserInfos,
+  UserInfos,
+  UserInfosUpdate,
+  UserInfosUpdatePassword,
+} from 'src/types/user-interface';
 
 import { ApiError } from '../utils/apiErrors';
 import { apiFetcher } from '../utils/fetchers';
@@ -28,7 +33,7 @@ export function usePutUserInfos() {
         }),
       });
 
-      setUserInfos(res as UserInfos);
+      setUserInfos(res as IUserInfos);
     } catch (error: any) {
       throw new Error(t(`errors.${error.message}`));
     }

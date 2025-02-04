@@ -71,7 +71,7 @@ export default function AccountPopover() {
       >
         {user?.avatar_data ? (
           <Avatar
-            src={user?.avatar_data.id}
+            src={user?.avatar_data.url}
             alt="Profile Picture"
             sx={{
               width: 50,
