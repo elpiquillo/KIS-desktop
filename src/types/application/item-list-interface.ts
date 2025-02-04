@@ -10,20 +10,20 @@ export interface ItemListData {
     content: string;
     title: string;
   }[];
+  button_action: ButtonAction[];
+  queries: DataQuery[];
+  queries_dispatch: QueriesDispatch[];
   image?: {
     file_name: string;
     original: string;
     thumbnail: string;
   };
-  button_action: ButtonAction[];
-  queries: DataQuery[];
-  queries_dispatch: QueriesDispatch[];
 }
 
 export interface ItemListFinalData {
   card_title: string;
   description: string;
   card_content: ItemListData['card_content'];
-  image?: ItemListData['image'];
   button_action: ButtonAction[];
+  image?: ItemListData['image'];
 }

@@ -32,19 +32,11 @@ export type DataValue = DataValueFile | string | number;
 export interface InputFormData {
   title: string;
   type: string;
-  document_id?: any;
   fields: {
     name: string;
     label: string;
     title: string;
     value: DataValue;
-    file_name?: string;
-    alt?: string;
-    original?: string;
-    options?: {
-      name: string;
-      value: string;
-    }[];
     type: FieldType;
     validate: {
       required: {
@@ -52,10 +44,17 @@ export interface InputFormData {
         value: boolean;
         errorMessage: string;
       };
-      pattern?: ValidateContent;
       minLength: ValidateContent;
       maxLength: ValidateContent;
+      pattern?: ValidateContent;
     };
+    file_name?: string;
+    alt?: string;
+    original?: string;
+    options?: {
+      name: string;
+      value: string;
+    }[];
     condition?: {
       active: boolean;
       target: string;
@@ -74,6 +73,7 @@ export interface InputFormData {
   };
   queries: DataQuery[];
   queries_dispatch: QueriesDispatch[];
+  document_id?: any;
 }
 
 export type FieldData = InputFormData['fields'][number];
