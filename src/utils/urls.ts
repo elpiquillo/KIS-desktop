@@ -27,5 +27,9 @@ export const urls = {
   dashboardAcceses: {
     update: '/users/dashboard_accesses/',
   },
+  notifications: {
+    list: '/users/notifications',
+    delete: '/users/notifications/',
+  },
   profile: {},
 };
