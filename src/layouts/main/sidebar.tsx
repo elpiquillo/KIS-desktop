@@ -1,15 +1,12 @@
-
+import { Card, Stack } from '@mui/material';
 import Box, { BoxProps } from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-
 import { useGetDashboardAccessesAll } from 'src/apis/dashboard-access';
+import { useGetNotifications } from 'src/apis/notifications';
 import { NavAppSection } from 'src/components/nav-app-section';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
+import { useNotificationState } from 'src/store/notificationState';
 import { hideScroll } from 'src/theme/css';
-
 import { NAV } from '../config-layout';
-
 import AccountPopover from './account-popover';
 
 // ----------------------------------------------------------------------
@@ -18,9 +15,12 @@ export default function Sidebar({ sx }: BoxProps) {
   const applications = useDashboardAccessState((s) =>
     s.applications.filter((app) => app.id.display && app.favorite)
   );
+  const notifications = useNotificationState((state) => state.notifications);
+
   const { data } = useGetDashboardAccessesAll(
     applications === undefined || applications.length === 0
   );
+  const { data: dataNotifications } = useGetNotifications();
 
   return (
     <Card
@@ -47,7 +47,10 @@ export default function Sidebar({ sx }: BoxProps) {
           ...hideScroll.x,
         }}
       >
-        <NavAppSection applications={applications || data} />
+        <NavAppSection
+          applications={applications || data}
+          notifications={notifications || dataNotifications}
+        />
         <Box sx={{ flex: 1 }} />
         <Box sx={{ mx: 'auto' }}>
           <AccountPopover />

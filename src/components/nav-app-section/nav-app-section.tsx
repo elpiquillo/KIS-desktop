@@ -2,12 +2,14 @@ import { Avatar, Box, IconButton, Skeleton, Stack, Tooltip, useTheme } from '@mu
 import { useNavigate } from 'react-router-dom';
 import { useActiveLink } from 'src/routes/hooks';
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
+import { NotificationData } from 'src/types/notification-interface';
 
 interface NavAppSectionProps {
   applications: DashboardAccessInterface[];
+  notifications: NotificationData[];
 }
 
-export default function NavAppSection({ applications }: NavAppSectionProps) {
+export default function NavAppSection({ applications, notifications }: NavAppSectionProps) {
   const navigate = useNavigate();
   const theme = useTheme();
 
