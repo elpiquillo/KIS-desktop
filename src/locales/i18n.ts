@@ -1,8 +1,8 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { languages } from './config-lang';
-import en from './langs/en.json';
-import fr from './langs/fr.json';
+import en from './langs/en/translation.json';
+import fr from './langs/fr/translation.json';
 
 export type AvailableLangage = (typeof languages)[number];
 
