@@ -28,7 +28,7 @@ export default function NavAppSection({ applications }: NavAppSectionProps) {
   return applications
     .filter((app) => app.id.display)
     .map((app) => (
-      <Stack key={app.id.id} m="auto" mb={3}>
+      <Stack key={app.id.id} m="auto" mb={2}>
         <Box
           sx={{
             display: 'flex',
@@ -68,8 +68,8 @@ export default function NavAppSection({ applications }: NavAppSectionProps) {
             <IconButton
               key={app.id.id}
               sx={{
-                height: 35,
-                width: 35,
+                height: 38,
+                width: 38,
                 backgroundColor: theme.palette.background.neutral,
                 borderRadius: ActiveLink(app.id.id, false) ? 1 : 30,
                 outline: ActiveLink(app.id.id, false) ? '2px solid' : 'none',
