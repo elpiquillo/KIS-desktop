@@ -3,6 +3,7 @@ const { autoUpdater } = require('electron-updater');
 const path = require('path');
 
 let mainWindow;
+let isQuitting = false; // Flag to check if the app is quitting explicitly
 
 app.whenReady().then(() => {
   autoUpdater.checkForUpdatesAndNotify();
@@ -23,15 +24,22 @@ app.whenReady().then(() => {
   const startURL = `file://${path.join(__dirname, 'dist', 'index.html')}`;
   mainWindow.loadURL(startURL);
 
-  // Prevent window from closing, minimize instead (Windows/Linux) or hide (macOS)
+  // Prevent window from closing via the close button but allow quitting via Dock
   mainWindow.on('close', (event) => {
-    event.preventDefault(); // Prevent the window from closing
-    if (process.platform === 'darwin') {
-      mainWindow.hide(); // Hide the window on macOS
-    } else {
-      mainWindow.minimize(); // Minimize the window on Windows/Linux
+    if (!isQuitting) {
+      event.preventDefault();
+      if (process.platform === 'darwin') {
+        mainWindow.hide(); // Hide window on macOS
+      } else {
+        mainWindow.minimize(); // Minimize on Windows/Linux
+      }
     }
   });
+});
+
+// Detect when the user explicitly quits the app (Cmd + Q or "Quit" from Dock)
+app.on('before-quit', () => {
+  isQuitting = true;
 });
 
 // Ensure the app quits fully when all windows are closed (except on macOS)
