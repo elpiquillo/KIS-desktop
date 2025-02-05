@@ -19,8 +19,12 @@ import '../../assets/fonts/style.css';
 import useThemeStore from 'src/store/themeModeState';
 import { MenuItemData } from 'src/types/dashboard-menu-interface';
 import themesColor from 'src/utils/themes-color';
+import { useNotificationState } from 'src/store/notificationState';
+import { useSnackbar } from 'notistack';
+import { mockNotifications } from '../main/mockData';
 
 function ApplicationMenuSidebar() {
+  const { enqueueSnackbar } = useSnackbar();
   const { applicationId, pageId } = useParams();
   const navigate = useNavigate();
 
@@ -30,6 +34,7 @@ function ApplicationMenuSidebar() {
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)
   );
+  const notifications = useNotificationState((state) => state.notifications);
   const { isLoading } = useGetDashboardMenu({ dashboardId: applicationId });
   const { dashboardMenu } = useDashboardState();
 
@@ -43,6 +48,25 @@ function ApplicationMenuSidebar() {
       navigate(`/${applicationId}/${page?.menu_item_url.url}`);
     }
   }, [applicationId, dashboardMenu?.content, isLoading, navigate, pageId]);
+
+  useEffect(() => {
+    const notificationsForApp = mockNotifications?.filter(
+      (notification) => notification.app_id.$oid === applicationId
+    );
+    if (notificationsForApp?.length) {
+      notificationsForApp.forEach((notification) => {
+        enqueueSnackbar(notification.message, {
+          variant: 'extended',
+          title: notification.title,
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          autoHideDuration: null,
+          onClose: () => {
+            // console.log('Notification closed');
+          },
+        });
+      });
+    }
+  }, [applicationId, enqueueSnackbar]);
 
   const renderMenuItem = () =>
     !isLoading &&

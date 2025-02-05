@@ -1,12 +1,10 @@
 import { Button } from '@mui/material';
-
-import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import { t } from 'i18next';
 import { closeSnackbar, SnackbarProvider as NotistackProvider } from 'notistack';
 import { useRef } from 'react';
-
 import Iconify from '../iconify';
+import { SnackbarWithDescription } from './snackbar-with-description';
 import { StyledIcon, StyledNotistack } from './styles';
 
 // ----------------------------------------------------------------------
@@ -20,7 +18,7 @@ export default function SnackbarProvider({ children }: Props) {
 
   const notifsIcon = (snackbarId: any) => (
     <IconButton size="small" onClick={() => closeSnackbar(snackbarId)} sx={{ p: 0.5 }}>
-      <Iconify width={16} icon="mingcute:close-line" color="inherit"/>
+      <Iconify width={16} icon="mingcute:close-line" color="inherit" />
     </IconButton>
   );
 
@@ -73,6 +71,7 @@ export default function SnackbarProvider({ children }: Props) {
         success: StyledNotistack,
         warning: StyledNotistack,
         error: StyledNotistack,
+        extended: SnackbarWithDescription,
       }}
       // with close as default
       action={notifsButton}
