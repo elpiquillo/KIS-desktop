@@ -32,7 +32,6 @@ export function Router() {
     <BrowserRouter>
       <AuthHandler />
       <Routes>
-        <Route path="/home" element={<PageWrapper needAuth={false} element={<Home />} />} />
         <Route
           element={
             <AuthLayout image="https://cloud.getkis.io/static/media/bg-cloud.bcd18fb5446f2f6b04ed.png">
@@ -69,6 +68,7 @@ export function Router() {
               element={<PageWrapper needAuth element={<Applications />} />}
             />
           </Route>
+          <Route path="/home" element={<PageWrapper needAuth={false} element={<Home />} />} />
           <Route path="*" element={<PageWrapper needAuth={false} element={<Home />} />} />
         </Route>
       </Routes>
