@@ -25,11 +25,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     // OR using local (public folder)
     // -------------------------------------------------------
     const logo = (
-      <Box
-        component="img"
-        src="KIS_VERT.svg"
-        sx={{ width: 60, cursor: 'pointer', ...sx }}
-      />
+      <Box component="img" src="assets/logo.png" sx={{ width: 60, cursor: 'pointer', ...sx }} />
     );
 
     // const logo = (

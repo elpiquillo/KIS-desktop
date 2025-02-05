@@ -5,7 +5,7 @@
     "name": "Joachim SEBASTIA",
     "email": "joachim@getkis.io"
   },
-  "main": "./src/electron/electron.cjs",
+  "main": "electron.cjs",
   "homepage": "./",
   "private": true,
   "version": "0.0.1",
@@ -13,6 +13,11 @@
   "scripts": {
     "electron-dev": "electron .",
     "electron-dist": "electron-builder build --mac --publish always",
+    "electron-dist-win": "electron-builder build --win --publish always",
+    "electron-dist-linux": "electron-builder build --linux --publish always",
+    "electron-dist-all": "electron-builder build --mac --win --linux --publish always",
+    "electron-dist-all-no-publish": "electron-builder build --mac --win --linux",
+    "electron-dist-mac-no-publish": "npm run build && electron-builder build --mac",
     "dev": "vite",
     "build": "tsc && vite build",
     "format": "prettier --write src/**/*.ts{,x}",

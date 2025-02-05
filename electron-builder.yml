@@ -12,6 +12,7 @@ dmg:
 mac:
   category: working tool
   hardenedRuntime: true
+  icon: dist/assets/AppIcon.icns
 publish:
   provider: github
   owner: elpiquillo

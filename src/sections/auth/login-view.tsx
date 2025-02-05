@@ -1,19 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from "@mui/lab/LoadingButton";
-import { Button, IconButton, InputAdornment } from "@mui/material";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { t } from "i18next";
-import { useForm } from "react-hook-form";
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Button, IconButton, InputAdornment } from '@mui/material';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { t } from 'i18next';
+import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { useLogin } from 'src/auth/useLogin';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import Iconify from "src/components/iconify";
+import Iconify from 'src/components/iconify';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { RouterLink } from "src/routes/components";
-import { paths } from "src/routes/paths";
+import { RouterLink } from 'src/routes/components';
+import { paths } from 'src/routes/paths';
 
 export default function LoginView() {
   const password = useBoolean();
@@ -21,7 +21,7 @@ export default function LoginView() {
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required(t('global.emailRequired')).email(t('global.emailInvalid')),
-    password: Yup.string().required(t('auth.passwordRequired'))
+    password: Yup.string().required(t('auth.passwordRequired')),
   });
 
   const defaultValues = {
@@ -49,9 +49,7 @@ export default function LoginView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h4">
-        {t("auth.loginPage.title")}
-      </Typography>
+      <Typography variant="h4">{t('auth.loginPage.title')}</Typography>
     </Stack>
   );
 
@@ -67,7 +65,10 @@ export default function LoginView() {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={password.onToggle} edge="end">
-                <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} color='grey.400' />
+                <Iconify
+                  icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                  color="grey.400"
+                />
               </IconButton>
             </InputAdornment>
           ),
@@ -79,10 +80,10 @@ export default function LoginView() {
         component={RouterLink}
         size="small"
         href={paths.auth.forgotPassword}
-        color='success'
-        sx={{ alignSelf: 'flex-end', paddingTop: 0}}
+        color="success"
+        sx={{ alignSelf: 'flex-end', paddingTop: 0 }}
       >
-        {t("auth.loginPage.forgotPassword")}
+        {t('auth.loginPage.forgotPassword')}
       </Button>
 
       <LoadingButton
