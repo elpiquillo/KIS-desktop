@@ -1,4 +1,4 @@
-import { Box, Breadcrumbs, Typography } from '@mui/material';
+import { Box, Breadcrumbs, Link, Typography } from '@mui/material';
 import React from 'react';
 import { RouterLink } from 'src/routes/components';
 import { useParams } from 'src/routes/hooks';
@@ -32,15 +32,14 @@ export default function BreadcrumbView({ blockInfo }: Props) {
         }}
       >
         {data.right_links.map((link) => (
-          <Typography
+          <Link
             key={link.id}
-            variant="body2"
-            sx={{ color: 'success.main' }}
+            color="ButtonText"
             component={RouterLink}
             href={`${paths.main.root}${applicationId}/${link.page_link}`}
           >
             {link.page_name}
-          </Typography>
+          </Link>
         ))}
       </Breadcrumbs>
     </Box>
