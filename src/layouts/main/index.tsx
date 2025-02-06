@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
 
-
+import { useResponsive } from 'src/hooks/use-responsive';
 import { useSidebarState } from 'src/store/sidebarState';
 
 import Header from './header';
@@ -15,8 +15,9 @@ type Props = {
 
 export default function MainLayout({ children }: Props) {
   const { sidebarOpen } = useSidebarState();
-
+  const lgUp = useResponsive('up', 'lg');
   const [boxHeight, setBoxHeight] = useState('100vh');
+
   useEffect(() => {
     const updateHeight = () => {
       const headerHeight = document.getElementById('header')?.offsetHeight || 0;
@@ -45,10 +46,10 @@ export default function MainLayout({ children }: Props) {
         sx={{
           display: 'flex',
           flex: 1, // Take remaining space after Header
-          flexDirection: { xs: 'column', lg: 'row' },
+          flexDirection: 'row',
         }}
       >
-        {sidebarOpen && (
+        {lgUp && sidebarOpen && (
           <Sidebar
             sx={{
               background: 'none',

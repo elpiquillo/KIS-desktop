@@ -6,7 +6,6 @@ import 'simplebar-react/dist/simplebar.min.css';
 import { useResponsive } from 'src/hooks/use-responsive';
 import { useSidebarState } from 'src/store/sidebarState';
 
-
 import { NAV, HEADER } from '../config-layout';
 
 // ----------------------------------------------------------------------

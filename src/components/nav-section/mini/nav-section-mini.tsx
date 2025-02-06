@@ -1,7 +1,6 @@
 import Stack from '@mui/material/Stack';
 import { memo } from 'react';
 
-
 import NavList from './nav-list';
 import { NavProps, NavGroupProps } from '../types';
 

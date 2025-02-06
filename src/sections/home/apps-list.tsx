@@ -1,8 +1,9 @@
-import { Card, CardHeader, Stack } from '@mui/material';
+import { Box, Card, CardHeader, Stack } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Children } from 'react';
 import SimpleBar from 'simplebar-react';
 import { ApplicationCards, ApplicationCardSkeleton } from 'src/components/application-cards';
+import { useResponsive } from 'src/hooks/use-responsive';
 import DashboardAccessInterface from 'src/types/dashboard-access-interface';
 
 import { applyFilter, removeAccents } from 'src/utils/applyFilter';
@@ -50,6 +51,7 @@ export default function ApplicationsList({
   });
 
   const sortedApplications = sortApplicationsByFavorite(applicationFiltered);
+  const lgUp = useResponsive('up', 'lg');
 
   return (
     <Card {...getTestId('applications-list-container')} sx={{ height: '100%' }}>
@@ -66,8 +68,9 @@ export default function ApplicationsList({
             </motion.div>
           </Stack>
         }
-        action={headerActions}
+        action={lgUp && headerActions}
       />
+      {!lgUp && <Box sx={{ px: 3, pb: 2, pt: 1 }}>{headerActions}</Box>}
       <SimpleBar style={{ maxHeight: 'calc(100vh - 100px)' }}>
         {loading && <ApplicationCardSkeleton numberOfCards={5} />}
         <ApplicationCards applications={sortedApplications} />

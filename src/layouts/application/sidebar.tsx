@@ -9,8 +9,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleBar from 'simplebar-react';
 import { useGetDashboardMenu } from 'src/apis/dashboard-menu';
-import Iconify from 'src/components/iconify';
+import AppNameChip from 'src/components/app-name-chip/app-name-chip';
 import NavItem from 'src/components/nav-section/mini/nav-item';
+
 import { useActiveLink, useParams } from 'src/routes/hooks';
 import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
@@ -19,6 +20,7 @@ import '../../assets/fonts/style.css';
 import useThemeStore from 'src/store/themeModeState';
 import { MenuItemData } from 'src/types/dashboard-menu-interface';
 import themesColor from 'src/utils/themes-color';
+import CollapseMenuButton from './collapseMenuButton';
 
 function ApplicationMenuSidebar() {
   const { applicationId, pageId } = useParams();
@@ -32,7 +34,6 @@ function ApplicationMenuSidebar() {
   );
   const { isLoading } = useGetDashboardMenu({ dashboardId: applicationId });
   const { dashboardMenu } = useDashboardState();
-
   const { setCollapseAppMenu, collapseAppMenu } = useCollapseDashboardMenu();
 
   const ActiveLink = (url: string) => useActiveLink(url, true);
@@ -162,54 +163,12 @@ function ApplicationMenuSidebar() {
                   }}
                 >
                   {!collapseAppMenu && (
-                    <Chip
-                      color="default"
-                      variant="outlined"
-                      sx={{
-                        maxWidth: 'calc(100% - 40px)',
-                      }}
-                      avatar={
-                        <Avatar
-                          variant="square"
-                          alt={application?.name}
-                          src={application?.logo}
-                          sx={{ background: theme.palette.background.paper }}
-                        />
-                      }
-                      label={
-                        <Typography
-                          variant="body2"
-                          noWrap
-                          sx={{
-                            maxWidth: '130px', // Set a maximum width for the text
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: 'block',
-                          }}
-                        >
-                          {application?.name}
-                        </Typography>
-                      }
+                    <AppNameChip
+                      application_name={application?.name || ''}
+                      application_logo={application?.logo || ''}
                     />
                   )}
-                  <IconButton
-                    size="small"
-                    sx={{
-                      border: 1,
-                      borderColor: 'divider',
-                      borderRadius: 1,
-                      ml: 1,
-                    }}
-                    aria-label="collapse applications menu"
-                    onClick={() => {
-                      setCollapseAppMenu(!collapseAppMenu);
-                    }}
-                  >
-                    <Iconify
-                      icon={collapseAppMenu ? 'mdi:chevron-right' : 'mdi:chevron-left'}
-                      color={theme.palette.text.primary}
-                    />
-                  </IconButton>
+                  <CollapseMenuButton />
                 </Box>
               }
             />

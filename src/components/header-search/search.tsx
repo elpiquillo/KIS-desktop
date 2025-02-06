@@ -2,6 +2,7 @@ import { Input, alpha } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Iconify from 'src/components/iconify';
 import { useDebounce } from 'src/hooks/use-debounce';
+import { useResponsive } from 'src/hooks/use-responsive';
 import { grey } from 'src/theme/palette';
 import { getTestId } from 'src/utils/data-test-id.helper';
 
@@ -17,6 +18,7 @@ export default function HeaderSearch({
   onSubmit,
 }: HeaderSearchProps) {
   const [value, setValue] = useState('');
+  const lgUp = useResponsive('up', 'lg');
 
   const debouncedValue = useDebounce(value, 500);
 
@@ -44,7 +46,8 @@ export default function HeaderSearch({
         />
       }
       sx={{
-        width: '280px',
+        height: 40,
+        width: lgUp ? 280 : '100%',
         border: 1,
         borderColor: alpha(grey[500], 0.2),
         borderRadius: 1,

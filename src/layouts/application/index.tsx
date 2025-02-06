@@ -1,11 +1,14 @@
 import { Box, Card, CardHeader, Grid, useTheme } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import Label from 'src/components/label';
+
+import { useResponsive } from 'src/hooks/use-responsive';
 import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 
 import { useDashboardState } from 'src/store/dashboardState';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
 
+import CollapseMenuButton from './collapseMenuButton';
 import ApplicationMenuSidebar from './sidebar';
 
 type Props = {
@@ -14,6 +17,8 @@ type Props = {
 
 export default function ApplicationLayout({ children }: Props) {
   const theme = useTheme();
+  const lgUp = useResponsive('up', 'lg');
+
   const { paletteMode } = useThemeMode();
   const { collapseAppMenu } = useCollapseDashboardMenu();
 
@@ -29,12 +34,12 @@ export default function ApplicationLayout({ children }: Props) {
       height="100%"
       maxWidth="100vw"
     >
-      <ApplicationMenuSidebar />
+      {lgUp && <ApplicationMenuSidebar />}
       <Card
         sx={{
           width: collapseAppMenu ? '100%' : 'calc(100% - 200px)',
           maxWidth: '100vw',
-          ml: -2,
+          ml: lgUp ? -2 : 0,
           background:
             paletteMode === 'light' ? theme.palette.background.paper : theme.palette.grey[900],
           border: 'none',
@@ -50,6 +55,7 @@ export default function ApplicationLayout({ children }: Props) {
           }}
           title={
             <Box>
+              {!lgUp && <CollapseMenuButton />}
               {/* <Typography variant="button">Actions fréquentes</Typography>&nbsp;
               <Label title={pageName} mr={1} variant="soft">
                 Voir les Pays
