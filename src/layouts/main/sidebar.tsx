@@ -8,7 +8,6 @@ import { useNotificationState } from 'src/store/notificationState';
 import { hideScroll } from 'src/theme/css';
 import { NAV } from '../config-layout';
 import AccountPopover from './account-popover';
-import { mockNotifications } from './mockData';
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +47,10 @@ export default function Sidebar({ sx }: BoxProps) {
           ...hideScroll.x,
         }}
       >
-        <NavAppSection applications={applications || data} notifications={mockNotifications} />
+        <NavAppSection
+          applications={applications || data}
+          notifications={notifications || dataNotifications}
+        />
         <Box sx={{ flex: 1 }} />
         <Box sx={{ mx: 'auto' }}>
           <AccountPopover />

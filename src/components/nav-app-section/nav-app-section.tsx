@@ -14,7 +14,7 @@ export default function NavAppSection({ applications, notifications }: NavAppSec
   const theme = useTheme();
 
   const getCountNotifications = (appId: string) =>
-    notifications.reduce((n, notification) => n + Number(notification.app_id.$oid === appId), 0);
+    notifications?.reduce((n, notification) => n + Number(notification.app_id.$oid === appId), 0);
 
   function ActiveLink(path: string, exact: boolean) {
     return useActiveLink(path, exact);
