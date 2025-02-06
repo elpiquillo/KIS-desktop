@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { closeSnackbar, CustomContentProps, SnackbarContent } from 'notistack';
 import { Box, Card, CardContent, Collapse, IconButton, Typography, useTheme } from '@mui/material';
+import { closeSnackbar, CustomContentProps, SnackbarContent } from 'notistack';
+import React, { useState } from 'react';
 import Iconify from '../iconify';
 
 interface SnackbarWithDescriptionProps extends CustomContentProps {

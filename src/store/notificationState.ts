@@ -1,5 +1,5 @@
-import { NotificationData } from 'src/types/notification-interface';
 import { create } from 'zustand';
+import { NotificationData } from 'src/types/notification-interface';
 
 interface NotificationState {
   notifications?: NotificationData[];
