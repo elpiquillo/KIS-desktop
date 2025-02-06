@@ -1,6 +1,7 @@
 import { useSnackbar } from 'notistack';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { IUserInfos } from 'src/types/user-interface';
 import { apiLogin } from '../apis/auth';
 import { AuthToken, useUserState } from '../store/userState';
 
@@ -30,7 +31,17 @@ export function useLogin() {
 
       useUserState.getState().setAuth(auth);
       useUserState.getState().setTokenValidated(true);
-      useUserState.getState().setUserInfos(res.json);
+      const user: IUserInfos = {
+        id: res.json.id,
+        email: res.json.attributes.email,
+        first_name: res.json.attributes.first_name,
+        last_name: res.json.attributes.last_name,
+        avatar_data: res.json.attributes.avatar,
+        u_at: res.json.attributes.u_at,
+        c_at: res.json.attributes.c_at,
+        type: res.json.type,
+      };
+      useUserState.getState().setUserInfos(user);
 
       navigate({ pathname: location.state?.from || '/home' });
     } catch (err) {

@@ -16,14 +16,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import AwsS3, { type AwsBody } from '@uppy/aws-s3';
-import Uppy from '@uppy/core';
 import i18next, { t } from 'i18next';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
-import { usePutPassword, usePutUserInfos } from 'src/apis/account';
+import { usePutPassword, usePutUserInfos, useUppyToUpdateProfilePicture } from 'src/apis/account';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -51,7 +49,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
   const { putPassword } = usePutPassword();
   const { paletteMode, togglePaletteMode } = useThemeMode();
   const { enqueueSnackbar } = useSnackbar();
-
+  const uppy = useUppyToUpdateProfilePicture();
   const { setThemeName } = useThemeStore();
   const { setUserInfos } = useUserState();
 
@@ -320,13 +318,6 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
     ));
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const uppy = new Uppy<Meta, AwsBody>({ autoProceed: true }).use(AwsS3, {
-      endpoint: `${process.env.REACT_APP_API_BASE_URL}/users`,
-      headers: {
-        Authorization: `${localStorage.getItem('authorization')}`,
-      },
-    });
-
     const file = event.target.files?.[0];
     if (file) {
       setFileUploading(true);
@@ -425,7 +416,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
               },
             }}
           >
-            <input type="file" hidden onChange={handleImageUpload} />
+            <input type="file" accept="image/*" hidden onChange={handleImageUpload} />
 
             <Avatar
               src={user?.avatar_data?.url}
@@ -466,7 +457,7 @@ export function AccountSettingsModal({ open, onClose }: ModalProps) {
             disabled={fileUploading}
           >
             {fileUploading ? t('settings.uploading') : t('settings.uploadProfilePicture')}
-            <input type="file" hidden onChange={handleImageUpload} />
+            <input type="file" accept="image/*" hidden onChange={handleImageUpload} />
           </Button>
         </Box>
         <Divider sx={{ my: 2 }} />
