@@ -15,8 +15,10 @@ export default function AppNameChip({
     <Chip
       variant={lgUp ? 'outlined' : 'filled'}
       sx={{
-        backgroundColor: lgUp ? 'none' : alpha(theme.palette.background.default, 0.3),
         maxWidth: 'calc(100% - 40px)',
+        ...(!lgUp && {
+          backgroundColor: alpha(theme.palette.background.default, 0.3),
+        }),
       }}
       avatar={
         <Avatar

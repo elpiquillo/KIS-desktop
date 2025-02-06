@@ -12,6 +12,8 @@ import { useGetDashboardMenu } from 'src/apis/dashboard-menu';
 import AppNameChip from 'src/components/app-name-chip/app-name-chip';
 import NavItem from 'src/components/nav-section/mini/nav-item';
 
+import { useResponsive } from 'src/hooks/use-responsive';
+
 import { useActiveLink, useParams } from 'src/routes/hooks';
 import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
@@ -25,7 +27,7 @@ import CollapseMenuButton from './collapseMenuButton';
 function ApplicationMenuSidebar() {
   const { applicationId, pageId } = useParams();
   const navigate = useNavigate();
-
+  const lgUp = useResponsive('up', 'lg');
   const { themeName } = useThemeStore();
 
   const theme = useTheme();
@@ -104,6 +106,7 @@ function ApplicationMenuSidebar() {
 
         return (
           <NavItem
+            onClick={() => !lgUp && setCollapseAppMenu(true)}
             key={menuItemUrl.text}
             title={menuItemUrl.text}
             path={`${applicationId}/${menuItemUrl.url}`}
@@ -139,9 +142,29 @@ function ApplicationMenuSidebar() {
         background: alpha(theme.palette.background.paper, 0.6),
         width: collapseAppMenu ? 80 : 300,
         transition: 'width 0.3s ease-in-out',
+        ...(lgUp
+          ? {}
+          : {
+              transition: 'none',
+              width: collapseAppMenu ? 0 : '100%',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              height: '100vh',
+              zIndex: 9999, // Ensure it's above other elements
+              backdropFilter: 'blur(10px)', // Optional to match existing design
+            }),
       }}
     >
-      <Card sx={{ height: '100%', background: 'none', border: 'none', pr: 2 }}>
+      <Card
+        sx={{
+          height: '100%',
+          background: 'none',
+          border: 'none',
+          pr: 2,
+          ...(!lgUp && { pr: 0, borderRadius: 0 }),
+        }}
+      >
         <SimpleBar style={{ maxHeight: 'calc(100vh - 64px)', overflowX: 'hidden', flex: 1 }}>
           <Box
             sx={{

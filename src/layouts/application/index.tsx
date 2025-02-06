@@ -8,7 +8,6 @@ import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 import { useDashboardState } from 'src/store/dashboardState';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
 
-import CollapseMenuButton from './collapseMenuButton';
 import ApplicationMenuSidebar from './sidebar';
 
 type Props = {
@@ -34,10 +33,10 @@ export default function ApplicationLayout({ children }: Props) {
       height="100%"
       maxWidth="100vw"
     >
-      {lgUp && <ApplicationMenuSidebar />}
+      <ApplicationMenuSidebar />
       <Card
         sx={{
-          width: collapseAppMenu ? '100%' : 'calc(100% - 200px)',
+          width: collapseAppMenu || !lgUp ? '100%' : 'calc(100% - 200px)',
           maxWidth: '100vw',
           ml: lgUp ? -2 : 0,
           background:
@@ -55,7 +54,6 @@ export default function ApplicationLayout({ children }: Props) {
           }}
           title={
             <Box>
-              {!lgUp && <CollapseMenuButton />}
               {/* <Typography variant="button">Actions fréquentes</Typography>&nbsp;
               <Label title={pageName} mr={1} variant="soft">
                 Voir les Pays

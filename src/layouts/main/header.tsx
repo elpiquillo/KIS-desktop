@@ -1,17 +1,26 @@
 import { Avatar, Divider, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import AppNameChip from 'src/components/app-name-chip/app-name-chip';
 import Iconify from 'src/components/iconify';
 
 import { useResponsive } from 'src/hooks/use-responsive';
+import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
+import { useDashboardAccessState } from 'src/store/dashboardAccessState';
+
 import { useSidebarState } from 'src/store/sidebarState';
+
 import AccountPopover from './account-popover';
 
 export default function Header() {
   const { sidebarOpen, setSidebarOpen } = useSidebarState();
   const lgUp = useResponsive('up', 'lg');
+  const { setCollapseAppMenu, collapseAppMenu } = useCollapseDashboardMenu();
+  const { applicationId, pageId } = useParams();
+  const application = useDashboardAccessState((state) =>
+    state.applications.find((app) => app.id.id === applicationId)
+  );
 
   const handleToggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -79,26 +88,29 @@ export default function Header() {
   return (
     <Box id="header" width="100%" sx={{ mt: 0.5 }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton
-          sx={{
-            ml: 1,
-            WebkitAppRegion: 'no-drag',
-            '&:focus, &:focus-visible': {
-              outline: 'none',
-              backgroundColor: 'transparent',
-            },
-          }}
-          aria-label="collapse applications menu"
-          onClick={() => handleToggleSidebar()}
-        >
-          <Iconify
-            icon={sidebarOpen ? 'hugeicons:sidebar-left-01' : 'hugeicons:sidebar-left'}
-            color={(theme) => theme.palette.text.primary}
-            width={25}
-          />
-        </IconButton>
+        {application && (
+          <IconButton
+            sx={{
+              borderRadius: 1,
+              ml: 1,
+              mr: 1,
+            }}
+            aria-label="collapse applications menu"
+            onClick={() => {
+              setCollapseAppMenu(!collapseAppMenu);
+            }}
+          >
+            <Iconify
+              icon={sidebarOpen ? 'hugeicons:sidebar-left-01' : 'hugeicons:sidebar-left'}
+              color={(theme) => theme.palette.text.primary}
+              width={28}
+            />
+          </IconButton>
+        )}
 
-        <AppNameChip application_name="Application Name" application_logo="/static/logo.svg" />
+        {application && (
+          <AppNameChip application_name={application.name} application_logo={application.logo} />
+        )}
 
         <Box sx={{ ml: 'auto', mr: 1 }}>
           <IconButton
