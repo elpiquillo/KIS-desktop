@@ -1,12 +1,10 @@
-const { app, BrowserWindow, protocol } = require('electron');
+const { app, BrowserWindow, protocol, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const path = require('path');
 
 let mainWindow;
-let isQuitting = false; // Flag to check if the app is quitting explicitly
 
 app.whenReady().then(() => {
-  autoUpdater.checkForUpdatesAndNotify();
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, 'dist', 'assets', 'AppIcon.icns'),
     width: 1280,
@@ -21,35 +19,31 @@ app.whenReady().then(() => {
     },
   });
 
-  const startURL = `file://${path.join(__dirname, 'dist', 'index.html')}`;
+  const startURL = `file://${path.resolve(__dirname, 'dist', 'index.html')}`;
   mainWindow.loadURL(startURL);
 
-  // Prevent window from closing via the close button but allow quitting via Dock
+  // Check for updates
+  autoUpdater.checkForUpdatesAndNotify();
+
+  // Handle window close event
   mainWindow.on('close', (event) => {
-    if (!isQuitting) {
-      event.preventDefault();
-      if (process.platform === 'darwin') {
-        mainWindow.hide(); // Hide window on macOS
-      } else {
-        mainWindow.minimize(); // Minimize on Windows/Linux
-      }
+    event.preventDefault();
+    if (process.platform === 'darwin') {
+      mainWindow.hide();
+    } else {
+      mainWindow.minimize();
     }
   });
+
+  setupAutoUpdater();
 });
 
-// Detect when the user explicitly quits the app (Cmd + Q or "Quit" from Dock)
-app.on('before-quit', () => {
-  isQuitting = true;
-});
-
-// Ensure the app quits fully when all windows are closed (except on macOS)
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-// Reopen the window if the user clicks on the app icon (macOS behavior)
 app.on('activate', () => {
   if (mainWindow.isDestroyed()) {
     mainWindow = new BrowserWindow({
@@ -70,3 +64,48 @@ app.on('activate', () => {
     mainWindow.show();
   }
 });
+
+/**
+ * Function to handle updates with electron-updater
+ */
+function setupAutoUpdater() {
+  autoUpdater.autoDownload = true; // Set to true if you want to download updates automatically
+
+  // Listen for update availability
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Available',
+      message: 'A new update is available. Downloading now...',
+    });
+  });
+
+  // Listen for update download completion
+  autoUpdater.on('update-downloaded', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Ready',
+      message: 'A new update has been downloaded. Restart the app to apply the update?',
+      buttons: ['Restart', 'Later'],
+    }).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall(); // Restart app and install update
+      }
+    });
+  });
+
+  // Listen for errors
+  autoUpdater.on('error', (error) => {
+    console.error('Update Error:', error);
+    dialog.showMessageBox({
+      type: 'error',
+      title: 'Update Error',
+      message: `Failed to update: ${error.message}`,
+    });
+  });
+
+  // Periodically check for updates (every 30 minutes)
+  setInterval(() => {
+    autoUpdater.checkForUpdates();
+  }, 30 * 60 * 1000);
+}
