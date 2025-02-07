@@ -1,7 +1,5 @@
-import { Box } from '@mui/material';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
-
 
 import { useGetDashboardAccessesAll } from 'src/apis/dashboard-access';
 import HeaderSearch from 'src/components/header-search';
@@ -33,13 +31,11 @@ export default function HomeView() {
       loading={dashboardStateData.length > 0 ? false : isLoading}
       searchValue={searchValue}
       headerActions={
-        <Box sx={{ display: 'flex', gap: '10px' }}>
-          <HeaderSearch
-            value={searchValue}
-            placeholder={t('global.searchByName')}
-            onSubmit={setSearchValue}
-          />
-        </Box>
+        <HeaderSearch
+          value={searchValue}
+          placeholder={t('global.searchByName')}
+          onSubmit={setSearchValue}
+        />
       }
     />
   );

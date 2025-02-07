@@ -1,4 +1,4 @@
-import { alpha, Avatar, Card, Chip, IconButton, Tooltip, useTheme } from '@mui/material';
+import { alpha, Card, Tooltip, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
@@ -11,8 +11,12 @@ import { useNavigate } from 'react-router-dom';
 import SimpleBar from 'simplebar-react';
 import { useGetDashboardMenu } from 'src/apis/dashboard-menu';
 import { useDeleteNotification } from 'src/apis/notifications';
-import Iconify from 'src/components/iconify';
+
+import AppNameChip from 'src/components/app-name-chip/app-name-chip';
 import NavItem from 'src/components/nav-section/mini/nav-item';
+
+import { useResponsive } from 'src/hooks/use-responsive';
+
 import { useActiveLink, useParams } from 'src/routes/hooks';
 import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
@@ -21,6 +25,7 @@ import { useNotificationState } from 'src/store/notificationState';
 import useThemeStore from 'src/store/themeModeState';
 import { MenuItemData } from 'src/types/dashboard-menu-interface';
 import themesColor from 'src/utils/themes-color';
+import CollapseMenuButton from './collapseMenuButton';
 import '../../assets/fonts/style.css';
 
 function ApplicationMenuSidebar() {
@@ -28,7 +33,7 @@ function ApplicationMenuSidebar() {
   const { enqueueSnackbar } = useSnackbar();
   const { applicationId, pageId } = useParams();
   const navigate = useNavigate();
-
+  const lgUp = useResponsive('up', 'lg');
   const { themeName } = useThemeStore();
   const { collapseAppMenu, setCollapseAppMenu } = useCollapseDashboardMenu();
 
@@ -131,6 +136,7 @@ function ApplicationMenuSidebar() {
 
         return (
           <NavItem
+            onClick={() => !lgUp && setCollapseAppMenu(true)}
             key={menuItemUrl.text}
             title={menuItemUrl.text}
             path={`${applicationId}/${menuItemUrl.url}`}
@@ -166,9 +172,29 @@ function ApplicationMenuSidebar() {
         background: alpha(theme.palette.background.paper, 0.6),
         width: collapseAppMenu ? 80 : 300,
         transition: 'width 0.3s ease-in-out',
+        ...(lgUp
+          ? {}
+          : {
+              transition: 'none',
+              width: collapseAppMenu ? 0 : '100%',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              height: '100vh',
+              zIndex: 9999, // Ensure it's above other elements
+              backdropFilter: 'blur(10px)', // Optional to match existing design
+            }),
       }}
     >
-      <Card sx={{ height: '100%', background: 'none', border: 'none', pr: 2 }}>
+      <Card
+        sx={{
+          height: '100%',
+          background: 'none',
+          border: 'none',
+          pr: 2,
+          ...(!lgUp && { pr: 0, borderRadius: 0 }),
+        }}
+      >
         <SimpleBar style={{ maxHeight: 'calc(100vh - 64px)', overflowX: 'hidden', flex: 1 }}>
           <Box
             sx={{
@@ -190,54 +216,12 @@ function ApplicationMenuSidebar() {
                   }}
                 >
                   {!collapseAppMenu && (
-                    <Chip
-                      color="default"
-                      variant="outlined"
-                      sx={{
-                        maxWidth: 'calc(100% - 40px)',
-                      }}
-                      avatar={
-                        <Avatar
-                          variant="square"
-                          alt={application?.name}
-                          src={application?.logo}
-                          sx={{ background: theme.palette.background.paper }}
-                        />
-                      }
-                      label={
-                        <Typography
-                          variant="body2"
-                          noWrap
-                          sx={{
-                            maxWidth: '130px', // Set a maximum width for the text
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: 'block',
-                          }}
-                        >
-                          {application?.name}
-                        </Typography>
-                      }
+                    <AppNameChip
+                      application_name={application?.name || ''}
+                      application_logo={application?.logo || ''}
                     />
                   )}
-                  <IconButton
-                    size="small"
-                    sx={{
-                      border: 1,
-                      borderColor: 'divider',
-                      borderRadius: 1,
-                      ml: 1,
-                    }}
-                    aria-label="collapse applications menu"
-                    onClick={() => {
-                      setCollapseAppMenu(!collapseAppMenu);
-                    }}
-                  >
-                    <Iconify
-                      icon={collapseAppMenu ? 'mdi:chevron-right' : 'mdi:chevron-left'}
-                      color={theme.palette.text.primary}
-                    />
-                  </IconButton>
+                  <CollapseMenuButton />
                 </Box>
               }
             />
