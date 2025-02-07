@@ -10,8 +10,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleBar from 'simplebar-react';
 import { useGetDashboardMenu } from 'src/apis/dashboard-menu';
-import AppNameChip from 'src/components/app-name-chip/app-name-chip';
 import { useDeleteNotification } from 'src/apis/notifications';
+
+import AppNameChip from 'src/components/app-name-chip/app-name-chip';
 import NavItem from 'src/components/nav-section/mini/nav-item';
 
 import { useResponsive } from 'src/hooks/use-responsive';
@@ -39,7 +40,6 @@ function ApplicationMenuSidebar() {
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)
   );
-  const { setCollapseAppMenu, collapseAppMenu } = useCollapseDashboardMenu();
   const dashboardMenu = useDashboardState((state) => state.dashboardMenu);
   const notifications = useNotificationState((state) => state.notifications);
 
