@@ -18,6 +18,13 @@ export default function AppNameChip({
         maxWidth: 'calc(100% - 40px)',
         ...(!lgUp && {
           backgroundColor: alpha(theme.palette.background.default, 0.3),
+          textAlign: 'left',
+          justifyContent: 'flex-start',
+          pl: 0.5,
+          ml: 1,
+          width: 'calc(100vw - 130px)',
+          alignContent: 'left',
+          height: 40,
         }),
       }}
       avatar={
