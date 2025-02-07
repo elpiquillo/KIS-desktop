@@ -31,7 +31,7 @@ export async function apiLogin(email: string, password: string) {
 
   return {
     raw: res,
-    json: (await res.json()).data as IUserInfos,
+    json: (await res.json()).data,
   };
 }
 

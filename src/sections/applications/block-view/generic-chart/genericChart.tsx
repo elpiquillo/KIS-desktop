@@ -29,15 +29,18 @@ export function GenericChartView({ blockInfo, handleGetHandlers }: Props) {
   });
 
   const total = useMemo(
-    () => finalData.series.reduce((acc: number, cur) => acc + cur.value, 0),
+    () => finalData.series?.reduce((acc: number, cur) => acc + cur.value, 0),
     [finalData.series]
   );
   const chartCategories = useMemo(
-    () => finalData.series.map((item) => `${item.label} (${item.value})`),
+    () => finalData.series?.map((item) => `${item.label} (${item.value})`),
     [finalData.series]
   );
-  const chartColors = useMemo(() => finalData.series.map((item) => item.color), [finalData.series]);
-  const chartSeries = finalData.series.map((item) => item.value);
+  const chartColors = useMemo(
+    () => finalData.series?.map((item) => item.color),
+    [finalData.series]
+  );
+  const chartSeries = finalData.series?.map((item) => item.value);
 
   const chartOptionsByComponentType = useMemo(() => {
     let partialOptions = {

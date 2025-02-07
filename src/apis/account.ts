@@ -1,6 +1,6 @@
+import AwsS3, { type AwsBody } from '@uppy/aws-s3';
+import Uppy, { Meta } from '@uppy/core';
 import { t } from 'i18next';
-import { useEffect } from 'react';
-import useSWR from 'swr';
 
 import { useUserState } from 'src/store/userState';
 import {
@@ -58,4 +58,14 @@ export function usePutPassword() {
   };
 
   return { putPassword };
+}
+
+export function useUppyToUpdateProfilePicture() {
+  const uppy = new Uppy<Meta, AwsBody>({ autoProceed: true }).use(AwsS3, {
+    endpoint: `${process.env.REACT_APP_API_BASE_URL}/users`,
+    headers: {
+      Authorization: `${localStorage.getItem('authorization')}`,
+    },
+  });
+  return uppy;
 }

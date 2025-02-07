@@ -1,15 +1,17 @@
-import { alpha, Avatar, Card, Chip, Divider, IconButton, Tooltip, useTheme } from '@mui/material';
+import { alpha, Card, Tooltip, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
+import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleBar from 'simplebar-react';
 import { useGetDashboardMenu } from 'src/apis/dashboard-menu';
 import AppNameChip from 'src/components/app-name-chip/app-name-chip';
+import { useDeleteNotification } from 'src/apis/notifications';
 import NavItem from 'src/components/nav-section/mini/nav-item';
 
 import { useResponsive } from 'src/hooks/use-responsive';
@@ -18,27 +20,37 @@ import { useActiveLink, useParams } from 'src/routes/hooks';
 import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
 import { useDashboardState } from 'src/store/dashboardState';
-import '../../assets/fonts/style.css';
+import { useNotificationState } from 'src/store/notificationState';
 import useThemeStore from 'src/store/themeModeState';
 import { MenuItemData } from 'src/types/dashboard-menu-interface';
 import themesColor from 'src/utils/themes-color';
 import CollapseMenuButton from './collapseMenuButton';
+import '../../assets/fonts/style.css';
 
 function ApplicationMenuSidebar() {
+  const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
   const { applicationId, pageId } = useParams();
   const navigate = useNavigate();
   const lgUp = useResponsive('up', 'lg');
   const { themeName } = useThemeStore();
+  const { collapseAppMenu, setCollapseAppMenu } = useCollapseDashboardMenu();
 
-  const theme = useTheme();
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)
   );
-  const { isLoading } = useGetDashboardMenu({ dashboardId: applicationId });
-  const { dashboardMenu } = useDashboardState();
   const { setCollapseAppMenu, collapseAppMenu } = useCollapseDashboardMenu();
+  const dashboardMenu = useDashboardState((state) => state.dashboardMenu);
+  const notifications = useNotificationState((state) => state.notifications);
+
+  const { isLoading } = useGetDashboardMenu({ dashboardId: applicationId });
+  const { deleteNotification } = useDeleteNotification();
 
   const ActiveLink = (url: string) => useActiveLink(url, true);
+
+  const handleCloseSnackbar = (id: string) => () => {
+    deleteNotification({ id });
+  };
 
   useEffect(() => {
     if (!pageId && !isLoading && dashboardMenu?.content && dashboardMenu.content.length > 0) {
@@ -46,6 +58,24 @@ function ApplicationMenuSidebar() {
       navigate(`/${applicationId}/${page?.menu_item_url.url}`);
     }
   }, [applicationId, dashboardMenu?.content, isLoading, navigate, pageId]);
+
+  useEffect(() => {
+    const notificationsForApp = notifications?.filter(
+      (notification) => notification.app_id.$oid === applicationId
+    );
+    if (notificationsForApp?.length) {
+      notificationsForApp.forEach((notification) => {
+        enqueueSnackbar(notification.message, {
+          variant: 'extended',
+          title: notification.title,
+          anchorOrigin: { vertical: 'top', horizontal: 'center' },
+          autoHideDuration: null,
+          onClose: handleCloseSnackbar(notification._id.$oid),
+        });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [applicationId, enqueueSnackbar]);
 
   const renderMenuItem = () =>
     !isLoading &&
