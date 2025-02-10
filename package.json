@@ -12,7 +12,7 @@
   "type": "module",
   "scripts": {
     "electron-dev": "electron .",
-    "electron-dist": "npm run build && electron-builder build --mac --publish always",
+    "electron-dist": "electron-builder build --mac --publish always",
     "electron-dist-mac-no-publish": "npm run build && electron-builder build --mac",
     "dev": "vite",
     "build": "tsc && vite build",
@@ -29,6 +29,7 @@
     "@bugsnag/plugin-react": "^7.24.0",
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/modifiers": "^7.0.0",
+    "@electron/notarize": "^1.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fullcalendar/core": "^6.1.15",
@@ -48,6 +49,7 @@
     "apexcharts": "^4.0.0",
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",
+    "dotenv": "^16.4.7",
     "electron-updater": "^6.1.8",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -82,7 +84,6 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@electron/notarize": "^2.3.0",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^15.0.7",
     "@testing-library/user-event": "^14.5.2",
@@ -95,7 +96,6 @@
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitejs/plugin-react-swc": "^3.6.0",
-    "dotenv": "^16.4.7",
     "dotenv-expand": "^12.0.1",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
