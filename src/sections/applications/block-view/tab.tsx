@@ -28,17 +28,27 @@ export default function TabView({ blockInfo }: Props) {
         fullWidth
         exclusive
         size="small"
-        color="success"
         value={currentTabId}
         onChange={(_, value) => setCurrentTabId(value)}
-        sx={{ mb: 2 }}
+        sx={{ mb: 2, backgroundColor: 'background.neutral' }}
       >
         {tabsContent.map((tab) => (
           <ToggleButton
             key={tab.id}
             value={tab.id}
+            disableRipple
             sx={{
-              color: 'grey.600',
+              color: 'text.secondary',
+              '&.Mui-selected': {
+                backgroundColor: 'background.paper',
+                boxShadow: (theme) => `${theme.customShadows.z1} !important`,
+              },
+              '&:hover': {
+                backgroundColor: 'background.neutral',
+                '&.Mui-selected': {
+                  backgroundColor: 'background.paper',
+                },
+              },
               '&:focus': {
                 outline: 'none',
               },
