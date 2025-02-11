@@ -10,7 +10,7 @@ interface Props {
 
 export default function TabView({ blockInfo }: Props) {
   const {
-    data: { tab_content: tabsContent },
+    data: { full_width: fullWidth, tab_content: tabsContent },
   } = blockInfo.blocs[0];
   const [currentTabId, setCurrentTabId] = useState(tabsContent[0].id);
   const [currentTabContainer, setCurrentTabContainer] = useState(tabsContent[0].container);
@@ -25,20 +25,30 @@ export default function TabView({ blockInfo }: Props) {
   return (
     <Box>
       <ToggleButtonGroup
-        fullWidth
         exclusive
         size="small"
-        color="success"
+        fullWidth={fullWidth}
         value={currentTabId}
         onChange={(_, value) => setCurrentTabId(value)}
-        sx={{ mb: 2 }}
+        sx={{ mb: 2, backgroundColor: 'background.neutral' }}
       >
         {tabsContent.map((tab) => (
           <ToggleButton
             key={tab.id}
             value={tab.id}
+            disableRipple
             sx={{
-              color: 'grey.600',
+              color: 'text.secondary',
+              '&.Mui-selected': {
+                backgroundColor: 'background.paper',
+                boxShadow: (theme) => `${theme.customShadows.z1} !important`,
+              },
+              '&:hover': {
+                backgroundColor: 'background.neutral',
+                '&.Mui-selected': {
+                  backgroundColor: 'background.paper',
+                },
+              },
               '&:focus': {
                 outline: 'none',
               },
