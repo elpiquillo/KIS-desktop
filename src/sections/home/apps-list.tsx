@@ -52,7 +52,7 @@ export default function ApplicationsList({
 
   const sortedApplications = sortApplicationsByFavorite(applicationFiltered);
   const lgUp = useResponsive('up', 'lg');
-  const xsUp = useResponsive('up', 'xs');
+  const smDown = useResponsive('down', 'sm');
 
   return (
     <Card {...getTestId('applications-list-container')} sx={{ height: '100%' }}>
@@ -75,7 +75,7 @@ export default function ApplicationsList({
       <SimpleBar
         style={{
           ...(lgUp && { maxHeight: 'calc(100vh - 100px)' }),
-          ...(xsUp && { maxHeight: 'calc(100vh - 210px)' }),
+          ...(smDown && { maxHeight: 'calc(100vh - 210px)' }),
         }}
       >
         {loading && <ApplicationCardSkeleton numberOfCards={5} />}

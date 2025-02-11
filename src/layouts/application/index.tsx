@@ -22,13 +22,10 @@ export default function ApplicationLayout({ children }: Props) {
   const lgUp = useResponsive('up', 'lg');
 
   const { paletteMode } = useThemeMode();
-  const { collapseAppMenu, setCollapseAppMenu } = useCollapseDashboardMenu();
-  const { sidebarOpen } = useSidebarState();
+  const { collapseAppMenu } = useCollapseDashboardMenu();
 
-  const { pageId, applicationId } = useParams();
-  const application = useDashboardAccessState((state) =>
-    state.applications.find((app) => app.id.id === applicationId)
-  );
+  const { pageId } = useParams();
+
   const { dashboardMenu } = useDashboardState();
   const pageName = dashboardMenu?.content.find((item) => item.menu_item_url.url === pageId)
     ?.menu_item_url.text;
@@ -61,26 +58,6 @@ export default function ApplicationLayout({ children }: Props) {
           }}
           title={
             <Box>
-              {!lgUp && application && (
-                <IconButton
-                  sx={{
-                    borderRadius: 1,
-                    mr: 1,
-                    ml: -1,
-                  }}
-                  aria-label="collapse applications menu"
-                  onClick={() => {
-                    setCollapseAppMenu(!collapseAppMenu);
-                  }}
-                >
-                  <Iconify
-                    icon={sidebarOpen ? 'hugeicons:sidebar-left-01' : 'hugeicons:sidebar-left'}
-                    color={theme.palette.text.primary}
-                    width={28}
-                  />
-                </IconButton>
-              )}
-
               {/* <Typography variant="button">Actions fréquentes</Typography>&nbsp;
               <Label title={pageName} mr={1} variant="soft">
                 Voir les Pays

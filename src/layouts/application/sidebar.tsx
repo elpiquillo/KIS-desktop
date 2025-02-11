@@ -176,13 +176,14 @@ function ApplicationMenuSidebar() {
           ? {}
           : {
               transition: 'none',
-              width: collapseAppMenu ? 0 : '100%',
+              display: collapseAppMenu ? 'none' : 'block',
+              width: '97vw',
               position: 'fixed',
-              top: 0,
-              left: 0,
-              height: '100vh',
+              pr: 3,
+              height: 'calc(100vh - 64px)',
+              borderRadius: 2,
+              background: 'white',
               zIndex: 9999, // Ensure it's above other elements
-              backdropFilter: 'blur(10px)', // Optional to match existing design
             }),
       }}
     >
@@ -215,7 +216,7 @@ function ApplicationMenuSidebar() {
                     justifyContent: 'space-between',
                   }}
                 >
-                  {!collapseAppMenu && (
+                  {!collapseAppMenu && lgUp && (
                     <AppNameChip
                       application_name={application?.name || ''}
                       application_logo={application?.logo || ''}
