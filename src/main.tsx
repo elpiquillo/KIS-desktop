@@ -13,6 +13,8 @@ import { Router } from './routes/Routes';
 import ThemeProvider from './theme';
 import '../muiSetup';
 
+require('update-electron-app')();
+
 Bugsnag.start('ddf870d22820d3119afcd00910c7e288');
 BugsnagPerformance.start({ apiKey: 'ddf870d22820d3119afcd00910c7e288' });
 

@@ -1,6 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
+const path = require('path');
 const { app, BrowserWindow, protocol, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
-const path = require('path');
+
 
 let mainWindow;
 
@@ -35,7 +37,7 @@ app.whenReady().then(() => {
     }
   });
 
-  setupAutoUpdater();
+  // setupAutoUpdater();
 });
 
 app.on('window-all-closed', () => {
