@@ -6,7 +6,6 @@ import AppNameChip from 'src/components/app-name-chip/app-name-chip';
 import Iconify from 'src/components/iconify';
 
 import { useResponsive } from 'src/hooks/use-responsive';
-import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 import { useDashboardAccessState } from 'src/store/dashboardAccessState';
 
 import { useSidebarState } from 'src/store/sidebarState';
@@ -16,7 +15,6 @@ import AccountPopover from './account-popover';
 export default function Header() {
   const { sidebarOpen, setSidebarOpen } = useSidebarState();
   const lgUp = useResponsive('up', 'lg');
-  const { setCollapseAppMenu, collapseAppMenu } = useCollapseDashboardMenu();
   const { applicationId } = useParams();
   const application = useDashboardAccessState((state) =>
     state.applications.find((app) => app.id.id === applicationId)

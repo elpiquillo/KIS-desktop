@@ -1,5 +1,6 @@
 import { alpha, Avatar, Chip, Typography, useTheme } from '@mui/material';
 import { useResponsive } from 'src/hooks/use-responsive';
+import { useCollapseDashboardMenu } from 'src/store/collapseDashboardMenu';
 
 export default function AppNameChip({
   application_name,
@@ -10,9 +11,19 @@ export default function AppNameChip({
 }) {
   const theme = useTheme();
   const lgUp = useResponsive('up', 'lg');
+  const { setCollapseAppMenu, collapseAppMenu } = useCollapseDashboardMenu();
+
+  const handleToggleSidebar = () => {
+    if (!lgUp) {
+      setCollapseAppMenu(!collapseAppMenu);
+    }
+  };
 
   return (
     <Chip
+      onClick={() => {
+        handleToggleSidebar();
+      }}
       variant={lgUp ? 'outlined' : 'filled'}
       sx={{
         maxWidth: 'calc(100% - 40px)',

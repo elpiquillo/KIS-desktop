@@ -10,7 +10,7 @@ export default function PageView() {
   const dashboard = useDashboardState((s) => s.dashboard);
   const structure = dashboard?.pages.pages[0].structure;
   const lgUp = useResponsive('up', 'lg');
-  const xsUp = useResponsive('up', 'xs');
+  const smDown = useResponsive('down', 'sm');
   const { paletteMode } = useThemeMode();
 
   return (
@@ -19,7 +19,7 @@ export default function PageView() {
         ...(lgUp && {
           maxHeight: 'calc(100vh - 105px)',
         }),
-        ...(xsUp && {
+        ...(smDown && {
           maxHeight: 'calc(100vh - 210px)',
         }),
       }}

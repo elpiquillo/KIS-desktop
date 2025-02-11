@@ -16,6 +16,7 @@ type Props = {
 export default function MainLayout({ children }: Props) {
   const { sidebarOpen } = useSidebarState();
   const lgUp = useResponsive('up', 'lg');
+  const smDown = useResponsive('down', 'sm');
   const [boxHeight, setBoxHeight] = useState('100vh');
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function MainLayout({ children }: Props) {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
+        height: smDown ? 'calc(100vh - 75px)' : '100vh',
       }}
     >
       {lgUp && <Header />}
