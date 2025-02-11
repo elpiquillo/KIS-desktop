@@ -10,7 +10,7 @@ interface Props {
 
 export default function TabView({ blockInfo }: Props) {
   const {
-    data: { tab_content: tabsContent },
+    data: { full_width: fullWidth, tab_content: tabsContent },
   } = blockInfo.blocs[0];
   const [currentTabId, setCurrentTabId] = useState(tabsContent[0].id);
   const [currentTabContainer, setCurrentTabContainer] = useState(tabsContent[0].container);
@@ -25,9 +25,9 @@ export default function TabView({ blockInfo }: Props) {
   return (
     <Box>
       <ToggleButtonGroup
-        fullWidth
         exclusive
         size="small"
+        fullWidth={fullWidth}
         value={currentTabId}
         onChange={(_, value) => setCurrentTabId(value)}
         sx={{ mb: 2, backgroundColor: 'background.neutral' }}

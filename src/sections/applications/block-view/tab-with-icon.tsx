@@ -2,7 +2,7 @@ import { Box, IconButton, Tab, Tabs } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import Iconify from 'src/components/iconify';
 import { BlockInterface } from 'src/types/application/general-interface';
-import { TabWithIconData } from 'src/types/application/tab-with-icon';
+import { TabWithIconData } from 'src/types/application/tab-with-icon-interface';
 import ContainerView from '../container-view';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 export default function TabWithIconView({ blockInfo }: Props) {
   const {
-    data: { tab_content: tabsContent },
+    data: { full_width: fullWidth, tab_content: tabsContent },
   } = blockInfo.blocs[0];
 
   const [currentTabId, setCurrentTabId] = useState(tabsContent[0].id);
@@ -30,7 +30,12 @@ export default function TabWithIconView({ blockInfo }: Props) {
 
   return (
     <Box>
-      <Tabs variant="fullWidth" value={currentTabId} onChange={handleChangeTab} sx={{ mb: 2 }}>
+      <Tabs
+        variant={fullWidth ? 'fullWidth' : 'standard'}
+        value={currentTabId}
+        onChange={handleChangeTab}
+        sx={{ mb: 2 }}
+      >
         {tabsContent.map((tab) => (
           <Tab
             key={tab.id}
