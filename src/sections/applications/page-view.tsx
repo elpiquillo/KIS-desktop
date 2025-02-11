@@ -1,5 +1,6 @@
 import { Box, useTheme } from '@mui/material';
 import SimpleBar from 'simplebar-react';
+import { useResponsive } from 'src/hooks/use-responsive';
 import { useDashboardState } from 'src/store/dashboardState';
 import { useThemeMode } from 'src/theme/ThemeModeContext';
 import ContainerView from './container-view';
@@ -8,10 +9,21 @@ export default function PageView() {
   const theme = useTheme();
   const dashboard = useDashboardState((s) => s.dashboard);
   const structure = dashboard?.pages.pages[0].structure;
+  const lgUp = useResponsive('up', 'lg');
+  const xsUp = useResponsive('up', 'xs');
   const { paletteMode } = useThemeMode();
 
   return (
-    <SimpleBar style={{ maxHeight: 'calc(100vh - 105px)' }}>
+    <SimpleBar
+      style={{
+        ...(lgUp && {
+          maxHeight: 'calc(100vh - 105px)',
+        }),
+        ...(xsUp && {
+          maxHeight: 'calc(100vh - 210px)',
+        }),
+      }}
+    >
       <Box
         sx={{
           display: 'flex',

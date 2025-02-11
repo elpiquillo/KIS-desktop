@@ -41,7 +41,7 @@ export default function MainLayout({ children }: Props) {
         height: '100vh',
       }}
     >
-      <Header />
+      {lgUp && <Header />}
       <Box
         sx={{
           display: 'flex',
@@ -62,6 +62,7 @@ export default function MainLayout({ children }: Props) {
         )}
         <Main>{children}</Main>
       </Box>
+      {!lgUp && <Header />}
     </Box>
   );
 }
