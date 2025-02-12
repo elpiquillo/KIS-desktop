@@ -92,10 +92,6 @@
     "welcomeUser": ""
   },
   "logout": "",
-  "notification": {
-    "removed": "",
-    "removedMessage": ""
-  },
   "settings": {
     "changePassword": "",
     "darkMode": "",
