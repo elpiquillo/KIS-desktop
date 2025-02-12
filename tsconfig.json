@@ -32,7 +32,7 @@
     "**/*.tsx",
     "src/**/*",
     "i18next-parser.config.cjs",
-    "electron.cjs",
+    "*.cjs"
   ],
   "references": [
     {

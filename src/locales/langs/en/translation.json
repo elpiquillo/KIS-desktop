@@ -83,8 +83,6 @@
     "emailRequired": "Email is required",
     "favorite": "Favorite",
     "goodChoice": "Good choice!",
-    "notificationRemovedMessage": "Notification removed successfully",
-    "notificationRemovedTitle": "Notification removed",
     "options": "Options",
     "removeFromFavorites": "Remove from favorites",
     "saveChanges": "Save changes",
@@ -94,6 +92,10 @@
     "welcomeUser": "👋 Hey {{name}}! What are the priorities of the day?"
   },
   "logout": "Logout",
+  "notification": {
+    "removed": "Notification removed",
+    "removedMessage": "The notification has been removed successfully"
+  },
   "settings": {
     "changePassword": "Change password",
     "darkMode": "Dark mode",

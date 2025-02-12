@@ -1,8 +1,8 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import { Notification } from 'electron';
 import { t } from 'i18next';
 import { create } from 'zustand';
 import { NotificationData } from 'src/types/notification-interface';
+import { isElectron } from 'src/utils/isElectron';
+import { sendNotification } from 'src/utils/sendElectronNotification';
 
 interface NotificationState {
   notifications?: NotificationData[];
@@ -14,24 +14,13 @@ export const useNotificationState = create<NotificationState>()((set) => ({
   notifications: undefined,
   setNotifications: (value) => {
     set(() => ({ notifications: value }));
-    value.forEach((notificationValue) => {
-      displayNotification(notificationValue.title, notificationValue.message);
-    });
   },
   removeNotification: (id) => {
     set((state) => ({
       notifications: state.notifications?.filter((notification) => notification._id.$oid !== id),
     }));
-    displayNotification(
-      t('global.notificationRemovedTitle'),
-      t('global.notificationRemovedMessage')
-    );
+    if (isElectron()) {
+      // sendNotification(t('notification.removed'), t('notification.removedMessage'));
+    }
   },
 }));
-
-function displayNotification(title: string, message: string) {
-  new Notification({
-    title,
-    body: message,
-  }).show();
-}

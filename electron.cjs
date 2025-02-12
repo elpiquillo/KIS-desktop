@@ -1,7 +1,6 @@
 const path = require('path');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const { app, BrowserWindow } = require('electron');
-const { autoUpdater } = require('electron-updater');
+const { app, BrowserWindow, ipcMain, Notification} = require('electron');
 const { updateElectronApp, UpdateSourceType } = require('update-electron-app');
 
 let mainWindow;
@@ -9,12 +8,13 @@ let isQuitting = false;
 // Setup auto-updates
 updateElectronApp({
   updateSource: {
-    baseUrl: 'https://github.com/elpiquillo/KIS-desktop/releases',
-    type: UpdateSourceType.StaticStorage,
+    type: UpdateSourceType.ElectronPublicUpdateService,
+    repo: 'https://github.com/elpiquillo/KIS-desktop',
   },
-  updateInterval: '30 minutes',
+  updateInterval: '1 hour',
+  // eslint-disable-next-line global-require
+  logger: require('electron-log'),
 });
-
 
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
@@ -54,6 +54,7 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
 app.on('activate', () => {
   if (mainWindow) {
     mainWindow.show(); // Réaffiche la fenêtre si elle est cachée
@@ -62,47 +63,6 @@ app.on('activate', () => {
   }
 });
 
-/**
- * Function to handle updates with electron-updater
- */
-// function setupAutoUpdater() {
-//   autoUpdater.autoDownload = true; // Set to true if you want to download updates automatically
-
-//   // Listen for update availability
-//   autoUpdater.on('update-available', () => {
-//     dialog.showMessageBox({
-//       type: 'info',
-//       title: 'Update Available',
-//       message: 'A new update is available. Downloading now...',
-//     });
-//   });
-
-//   // Listen for update download completion
-//   autoUpdater.on('update-downloaded', () => {
-//     dialog.showMessageBox({
-//       type: 'info',
-//       title: 'Update Ready',
-//       message: 'A new update has been downloaded. Restart the app to apply the update?',
-//       buttons: ['Restart', 'Later'],
-//     }).then((result) => {
-//       if (result.response === 0) {
-//         autoUpdater.quitAndInstall(); // Restart app and install update
-//       }
-//     });
-//   });
-
-//   // Listen for errors
-//   autoUpdater.on('error', (error) => {
-//     console.error('Update Error:', error);
-//     dialog.showMessageBox({
-//       type: 'error',
-//       title: 'Update Error',
-//       message: `Failed to update: ${error.message}`,
-//     });
-//   });
-
-//   // Periodically check for updates (every 30 minutes)
-//   setInterval(() => {
-//     autoUpdater.checkForUpdates();
-//   }, 30 * 60 * 1000);
-// }
+ipcMain.on('show-notification', (_, { title, body }) => {
+  new Notification({ title, body }).show();
+});

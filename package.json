@@ -5,10 +5,6 @@
     "name": "Joachim SEBASTIA",
     "email": "joachim@getkis.io"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://gitlab.com/k883/fronts/kis-front-user-v2"
-  },
   "publish": {
     "provider": "github",
     "owner": "elpiquillo",
@@ -59,6 +55,7 @@
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.7",
+    "electron-log": "^5.3.0",
     "electron-updater": "^6.1.8",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb": "^19.0.4",

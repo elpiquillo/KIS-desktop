@@ -83,8 +83,6 @@
     "emailRequired": "",
     "favorite": "",
     "goodChoice": "",
-    "notificationRemovedMessage": "",
-    "notificationRemovedTitle": "",
     "options": "",
     "removeFromFavorites": "",
     "saveChanges": "",
@@ -94,6 +92,10 @@
     "welcomeUser": ""
   },
   "logout": "",
+  "notification": {
+    "removed": "",
+    "removedMessage": ""
+  },
   "settings": {
     "changePassword": "",
     "darkMode": "",
