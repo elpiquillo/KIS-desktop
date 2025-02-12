@@ -83,6 +83,8 @@
     "emailRequired": "Email is required",
     "favorite": "Favorite",
     "goodChoice": "Good choice!",
+    "notificationRemovedMessage": "Notification removed successfully",
+    "notificationRemovedTitle": "Notification removed",
     "options": "Options",
     "removeFromFavorites": "Remove from favorites",
     "saveChanges": "Save changes",

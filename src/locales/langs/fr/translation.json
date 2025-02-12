@@ -83,6 +83,8 @@
     "emailRequired": "",
     "favorite": "",
     "goodChoice": "",
+    "notificationRemovedMessage": "",
+    "notificationRemovedTitle": "",
     "options": "",
     "removeFromFavorites": "",
     "saveChanges": "",
