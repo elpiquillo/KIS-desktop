@@ -1,17 +1,20 @@
 const path = require('path');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { app, BrowserWindow } = require('electron');
-const { updateElectronApp } = require('update-electron-app');
+const { autoUpdater } = require('electron-updater');
+const { updateElectronApp, UpdateSourceType } = require('update-electron-app');
 
 let mainWindow;
 let isQuitting = false;
 // Setup auto-updates
 updateElectronApp({
   updateSource: {
-    provider: 'github',
-    repo: 'KIS-desktop',
-    owner: 'elpiquillo',
-  }
+    baseUrl: 'https://github.com/elpiquillo/KIS-desktop/releases',
+    type: UpdateSourceType.StaticStorage,
+  },
+  updateInterval: '30 minutes',
 });
+
 
 const createMainWindow = () => {
   mainWindow = new BrowserWindow({
