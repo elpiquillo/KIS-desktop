@@ -5,6 +5,15 @@
     "name": "Joachim SEBASTIA",
     "email": "joachim@getkis.io"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/k883/fronts/kis-front-user-v2"
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "elpiquillo",
+    "repo": "KIS-desktop"
+  },
   "main": "electron.cjs",
   "homepage": "./",
   "private": true,
@@ -78,6 +87,7 @@
     "simplebar-react": "^3.2.5",
     "swr": "^2.2.5",
     "uid": "^2.0.2",
+    "update-electron-app": "^3.1.1",
     "vite-plugin-checker": "^0.6.4",
     "vite-plugin-compression2": "^1.3.3",
     "yup": "^1.4.0",
