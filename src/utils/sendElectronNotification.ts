@@ -1,9 +1,13 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { ipcRenderer } from 'electron';
+declare global {
+  interface Window {
+    electron?: {
+      sendNotification: (title: string, body: string) => void;
+    };
+  }
+}
 
 export const sendNotification = (title: string, body: string) => {
-  ipcRenderer.send('show-notification', {
-    title,
-    body,
-  });
+  if (window.electron) {
+    window.electron.sendNotification(title, body);
+  }
 };

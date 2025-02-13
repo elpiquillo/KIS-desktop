@@ -1,6 +1,5 @@
 const path = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const { app, BrowserWindow, ipcMain, Notification} = require('electron');
+const { app, BrowserWindow, ipcMain, Notification } = require('electron');
 const { updateElectronApp, UpdateSourceType } = require('update-electron-app');
 
 let mainWindow;
@@ -23,6 +22,9 @@ const createMainWindow = () => {
     height: 720,
     webPreferences: {
       nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.cjs'),
+      contextIsolation: true,
+      enableRemoteModule: true
     },
     titleBarStyle: process.platform !== 'darwin' ? 'default' : 'hidden',
     trafficLightPosition: {
@@ -30,8 +32,11 @@ const createMainWindow = () => {
       y: 13,
     },
   });
-
-  const startURL = `file://${path.resolve(__dirname, 'dist', 'index.html')}`;
+  const startURL =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:8081'
+      : `file://${path.resolve(__dirname, 'dist', 'index.html')}`;
+  // const startURL = `file://${path.resolve(__dirname, 'dist', 'index.html')}`;
   mainWindow.loadURL(startURL);
 
   // Handle window close event
@@ -57,7 +62,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (mainWindow) {
-    mainWindow.show(); // Réaffiche la fenêtre si elle est cachée
+    mainWindow.show();
   } else {
     createMainWindow();
   }

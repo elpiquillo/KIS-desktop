@@ -92,6 +92,10 @@
     "welcomeUser": "👋 Hey {{name}}! What are the priorities of the day?"
   },
   "logout": "Logout",
+  "notification": {
+    "removed": "Notification removed",
+    "removedMessage": "Notification removed successfully"
+  },
   "settings": {
     "changePassword": "Change password",
     "darkMode": "Dark mode",

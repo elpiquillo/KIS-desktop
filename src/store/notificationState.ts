@@ -20,7 +20,7 @@ export const useNotificationState = create<NotificationState>()((set) => ({
       notifications: state.notifications?.filter((notification) => notification._id.$oid !== id),
     }));
     if (isElectron()) {
-      // sendNotification(t('notification.removed'), t('notification.removedMessage'));
+      sendNotification(t('notification.removed'), t('notification.removedMessage'));
     }
   },
 }));
